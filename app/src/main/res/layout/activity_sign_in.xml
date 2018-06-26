@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:background="@drawable/login"
     android:weightSum="10"
+
     >
 
     <LinearLayout
@@ -59,9 +60,8 @@
                 android:layout_height="40dp"
                 android:layout_marginBottom="20dp"
                 android:ems="10"
-                android:hint="Email"
                 android:inputType="textEmailAddress"
-                android:background="@color/colorWhite"
+                android:background="@drawable/round_edittext"
                 android:textAlignment="center"
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/colorBlack"
@@ -74,14 +74,14 @@
                 android:drawableLeft="@drawable/vec_lock"
                 android:layout_width="280dp"
                 android:layout_height="40dp"
-                android:background="@color/colorWhite"
+                android:background="@drawable/round_edittext"
                 android:ems="10"
-                android:hint="Password"
                 android:inputType="textPassword"
                 android:textAlignment="center"
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/colorBlack"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:fontFamily="serif-monospace"/>
 
 
             <Button
@@ -95,9 +95,11 @@
                 android:onClick="onLogin"
                 android:text="Login"
                 android:textStyle="bold"
-                android:background="@color/colorPrimaryDark"
+                android:background="@drawable/round_buttons"
                 android:textColor="@color/colorWhite"
                 />
+
+
 
             <Button
                 android:id="@+id/SignUp"
@@ -110,11 +112,9 @@
                 android:onClick="SignUp"
                 android:text="Sign Up"
                 android:textStyle="bold"
-                android:background="@color/colorPrimaryDark"
+                android:background="@drawable/round_buttons"
                 android:textColor="@color/colorWhite"
                 />
-
-
 
         </LinearLayout>
     </ScrollView>

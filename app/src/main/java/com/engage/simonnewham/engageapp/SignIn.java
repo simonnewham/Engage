@@ -10,15 +10,31 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.net.URLEncoder;
+
 /**
  * Login screen that allows users to login or create new account
  * Adapted from Android Studio login template
  */
+
 public class SignIn extends AppCompatActivity {
 
     //login task
-    private UserLoginTask mAuthTask = null;
-    private final String TAG = this.getClass().getSimpleName();
+    private UserLoginTask mAuthTask;
+    private final String TAG = "UserSignIn";
 
     //UI components
     private EditText mEmailView;
@@ -61,17 +77,18 @@ public class SignIn extends AppCompatActivity {
             focusView = mEmailView;
             cancel = true;
         }
-        else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
         //empty password
         if(TextUtils.isEmpty(password)){
             mPasswordView.setError("Password Required");
             focusView = mEmailView;
             cancel=true;
         }
+        else if (!isEmailValid(email)) {
+            mEmailView.setError(getString(R.string.error_invalid_email));
+            focusView = mEmailView;
+            cancel = true;
+        }
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -97,44 +114,110 @@ public class SignIn extends AppCompatActivity {
     public void SignUp(View view) {
 
         //Will need to load the baseline questionaire for new users
+        Intent intent = new Intent(this, SignUpActivity.class);
+        startActivity(intent);
 
     }
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<Void, Void, String> {
 
         private final String mEmail;
         private final String mPassword;
+        private String mResponse;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
             mPassword = password;
+            mResponse="";
+        }
+
+        /**
+         * Connect to API to verify login details
+         */
+        @Override
+        protected String doInBackground(Void... params) {
+
+            try{
+                URL url = new URL("http://engage.cs.uct.ac.za/android/login"); //will return "Login Success:<user_group>"
+
+                HttpURLConnection httpConn = (HttpURLConnection)url.openConnection();
+                Log.i(TAG, "Connection established");
+
+                httpConn.setRequestMethod("POST");
+
+                httpConn.setDoOutput(true);
+                httpConn.setDoInput(true);
+                //OutputStream opStream = httpConn.getOutputStream();
+                //BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(opStream, "UTF-8"));
+
+                // ***** Send POST message *****
+                String postData = URLEncoder.encode("email", "UTF-8")+"="+URLEncoder.encode(mEmail, "UTF-8")+"&"+
+                        URLEncoder.encode("password", "UTF-8")+"="+URLEncoder.encode(mPassword, "UTF-8");
+
+                httpConn.getOutputStream().write(postData.getBytes());
+               // bufferedWriter.write(postData);
+               // bufferedWriter.flush();
+               // bufferedWriter.close();
+               // opStream.close();
+
+                // ***** Receive result of post message *****
+                InputStream inputStream = httpConn.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                String result = "";
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null){
+                    result += line;
+                }
+                //store group number to download content
+               // mResponse = result;
+
+                bufferedReader.close();
+                inputStream.close();
+                httpConn.disconnect();
+
+                Log.i(TAG, ">>>>>Response Result: "+result);
+                //>>>TESTING<<<<
+                result = "Login Success:1";
+
+                Log.i(TAG, "Response Result: "+result);
+                return result;
+
+            }
+            catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return "";
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-
-            String loginUrl = "http://engage.cs.uct.ac.za/android/login";
-
-            //access database
-            Log.i(TAG, "Connection open");
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
+        //runs after doInBackground
+        protected void onPostExecute(final String result) {
             mAuthTask = null;
             //showProgress(false);
 
-            if (success == Boolean.TRUE) {
+           if (result.startsWith("Login Success")) {
+                Log.i(TAG, "SUCCESS");
+                String mGroup ="";
+
+                if(result.contains(":")){
+                    int index = result.indexOf(":");
+                    mGroup = result.substring(index);
+                }
 
                 Intent intent = new Intent(SignIn.this, MainActivity.class);
                 intent.putExtra("email", mEmail);
+                intent.putExtra("group", mGroup);
                 startActivity(intent);
-
                 finish();
             }
             else {

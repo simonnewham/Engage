@@ -3,16 +3,11 @@ package com.engage.simonnewham.engageapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-/**
- * user home page
- */
-
-public class MainActivity extends AppCompatActivity {
+public class ContentActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_content);
     }
 }
