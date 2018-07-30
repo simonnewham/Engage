@@ -1,9 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contentPanel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.engage.simonnewham.engageapp.ContentActivity">
+    android:orientation="vertical"
+    tools:context="com.engage.simonnewham.engageapp.activities.ContentActivity"
+    android:weightSum="1"
+    >
 
-</android.support.constraint.ConstraintLayout>
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:text="Title Location"
+        android:layout_weight="0.03"
+        android:paddingTop="10dp"
+        android:padding="4dp"/>
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Date Location"
+        android:layout_weight="0.02"
+        android:textColor="@color/colorPrimary"
+        android:padding="4dp"/>
+
+     <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingBottom="25dp" >
+
+         <TextView
+             android:id="@+id/content"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="Content Location" />
+
+     </ScrollView>
+
+    <Button
+        android:id="@+id/surveyButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        android:onClick="loadSurvey"
+        android:text="Answer Survey >>"
+        android:textColor="@color/colorWhite"
+        />
+
+
+</LinearLayout>

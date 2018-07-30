@@ -15,18 +15,17 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SignIn" android:theme="@style/LoginTheme">
+        <activity android:name=".activities.SignIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".ContentActivity" />
-        <activity android:name=".SurveyActivity"></activity>
+        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.SignUpActivity" />
+        <activity android:name=".activities.ContentActivity" />
+        <activity android:name=".activities.SurveyActivity"></activity>
     </application>
 
 </manifest>

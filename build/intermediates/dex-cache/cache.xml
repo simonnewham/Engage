@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/simonnewham/AndroidStudioProjects/EngageApp/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="410342682709fe1adaedc426e6ad4315b4dd2e1d">
+        <dex dex="/Users/simonnewham/AndroidStudioProjects/EngageApp/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_eca25d4c53f6bc1d78d8b5236071faa119e6c9c5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/simonnewham/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.8.1/2a8e0aa38a2e21cb39e2f5a7d6704cbdc941da0/gson-2.8.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="02a8e0aa38a2e21cb39e2f5a7d6704cbdc941da0">
+        <dex dex="/Users/simonnewham/AndroidStudioProjects/EngageApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/gson-2.8.1_1ccbedf786c5bc8bb4a1faa22ec93df6287ed7cd/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/simonnewham/AndroidStudioProjects/EngageApp/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="c82741bc129dd5f99f11a4ab8666ae24262053b6">
+        <dex dex="/Users/simonnewham/AndroidStudioProjects/EngageApp/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_6336420367b3228646fe7257fbf0699fa2e4fc29/classes.dex" />
+    </item>
+
+</items>

@@ -4,30 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.engage.simonnewham.engageapp.MainActivity"
+    tools:context="com.engage.simonnewham.engageapp.activities.MainActivity"
     android:background="@color/colorWhite"
     android:orientation="vertical"
     >
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"/>
 
-    <Button
-        android:id="@+id/button4"
+    <ListView
+        android:id="@+id/news_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:text="News" />
+        android:layout_height="match_parent"
+        android:paddingTop="2dp"/>
 
-    <Button
-        android:id="@+id/button5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:text="Surveys" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:text="Settings" />
 </LinearLayout>
