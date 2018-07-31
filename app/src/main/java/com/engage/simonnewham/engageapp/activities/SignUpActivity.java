@@ -75,7 +75,8 @@ public class SignUpActivity extends AppCompatActivity {
         if(error == false) {
             Log.i(TAG, "****SignUp details**** Email:"+email+"  Password:"+password+" Group:"+group);
             Toast.makeText(this, "Sign Up Success", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, SurveyActivity.class);
+            intent.putExtra("surveyID", "baseline");
             startActivity(intent);
             finish();
         }

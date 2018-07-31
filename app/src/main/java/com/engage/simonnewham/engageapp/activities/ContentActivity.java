@@ -12,13 +12,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.engage.simonnewham.engageapp.R;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import com.engage.simonnewham.engageapp.R;
 
 /**
  * @author simonnewham
@@ -72,10 +72,10 @@ public class ContentActivity extends AppCompatActivity {
 
             //JSONObject jTitle = reader.getJSONObject("Title");
             jTitle = reader.getString("Title");
-            jDate= reader.getString("Date");;
-            jContent= reader.getString("Main_content");;
-            jSource= reader.getString("Source");;
-            jType= reader.getString("Type");;
+            jDate= reader.getString("Date");
+            jContent= reader.getString("Main_content");
+            jSource= reader.getString("Source");
+            jType= reader.getString("Content_type");
 
         }
         catch (JSONException e) {

@@ -1,0 +1,62 @@
+{
+  "Survey_ID": "Base1",
+  "Title": "Baseline",
+  "Description": "Given the significant role that the media plays in society, it is critical to assess the way depictions of Muslims and Islam in the News inform the thoughts and actions of Muslims in the UK over a long term. This is a survey to determine your relationship to media in Britain and your thoughts about Britain and its Muslim inhabitants. The findings from the study will be used to inform the future relationship between the media and Muslims in Britain. Further details can be found in the participant information sheet.",
+  "Date_Created": "25-07-18",
+  "News_ID":"0",
+  "User_groups": ["1"],
+  "Qnumber": 10,
+  "Q1": {
+    "Question": "Name",
+    "Type": "Text" 
+  },
+  "Q2": {
+    "Question": "Age",
+    "Type": "Text" 
+  },
+  "Q3": {
+    "Question": "Gender",
+    "Type": "Text" 
+  },
+  "Q4": {
+    "Question": "Is your gender the same as at birth?",
+    "Type": "MCQ",
+    "Options": ["Yes", "No"] 
+  },
+  "Q5": {
+    "Question": "Which of the following best describes your citizenship and place of birth?",
+    "Type": "MCQ",
+    "Options": ["British citizen", "born in British citizen", "born Non-British citizen", "Britain abroad born in Britain","Non-British citizen", "Don’t know"] 
+  },
+  "Q6": {
+    "Question": "What is your marital status?",
+    "Type": "MCQ", 
+    "Options": ["Married In a registered same-sex civil partnership","Living with a partner","Separated (after being married or in a same-sex civil partnership)",
+      "Divorced/ dissolved same-sex civil partnership", "Single (never married/never a civil know partnership)","Don't know" ]
+  },
+ "Q7": {
+    "Question": "What is your highest educational qualification obtained?",
+    "Type": "MCQ",
+    "Options": ["Postgraduate degree", "Postgraduate degree", "Higher education below degree", "A level or equivalent", "O level or equivalent", "CSE or equivalent", 
+      "Foreign or other", "No qualification", "Don’t know/not applicable"] 
+  },
+  "Q8": {
+    "Question": "Which of these descriptions applied to what you were doing last week that is the seven days ending last Sunday?",
+    "Type": "MCQ",
+    "Options": ["In full-time education", "On government training/employment programme", "In paid work (or away temporarily) for at least 10 hours in week", 
+      "Waiting to take up paid work already accepted", "Unemployed and registered at a JobCentre or JobCentre Plus", "Unemployed, not registered, but actively looking for a job (of at least 10 hrs a week)", 
+      "Unemployed, wanting a job (of at least 10 hrs per week) but not actively looking for a job", "Permanently sick or disabled", "Wholly retired from work", 
+      "Looking after the home", "Don't know", "Text"] 
+  },
+  "Q9": {
+    "Question": "To which of these groups do you consider you belong?",
+    "Type": "MCQ",
+    "Options": ["Black, of African origin", "Black, of Caribbean origin", "Black, of other origin (please say which below)", "Asian, of Indian origin", "Asian, of Pakistani origin", 
+      "Other (please say which below)", "Asian, of Bangladeshi origin", "Asian, of Chinese origin", "Asian, of other origin (please say which below)", "White, of any origin",
+      "Mixed origin (please say which below)", "Don't know", "Text"]
+  },
+  "Q10": {
+    "Question": "State your primary spoken language:",
+    "Type": "Text" 
+  }
+}
