@@ -7,10 +7,13 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.engage.simonnewham.engageapp.R;
+import com.engage.simonnewham.engageapp.models.User;
+import com.google.gson.Gson;
 
 /**
  * Class for when new user signs up
@@ -21,15 +24,18 @@ public class SignUpActivity extends AppCompatActivity {
 
     private EditText mEmail;
     private EditText mPassword;
-    private EditText password2;
+    private EditText mPassword2;
     private EditText mGroup;
 
     private final String TAG = "UserSignUp";
+
+    User new_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Sign Up");
@@ -37,6 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         mEmail = (EditText) findViewById(R.id.email);
         mPassword = (EditText) findViewById(R.id.password);
+        mPassword2 = (EditText) findViewById(R.id.password2);
         mGroup = (EditText) findViewById(R.id.user_group);
     }
 
@@ -47,6 +54,7 @@ public class SignUpActivity extends AppCompatActivity {
         //get values from form
         String email = mEmail.getText().toString();
         String password = mPassword.getText().toString();
+        String password2 = mPassword2.getText().toString();
         String group = mGroup.getText().toString();
 
         // no email entered
@@ -60,31 +68,47 @@ public class SignUpActivity extends AppCompatActivity {
             mPassword.setError("Password Required");
             error=true;
         }
-        else if (!isEmailValid(email)) {
+        if (!isEmailValid(email)) {
             mEmail.setError(getString(R.string.error_invalid_email));
             error = true;
         }
-
-        //access to DB
-
-
-        //TRACING
+        if(!password2.equals(password)){
+            mPassword.setError("Passwords do not match");
+            mPassword2.setError("Passwords do not match");
+            error = true;
+        }
 
 
         //if successful load mainActivity
         if(error == false) {
-            Log.i(TAG, "****SignUp details**** Email:"+email+"  Password:"+password+" Group:"+group);
-            Toast.makeText(this, "Sign Up Success", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(this, SurveyActivity.class);
-            intent.putExtra("surveyID", "baseline");
-            startActivity(intent);
-            finish();
+
+            //create user JSON document and send to DB
+            new_user = new User(email, password, group);
+            Gson gson = new Gson();
+            String json = gson.toJson(new_user);
+
+            //Log.i(TAG, "****SignUp details**** Email:"+email+"  Password:"+password+" Group:"+group);
+            Log.i(TAG, "****JSON user**** Email:"+json);
+            Toast.makeText(this, "JSON"+json, Toast.LENGTH_LONG).show();
+            loadSurvey();
+
         }
         else{
 
         }
 
     }
+
+    public void loadSurvey(){
+
+        Intent intent = new Intent(this, SurveyActivity.class);
+        intent.putExtra("email", new_user.getEmail());
+        intent.putExtra("group", new_user.getUser_group());
+        intent.putExtra("surveyID", "BASELINE");
+        startActivity(intent);
+        finish();
+    }
+
 
     public void onCancel(View view) {
         Toast.makeText(this, "Sign Up Cancelled", Toast.LENGTH_SHORT).show();

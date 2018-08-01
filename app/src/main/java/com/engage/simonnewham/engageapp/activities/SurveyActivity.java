@@ -10,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -21,6 +23,8 @@ import android.widget.Toast;
 import com.engage.simonnewham.engageapp.R;
 import com.engage.simonnewham.engageapp.models.Question;
 import com.engage.simonnewham.engageapp.models.Survey;
+import com.engage.simonnewham.engageapp.models.SurveyResponse;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,20 +37,39 @@ import java.util.List;
 
 public class SurveyActivity extends AppCompatActivity {
 
+    //extra info on user
+    String email;
     String surveyID = null;
+    String user_group;
+
     private final String TAG = "SurveyActivity";
     LinearLayout lPanel;
     int current =-1; //int to keep track of question number being displayed
-    Survey survey;
+    Survey survey; //current survey object
     ArrayList<String> responses;
+
+    Button submit;
+    Button next;
+    RadioGroup radioGroup;
+    EditText editText;
+    TextView questionTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_survey);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        lPanel = (LinearLayout) findViewById(R.id.survey_panel);
+        //Array of answers
         responses = new ArrayList<>();
+
+        //View elements
+        lPanel = (LinearLayout) findViewById(R.id.survey_panel);
+        submit = (Button) findViewById(R.id.button_submit);
+        radioGroup = (RadioGroup) findViewById(R.id.RadioGroup);
+        editText = (EditText) findViewById(R.id.editText);
+        questionTitle = (TextView) findViewById(R.id.text_question);
+        next = (Button) findViewById(R.id.button_next);
 
         //setup toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -55,8 +78,11 @@ public class SurveyActivity extends AppCompatActivity {
 
         //get extra info
         Bundle extras = getIntent().getExtras();
-        if(extras != null)
-            surveyID = extras.getString("surveyID"); //baseline
+        if(extras != null) {
+            email = extras.getString("email");
+            user_group = extras.getString("group");
+            surveyID = extras.getString("surveyID");
+        }
 
         loadSurvey(surveyID);
     }
@@ -67,8 +93,7 @@ public class SurveyActivity extends AppCompatActivity {
      */
     public void loadSurvey(String surveyID){
 
-        //download survey from DB
-
+        //download survey from DB, http request will depend on surveyID
 
 
         //set up Question model
@@ -134,77 +159,142 @@ public class SurveyActivity extends AppCompatActivity {
 
     }
 
+    //displays the initial survey title and description
     public void displaySurvey(Survey s){
 
-        TextView title = new TextView(this);
-        title.setText("Survey Title: "+s.getTitle());
-        title.setTypeface(null, Typeface.BOLD);
-        lPanel.addView(title);
-        TextView description = new TextView(this);
-        description.setText("Info:"+"\n"+s.getDescription());
-        lPanel.addView(description);
+        onNext();
+//        TextView title = new TextView(this);
+//        title.setText("Survey Title: "+s.getTitle());
+//        title.setTypeface(null, Typeface.BOLD);
+//        title.setTextSize(20);
+//        lPanel.addView(title);
+//        TextView description = new TextView(this);
+//        description.setText("\n"+s.getDescription());
+//        description.setTextSize(15);
+//        lPanel.addView(description);
 
     }
 
+    //onClick listener for when next button is pressed
+    //checks if user has supplied input to question before allowing user to answer next question
     public void checkInput(View view){
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         //add current response to responses before allow user to go to next question
         String response;
+        if(editText.getVisibility() == View.VISIBLE ){
+            response = editText.getText().toString();
+            if (!response.equals("")){
+                responses.add(current, response);
+                onNext();
+            }
+            else{
+                Toast.makeText(this, "Please input a response", Toast.LENGTH_SHORT).show();
+            }
 
+        }
+        else if(radioGroup.getVisibility() == View.VISIBLE){
 
-        onNext();
+            if(radioGroup.getCheckedRadioButtonId() != -1){
+                int selectedId = radioGroup.getCheckedRadioButtonId();
+                RadioButton radioButton = (RadioButton) findViewById(selectedId);
+                response = radioButton.getText().toString();
+                responses.add(current, response);
+                onNext();
+            }
+            else{
+                Toast.makeText(this, "Please select an option", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if(current==survey.getqNum()){
+            lPanel.removeAllViews();
+            submit.setVisibility(View.VISIBLE);
+            next.setVisibility(View.GONE);
+        }
     }
+
     /**
-     * Method to handle when the next button is pressed on a survey
+     * Method to populate the next question
      *
      */
     public void onNext(){
 
-        //check previous content
+        //stop keyboard from showing
+        current = (current+1); //for final question it will make current equal to question number
 
+        if( current < survey.getqNum()){
+            //lPanel.removeAllViews();
+            editText.setText("");
+            editText.setVisibility(View.GONE);
+            radioGroup.removeAllViews();
+            radioGroup.clearCheck();
+            radioGroup.setVisibility(View.GONE);
 
-        lPanel.removeAllViews();
+            // current = (current+1)%survey.getqNum();
 
-        current = (current+1)%survey.getqNum();
-        Question toLoad = survey.getQuestions().get(current);
+            Question toLoad = survey.getQuestions().get(current);
 
-        int temp = current+1;
-        TextView q = new TextView(this);
-        q.setText("Question "+temp+": "+toLoad.getQuestion());
-        q.setTypeface(null, Typeface.BOLD);
-        lPanel.addView(q);
+            int temp = current+1;
+            //TextView q = new TextView(this);
+            questionTitle.setText("Question "+temp+": "+toLoad.getQuestion());
+            //q.setTypeface(null, Typeface.BOLD);
+            //q.setTextSize(15);
+            //lPanel.addView(q);
 
-        String type = toLoad.getType();
+            String type = toLoad.getType();
 
-        //add option to input response
-        if(type.equals("Text")){
-            EditText response = new EditText(this);
-            lPanel.addView(response);
-        }
-
-        //add radio buttons for each option
-        else if (type.equals("MCQ")){
-            RadioGroup radioGroup = new RadioGroup(this);
-            ArrayList<String> options = toLoad.getOptions();
-
-            for(int i=0; i<options.size();i++){
-                RadioButton radioButton = new RadioButton(this);
-                radioButton.setText(options.get(i));
-                radioGroup.addView(radioButton);
+            //add option to input response
+            if(type.equals("Text")){
+                //EditText response = new EditText(this);
+                //lPanel.addView(response);
+                editText.setVisibility(View.VISIBLE);
             }
-            lPanel.addView(radioGroup);
+
+            //add radio buttons for each option
+            else if (type.equals("MCQ")){
+                //RadioGroup radioGroup = new RadioGroup(this);
+                radioGroup.setVisibility(View.VISIBLE);
+                ArrayList<String> options = toLoad.getOptions();
+
+                for(int i=0; i<options.size();i++){
+                    RadioButton radioButton = new RadioButton(this);
+                    radioButton.setText(options.get(i));
+                    radioGroup.addView(radioButton);
+                }
+                //lPanel.addView(radioGroup);
+            }
         }
+
 
     }
 
     /**
-     * Method to handle when the previous button is pressed on a survey
+     * onClick listener for when submit is clicked
+     * Converts survey to JSON format and pushes document to DB
      * @param view
      */
-    public void onPrevious(View view){
+    public void onSubmit(View view){
+        Toast.makeText(this, "Survey Completed", Toast.LENGTH_SHORT).show();
+        //create survey resonse object and convert to JSON representation
+        SurveyResponse surveyResponse = new SurveyResponse(email, user_group, surveyID, responses );
+        Gson gson = new Gson();
+        String json = gson.toJson(surveyResponse);
+        Log.i(TAG, ">>>>>>>JSON SURVEY RESPONSE<<<<<<<"+json);
 
+        //take user to user home page keeping track of email and group
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("email", email);
+        intent.putExtra("group", user_group);
+        startActivity(intent);
+        finish();
     }
 
+    /**
+     * Method to convert a JSON file into a string
+     * @return
+     */
     public String loadJSONFromAsset() {
         String json = null;
         try {
@@ -222,9 +312,10 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
 
-    //Method for setting up toolbar
+    //Method for setting up toolbar options
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_menu, menu);
         return true;

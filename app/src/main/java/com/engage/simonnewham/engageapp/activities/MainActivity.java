@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
     private ListView news_list;
     private NewsAdapter newsAdapter;
 
+    private String email;
+    private String user_group;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +46,13 @@ public class MainActivity extends AppCompatActivity {
         newsList.add(new NewsItem("Survey Number 1", "31-08-18"));
         newsAdapter = new NewsAdapter(this, newsList);
         news_list.setAdapter(newsAdapter);
+
+        //get extra info to load personalised content
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            email = extras.getString("email");
+            user_group = extras.getString("group");
+        }
 
     }
 

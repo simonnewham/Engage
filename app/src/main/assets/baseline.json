@@ -1,21 +1,21 @@
 {
   "Survey_ID": "Base1",
-  "Title": "Baseline",
+  "Title": "Baseline Survey",
   "Description": "Given the significant role that the media plays in society, it is critical to assess the way depictions of Muslims and Islam in the News inform the thoughts and actions of Muslims in the UK over a long term. This is a survey to determine your relationship to media in Britain and your thoughts about Britain and its Muslim inhabitants. The findings from the study will be used to inform the future relationship between the media and Muslims in Britain. Further details can be found in the participant information sheet.",
   "Date_Created": "25-07-18",
   "News_ID":"0",
   "User_groups": ["1"],
   "Qnumber": 10,
   "Q1": {
-    "Question": "Name",
+    "Question": "Please enter your name",
     "Type": "Text" 
   },
   "Q2": {
-    "Question": "Age",
+    "Question": "What is your age?",
     "Type": "Text" 
   },
   "Q3": {
-    "Question": "Gender",
+    "Question": "What is your gender?",
     "Type": "Text" 
   },
   "Q4": {
