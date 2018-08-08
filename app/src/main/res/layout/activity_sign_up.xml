@@ -6,15 +6,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.engage.simonnewham.engageapp.activities.SignUpActivity"
+    android:background="@color/colorAccent"
     >
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar" />
+        layout="@layout/toolbar"
+        />
 
     <ScrollView
+        android:padding="5dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,20 +29,21 @@
                 android:id="@+id/welcome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="30dp"
+                android:paddingBottom="5dp"
                 android:paddingTop="10dp"
-                android:text="Welcome to ENGAGE"
+                android:text="SIGN UP"
                 android:textAlignment="center"
-                android:textSize="25dp"
+                android:textSize="25sp"
                 android:textStyle="bold"
+                android:textColor="@color/colorWhite"
                 />
 
-            <TextView
-                android:id="@+id/textView2"
+
+            <ImageView
+                android:id="@+id/imageView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Email:"
-                android:textSize="18dp" />
+                app:srcCompat="@drawable/ic_user" />
 
             <EditText
                 android:id="@+id/email"
@@ -46,31 +51,16 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textEmailAddress"
-                android:text="nwhsim001@myuct.ac.za"
-
+                android:text=""
+                android:drawableLeft="@drawable/ic_mail_white"
+                android:hint="email"
+                android:textAlignment="center"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="@color/colorWhite"
+                android:textColorHint="@color/colorOffWhite"
+                android:textColor="@color/colorWhite"
                 />
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="User Group:"
-                android:textSize="18dp" />
-
-            <EditText
-                android:id="@+id/user_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="number"
-                android:text="1" />
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Password:"
-                android:textSize="18dp" />
 
             <EditText
                 android:id="@+id/password"
@@ -78,14 +68,16 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPassword"
-                android:text="1234"/>
+                android:text=""
+                android:drawableLeft="@drawable/ic_lock_white"
+                android:backgroundTint="@color/colorWhite"
+                android:textColorHint="@color/colorOffWhite"
+                android:textColor="@color/colorWhite"
+                android:hint="password"
+                android:textAlignment="center"
+                android:layout_marginBottom="10dp"
+                />
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Re-enter Password:"
-                android:textSize="18dp" />
 
             <EditText
                 android:id="@+id/password2"
@@ -93,35 +85,43 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPassword"
-                android:text="1234"/>
+                android:text=""
+                android:drawableLeft="@drawable/ic_lock_white"
+                android:hint="re-enter password"
+                android:textAlignment="center"
+                android:layout_marginBottom="50dp"
+                android:backgroundTint="@color/colorWhite"
+                android:textColorHint="@color/colorOffWhite"
+                android:textColor="@color/colorWhite"
+                />
 
-            <LinearLayout
+            <Button
+                android:id="@+id/signup"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/round_buttons"
+                android:onClick="onSignUp"
+                android:text="Sign Up"
+                android:textColor="@color/colorWhite"
 
-                <Button
-                    android:id="@+id/cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/round_buttons"
-                    android:onClick="onCancel"
-                    android:text="Cancel"
-                    android:textColor="@color/colorWhite" />
+                />
 
-                <Button
-                    android:id="@+id/signup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/round_buttons"
-                    android:onClick="onSignUp"
-                    android:text="Sign Up!"
-                    android:textColor="@color/colorWhite" />
-            </LinearLayout>
+
+            <Button
+                android:id="@+id/cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="0.5"
+                android:background="@color/colorPrimary"
+                android:onClick="onCancel"
+                android:text="Cancel"
+                android:textColor="@color/colorWhite"
+                android:visibility="gone"/>
+
+
         </LinearLayout>
     </ScrollView>
 

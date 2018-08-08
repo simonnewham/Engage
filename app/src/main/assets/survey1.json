@@ -1,0 +1,32 @@
+{
+  "Survey_ID": "Survey1",
+  "Title": "Engagement Survey 1",
+  "Description": "This short survey seeks to measure the impact that this article had on you.",
+  "Date_Created": "01-08-18",
+  "News_ID":"Survey010818",
+  "User_groups": ["1"],
+  "Qnumber": 5,
+  "Q1": {
+    "Question": "Can you give a summary of what this article was about?",
+    "Type": "Text" 
+  },
+  "Q2": {
+    "Question": "How did this article make you feel?",
+    "Type": "MCQ",
+    "Options": ["Sad", "Angry","Fearful","Surprised","Indifferent","Happy"]
+  },
+  "Q3": {
+    "Question": "Did you learn anything new from this article? If yes, state what, if no, write no ",
+    "Type": "Text" 
+  },
+  "Q4": {
+    "Question": "Would you recommend this article to a friend or family member?",
+    "Type": "MCQ",
+    "Options": ["Yes", "No"] 
+  },
+  "Q5": {
+    "Question": "Did you agree with the point of few of this article?",
+    "Type": "MCQ",
+    "Options": ["Strongly disagree", "Somewhat disagree", "Impartial", "Somewhat agree","Strongly agree"]
+  }
+}

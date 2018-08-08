@@ -6,4 +6,6 @@ package com.engage.simonnewham.engageapp.models;
  */
 
 public class NewsArticle {
+
+
 }

@@ -55,7 +55,7 @@
                 android:textColor="@color/colorBlack"
                 android:textColorHint="@color/colorBlack"
                 android:layout_gravity="center"
-                android:text="email@email.com"
+                android:text="test@test.com"
                 />
 
             <EditText

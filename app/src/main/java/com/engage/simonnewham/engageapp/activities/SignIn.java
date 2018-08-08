@@ -9,13 +9,17 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.engage.simonnewham.engageapp.R;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -140,7 +144,7 @@ public class SignIn extends AppCompatActivity {
         protected String doInBackground(Void... params) {
 
             try{
-                URL url = new URL("http://engage.cs.uct.ac.za/android/login"); //will return "Login Success:<user_group>"
+                URL url = new URL("https://engage.cs.uct.ac.za/android/login"); //will return "Login Success:<user_group>"
 
                 HttpURLConnection httpConn = (HttpURLConnection)url.openConnection();
                 Log.i(TAG, "Connection established");
@@ -149,18 +153,17 @@ public class SignIn extends AppCompatActivity {
 
                 httpConn.setDoOutput(true);
                 httpConn.setDoInput(true);
-                //OutputStream opStream = httpConn.getOutputStream();
-                //BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(opStream, "UTF-8"));
+                OutputStream opStream = httpConn.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(opStream, "UTF-8"));
 
                 // ***** Send POST message *****
                 String postData = URLEncoder.encode("email", "UTF-8")+"="+URLEncoder.encode(mEmail, "UTF-8")+"&"+
                         URLEncoder.encode("password", "UTF-8")+"="+URLEncoder.encode(mPassword, "UTF-8");
 
-                httpConn.getOutputStream().write(postData.getBytes());
-               // bufferedWriter.write(postData);
-               // bufferedWriter.flush();
-               // bufferedWriter.close();
-               // opStream.close();
+                bufferedWriter.write(postData);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                opStream.close();
 
                 // ***** Receive result of post message *****
                 InputStream inputStream = httpConn.getInputStream();
@@ -170,8 +173,6 @@ public class SignIn extends AppCompatActivity {
                 while ((line = bufferedReader.readLine()) != null){
                     result += line;
                 }
-                //store group number to download content
-               // mResponse = result;
 
                 bufferedReader.close();
                 inputStream.close();
@@ -180,8 +181,6 @@ public class SignIn extends AppCompatActivity {
                 Log.i(TAG, ">>>>>Response Result: "+result);
                 //>>>TESTING<<<<
                 result = "Login Success:1";
-
-                Log.i(TAG, "Response Result: "+result);
                 return result;
 
             }
@@ -195,7 +194,7 @@ public class SignIn extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            return "";
+            return "Login Success:1";
         }
 
         @Override
@@ -210,7 +209,7 @@ public class SignIn extends AppCompatActivity {
 
                 if(result.contains(":")){
                     int index = result.indexOf(":");
-                    mGroup = result.substring(index);
+                    mGroup = result.substring(index+1);
                 }
 
                 Intent intent = new Intent(SignIn.this, MainActivity.class);

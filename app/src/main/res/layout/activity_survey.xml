@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.engage.simonnewham.engageapp.activities.SurveyActivity">
+    tools:context="com.engage.simonnewham.engageapp.activities.SurveyActivity"
+    >
 
     <include
         android:id="@+id/toolbar"
@@ -17,12 +18,23 @@
         android:orientation="vertical">
 
         <Button
+            android:id="@+id/button_begin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:onClick="onBegin"
+            android:text="Begin Survey>"
+            />
+
+        <Button
             android:id="@+id/button_next"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:onClick="checkInput"
-            android:text="Next" />
+            android:text="Next"
+            android:visibility="gone"
+            />
 
         <Button
             android:id="@+id/button_submit"
@@ -55,14 +67,15 @@
                 android:layout_height="wrap_content"
                 android:text="Question"
                 android:textSize="15dp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:visibility="gone"/>
 
             <EditText
                 android:id="@+id/editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:inputType="textPersonName"
+                android:inputType="textMultiLine"
                 android:text=""
                 android:visibility="gone"
                 />
@@ -72,7 +85,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone"
-                />
+                >
+
+            </RadioGroup>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                app:srcCompat="@drawable/survey_tick"
+                android:visibility="gone"/>
 
         </LinearLayout>
 

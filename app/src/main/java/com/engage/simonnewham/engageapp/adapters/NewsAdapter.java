@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.engage.simonnewham.engageapp.R;
-import com.engage.simonnewham.engageapp.models.NewsItem;
+import com.engage.simonnewham.engageapp.models.NewsListItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +19,12 @@ import java.util.List;
  * Created by simonnewham on 2018/07/27.
  */
 
-public class NewsAdapter extends ArrayAdapter<NewsItem>{
+public class NewsAdapter extends ArrayAdapter<NewsListItem>{
 
     private Context mContext;
-    private List<NewsItem> newsList = new ArrayList<>();
+    private List<NewsListItem> newsList = new ArrayList<>();
 
-    public NewsAdapter(@NonNull Context context, ArrayList<NewsItem> list) {
+    public NewsAdapter(@NonNull Context context, ArrayList<NewsListItem> list) {
         super(context, 0 , list);
         mContext = context;
         newsList = list;
@@ -37,7 +37,7 @@ public class NewsAdapter extends ArrayAdapter<NewsItem>{
         if(listItem == null)
             listItem = LayoutInflater.from(mContext).inflate(R.layout.content_list_item,parent,false);
 
-        NewsItem currentItem = newsList.get(position);
+        NewsListItem currentItem = newsList.get(position);
 
         TextView name = (TextView) listItem.findViewById(R.id.textView_name);
         name.setText(currentItem.getTitle());

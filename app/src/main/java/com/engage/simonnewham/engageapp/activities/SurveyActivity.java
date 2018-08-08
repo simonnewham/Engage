@@ -11,9 +11,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -48,11 +50,17 @@ public class SurveyActivity extends AppCompatActivity {
     Survey survey; //current survey object
     ArrayList<String> responses;
 
+    Button begin;
     Button submit;
     Button next;
     RadioGroup radioGroup;
     EditText editText;
     TextView questionTitle;
+    ImageView survey_tick;
+
+    //temporary views for begin survey
+    TextView title;
+    TextView description;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,16 +73,13 @@ public class SurveyActivity extends AppCompatActivity {
 
         //View elements
         lPanel = (LinearLayout) findViewById(R.id.survey_panel);
+        begin = (Button) findViewById(R.id.button_begin);
         submit = (Button) findViewById(R.id.button_submit);
         radioGroup = (RadioGroup) findViewById(R.id.RadioGroup);
         editText = (EditText) findViewById(R.id.editText);
         questionTitle = (TextView) findViewById(R.id.text_question);
         next = (Button) findViewById(R.id.button_next);
-
-        //setup toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Survey");
-        setSupportActionBar(toolbar);
+        survey_tick = (ImageView) findViewById(R.id.imageView);
 
         //get extra info
         Bundle extras = getIntent().getExtras();
@@ -83,6 +88,11 @@ public class SurveyActivity extends AppCompatActivity {
             user_group = extras.getString("group");
             surveyID = extras.getString("surveyID");
         }
+
+        //setup toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Survey");
+        setSupportActionBar(toolbar);
 
         loadSurvey(surveyID);
     }
@@ -100,7 +110,7 @@ public class SurveyActivity extends AppCompatActivity {
         ArrayList<Question> questionList = new ArrayList<>(); //hold all questions in survey
 
         try{
-            JSONObject reader = new JSONObject(loadJSONFromAsset());
+            JSONObject reader = new JSONObject(loadJSONFromAsset(surveyID));
 
             //JSONObject jTitle = reader.getJSONObject("Title");
            // jTitle = reader.getString("Title");
@@ -137,10 +147,6 @@ public class SurveyActivity extends AppCompatActivity {
 
            }
 
-//            for (int i=0; i<questionList.size(); i++){
-//                Log.i(TAG, "QUESTION LIST OUTPUT>>>>>>>>"+questionList.get(i).toString());
-//            }
-
             //create Survey object containing question list
             if(questionList !=null){
                 survey = new Survey(reader.getString("Survey_ID"), reader.getString("Title"), reader.getString("Description"),reader.getString("News_ID"),
@@ -162,16 +168,33 @@ public class SurveyActivity extends AppCompatActivity {
     //displays the initial survey title and description
     public void displaySurvey(Survey s){
 
+        if(surveyID.equals("Baseline.json")){
+            TextView thank = new TextView(this);
+            thank.setText("Welcome "+email+"!"+"\n"+"\nThank you for signing up for ENGAGE, please complete the following questionnaire to finish the sign up process! \n");
+            thank.setTypeface(null, Typeface.BOLD);
+            thank.setTextSize(20);
+            lPanel.addView(thank);
+        }
+
+        title = new TextView(this);
+        title.setText("Survey Title: "+s.getTitle());
+        title.setTypeface(null, Typeface.BOLD);
+        title.setTextSize(15);
+        lPanel.addView(title);
+
+        description = new TextView(this);
+        description.setText("\n"+s.getDescription());
+        description.setTextSize(15);
+        lPanel.addView(description);
+
+    }
+    public void onBegin(View view){
+        begin.setVisibility(View.GONE);
+        title.setVisibility(View.GONE);
+        description.setVisibility(View.GONE);
+        questionTitle.setVisibility(View.VISIBLE);
+        next.setVisibility(View.VISIBLE);
         onNext();
-//        TextView title = new TextView(this);
-//        title.setText("Survey Title: "+s.getTitle());
-//        title.setTypeface(null, Typeface.BOLD);
-//        title.setTextSize(20);
-//        lPanel.addView(title);
-//        TextView description = new TextView(this);
-//        description.setText("\n"+s.getDescription());
-//        description.setTextSize(15);
-//        lPanel.addView(description);
 
     }
 
@@ -179,7 +202,13 @@ public class SurveyActivity extends AppCompatActivity {
     //checks if user has supplied input to question before allowing user to answer next question
     public void checkInput(View view){
 
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        //code to hide keyboard after each question
+        try  {
+            InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+
+        }
 
         //add current response to responses before allow user to go to next question
         String response;
@@ -209,9 +238,24 @@ public class SurveyActivity extends AppCompatActivity {
         }
 
         if(current==survey.getqNum()){
-            lPanel.removeAllViews();
+            //lPanel.removeAllViews();
+            //remove all options after last question
             submit.setVisibility(View.VISIBLE);
             next.setVisibility(View.GONE);
+            survey_tick.setVisibility(View.VISIBLE);
+            editText.setVisibility(View.GONE);
+            radioGroup.removeAllViews();
+            radioGroup.clearCheck();
+            radioGroup.setVisibility(View.GONE);
+            questionTitle.setVisibility(View.GONE);
+
+            //TRACING
+            SurveyResponse surveyResponse = new SurveyResponse(email, user_group, surveyID, responses );
+            Gson gson = new Gson();
+            String json = gson.toJson(surveyResponse);
+            TextView test = new TextView(this);
+            test.setText(json);
+            lPanel.addView(test);
         }
     }
 
@@ -232,23 +276,16 @@ public class SurveyActivity extends AppCompatActivity {
             radioGroup.clearCheck();
             radioGroup.setVisibility(View.GONE);
 
-            // current = (current+1)%survey.getqNum();
-
             Question toLoad = survey.getQuestions().get(current);
 
             int temp = current+1;
             //TextView q = new TextView(this);
             questionTitle.setText("Question "+temp+": "+toLoad.getQuestion());
-            //q.setTypeface(null, Typeface.BOLD);
-            //q.setTextSize(15);
-            //lPanel.addView(q);
 
             String type = toLoad.getType();
 
             //add option to input response
             if(type.equals("Text")){
-                //EditText response = new EditText(this);
-                //lPanel.addView(response);
                 editText.setVisibility(View.VISIBLE);
             }
 
@@ -266,8 +303,6 @@ public class SurveyActivity extends AppCompatActivity {
                 //lPanel.addView(radioGroup);
             }
         }
-
-
     }
 
     /**
@@ -277,10 +312,14 @@ public class SurveyActivity extends AppCompatActivity {
      */
     public void onSubmit(View view){
         Toast.makeText(this, "Survey Completed", Toast.LENGTH_SHORT).show();
+        //load survey complete image
+
+
         //create survey resonse object and convert to JSON representation
         SurveyResponse surveyResponse = new SurveyResponse(email, user_group, surveyID, responses );
         Gson gson = new Gson();
         String json = gson.toJson(surveyResponse);
+
         Log.i(TAG, ">>>>>>>JSON SURVEY RESPONSE<<<<<<<"+json);
 
         //take user to user home page keeping track of email and group
@@ -295,10 +334,10 @@ public class SurveyActivity extends AppCompatActivity {
      * Method to convert a JSON file into a string
      * @return
      */
-    public String loadJSONFromAsset() {
+    public String loadJSONFromAsset(String filename) {
         String json = null;
         try {
-            InputStream is = getAssets().open("baseline.json");
+            InputStream is = getAssets().open(filename);
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
@@ -330,6 +369,7 @@ public class SurveyActivity extends AppCompatActivity {
                 Toast.makeText(this, "Home clicked", Toast.LENGTH_SHORT).show();
                 intent = new Intent(SurveyActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
                 return true;
             case R.id.about:
                 Toast.makeText(this, "About clicked", Toast.LENGTH_SHORT).show();

@@ -33,6 +33,9 @@ public class ContentActivity extends AppCompatActivity {
     TextView date;
     TextView content;
 
+    String email;
+    String user_group;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +51,14 @@ public class ContentActivity extends AppCompatActivity {
         title = (TextView) findViewById(R.id.title);
         date = (TextView) findViewById(R.id.date);
         content = (TextView) findViewById(R.id.content);
+
+        //get Extra
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            email = extras.getString("email");
+            user_group = extras.getString("group");
+
+        }
 
         //connect to DB and get Article details
 
@@ -122,6 +133,9 @@ public class ContentActivity extends AppCompatActivity {
     public void loadSurvey(View view){
         Toast.makeText(this, "Load Survey clicked", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(ContentActivity.this, SurveyActivity.class);
+        intent.putExtra("email", email);
+        intent.putExtra("group", user_group);
+        intent.putExtra("surveyID", "survey1.json"); //will change for http connection
         startActivity(intent);
     }
 

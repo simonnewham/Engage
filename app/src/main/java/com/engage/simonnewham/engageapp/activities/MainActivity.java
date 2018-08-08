@@ -1,30 +1,36 @@
 package com.engage.simonnewham.engageapp.activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.engage.simonnewham.engageapp.adapters.NewsAdapter;
 import com.engage.simonnewham.engageapp.R;
-import com.engage.simonnewham.engageapp.models.NewsItem;
+import com.engage.simonnewham.engageapp.adapters.NewsAdapter;
+import com.engage.simonnewham.engageapp.models.NewsListItem;
 
 import java.util.ArrayList;
 
+//import android.support.v7.app.AppCompatActivity;
+
 /**
- * user home page
+ * user home page with list of news items
+ * Load particular news item when user clicks on item
  */
 
 public class MainActivity extends AppCompatActivity {
 
     private ListView news_list;
     private NewsAdapter newsAdapter;
+    private LinearLayout main_panel;
 
     private String email;
     private String user_group;
@@ -38,21 +44,29 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //setUp news item list
-        news_list = (ListView) findViewById(R.id.news_list);
-        ArrayList<NewsItem> newsList = new ArrayList<>();
-        newsList.add(new NewsItem("Man Utd 1-4 Liverpool: Xherdan Shaqiri scores stunning overhead kick", "27-07-18"));
-        newsList.add(new NewsItem("News Item 2", "28-07-18"));
-        newsList.add(new NewsItem("Survey Number 1", "31-08-18"));
-        newsAdapter = new NewsAdapter(this, newsList);
-        news_list.setAdapter(newsAdapter);
-
         //get extra info to load personalised content
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             email = extras.getString("email");
             user_group = extras.getString("group");
         }
+
+        //TRACING
+        TextView tmail = (TextView) findViewById(R.id.tmail);
+        tmail.setText("Email: "+email);
+        TextView tgroup = (TextView) findViewById(R.id.tgroup);
+        tgroup.setText("User Group: "+user_group);
+
+        //connect to DB to download news items
+
+        //setUp news item list
+        news_list = (ListView) findViewById(R.id.news_list);
+        ArrayList<NewsListItem> newsList = new ArrayList<>();
+        newsList.add(new NewsListItem("Man Utd 1-4 Liverpool: Xherdan Shaqiri scores stunning overhead kick", "27-07-18"));
+        newsList.add(new NewsListItem("News Item 2", "28-07-18"));
+        newsList.add(new NewsListItem("Survey Number 1", "31-08-18"));
+        newsAdapter = new NewsAdapter(this, newsList);
+        news_list.setAdapter(newsAdapter);
 
     }
 
@@ -86,12 +100,15 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
     public void loadNews(View view){
 
         Intent intent = new Intent(MainActivity.this, ContentActivity.class);
+        intent.putExtra("email", email);
+        intent.putExtra("group", user_group);
+        intent.putExtra("newsID", "news1"); //**UPDATE THIS WITH ACTUAL NEWS ID FOR DB
         startActivity(intent);
         finish();
 
     }
-
 }
