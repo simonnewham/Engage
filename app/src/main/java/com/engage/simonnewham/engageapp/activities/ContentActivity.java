@@ -157,6 +157,8 @@ public class ContentActivity extends AppCompatActivity {
             case R.id.home:
                 Toast.makeText(this, "Home clicked", Toast.LENGTH_SHORT).show();
                 intent = new Intent(ContentActivity.this, MainActivity.class);
+                intent.putExtra("email", email);
+                intent.putExtra("group", user_group);
                 startActivity(intent);
                 finish();
                 return true;

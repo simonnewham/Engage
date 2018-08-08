@@ -2,6 +2,7 @@ package com.engage.simonnewham.engageapp.activities;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -32,8 +33,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +73,9 @@ public class SurveyActivity extends AppCompatActivity {
     //temporary views for begin survey
     TextView title;
     TextView description;
+
+
+    private SurveyTask mAuthTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -320,14 +335,17 @@ public class SurveyActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String json = gson.toJson(surveyResponse);
 
+        mAuthTask = new SurveyTask(email, user_group, json);
+        mAuthTask.execute((Void) null);
+
         Log.i(TAG, ">>>>>>>JSON SURVEY RESPONSE<<<<<<<"+json);
 
         //take user to user home page keeping track of email and group
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("email", email);
-        intent.putExtra("group", user_group);
-        startActivity(intent);
-        finish();
+//        Intent intent = new Intent(this, MainActivity.class);
+//        intent.putExtra("email", email);
+//        intent.putExtra("group", user_group);
+//        startActivity(intent);
+//        finish();
     }
 
     /**
@@ -368,6 +386,8 @@ public class SurveyActivity extends AppCompatActivity {
             case R.id.home:
                 Toast.makeText(this, "Home clicked", Toast.LENGTH_SHORT).show();
                 intent = new Intent(SurveyActivity.this, MainActivity.class);
+                intent.putExtra("email", email);
+                intent.putExtra("group", user_group);
                 startActivity(intent);
                 finish();
                 return true;
@@ -383,6 +403,122 @@ public class SurveyActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class SurveyTask extends AsyncTask<Void, Void, String> {
+
+        private final String mEmail;
+        private final String mGroup;
+        private String mResponse;
+
+        SurveyTask(String email, String user_group, String response) {
+            mEmail = email;
+            mGroup = user_group;
+            mResponse=response;
+        }
+
+        /**
+         * Connect to API to upload surveyResponse to API
+         */
+        @Override
+        protected String doInBackground(Void... params) {
+
+            try{
+                URL url = new URL("https://engage.cs.uct.ac.za/android/post_survey"); //will return "Login Success:<user_group>"
+
+                HttpURLConnection httpConn = (HttpURLConnection)url.openConnection();
+                Log.i(TAG, "Connection established");
+
+                httpConn.setRequestMethod("POST");
+                httpConn.setRequestProperty("Content-Type", "application/json");
+
+                httpConn.setDoOutput(true);
+                httpConn.setDoInput(true);
+                OutputStream opStream = httpConn.getOutputStream();
+
+                String str =  mResponse;
+                byte[] outputInBytes = str.getBytes("UTF-8");
+
+                opStream.write( outputInBytes );
+                opStream.close();
+
+//                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(opStream, "UTF-8"));
+//
+//                // ***** Send POST message *****
+//                String postData = URLEncoder.encode("surveyResponse", "UTF-8")+"="+URLEncoder.encode(mResponse, "UTF-8");
+//
+//                bufferedWriter.write(postData);
+//                bufferedWriter.flush();
+//                bufferedWriter.close();
+//                opStream.close();
+
+                // ***** Receive result of post message *****
+                InputStream inputStream = httpConn.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                String result = "";
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null){
+                    result += line;
+                }
+
+                bufferedReader.close();
+                inputStream.close();
+                httpConn.disconnect();
+
+                Log.i(TAG, ">>>>>Response Result: "+result);
+                //>>>TESTING<<<<
+
+                return result;
+
+            }
+            catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return "";
+        }
+
+        @Override
+        //runs after doInBackground
+        protected void onPostExecute(final String result) {
+            mAuthTask = null;
+            //showProgress(false);
+
+            if (result.startsWith("Upload Success")) {
+                Log.i(TAG, "SUCCESS");
+                String surveyStore ="";
+
+                if(result.contains(":")){
+                    int index = result.indexOf(":");
+                    surveyStore = result.substring(index+1);
+                }
+
+                Intent intent = new Intent(SurveyActivity.this, MainActivity.class);
+                intent.putExtra("email", mEmail);
+                intent.putExtra("group", mGroup);
+                startActivity(intent);
+                finish();
+            }
+            else {
+                Log.i(TAG, "Server error:"+result);
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            mAuthTask = null;
+            //showProgress(false);
         }
     }
 }
