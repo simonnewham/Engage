@@ -25,7 +25,8 @@
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.SignUpActivity" />
         <activity android:name=".activities.ContentActivity" />
-        <activity android:name=".activities.SurveyActivity"></activity>
+        <activity android:name=".activities.SurveyActivity" />
+        <activity android:name=".activities.AboutActivity"></activity>
     </application>
 
 </manifest>

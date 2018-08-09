@@ -83,13 +83,18 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.home:
-                Toast.makeText(this, "Home clicked", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Home clicked", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.about:
-                Toast.makeText(this, "About clicked", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "About clicked", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, AboutActivity.class);
+                intent.putExtra("email", email);
+                intent.putExtra("group", user_group);
+                startActivity(intent);
+                finish();
                 return true;
             case R.id.logout:
-                Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
                 intent = new Intent(MainActivity.this, SignIn.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

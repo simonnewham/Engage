@@ -572,7 +572,7 @@ public class SurveyActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.home:
-                Toast.makeText(this, "Home clicked", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Home clicked", Toast.LENGTH_SHORT).show();
                 intent = new Intent(SurveyActivity.this, MainActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
@@ -580,10 +580,14 @@ public class SurveyActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.about:
-                Toast.makeText(this, "About clicked", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "About clicked", Toast.LENGTH_SHORT).show();
+                intent = new Intent(this, AboutActivity.class);
+                intent.putExtra("email", email);
+                intent.putExtra("group", user_group);
+                startActivity(intent);
                 return true;
             case R.id.logout:
-                Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
                 intent = new Intent(SurveyActivity.this, SignIn.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

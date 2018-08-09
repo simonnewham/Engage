@@ -164,6 +164,11 @@ public class ContentActivity extends AppCompatActivity {
                 return true;
             case R.id.about:
                 Toast.makeText(this, "About clicked", Toast.LENGTH_SHORT).show();
+                intent = new Intent(ContentActivity.this, AboutActivity.class);
+                intent.putExtra("email", email);
+                intent.putExtra("group", user_group);
+                startActivity(intent);
+                finish();
                 return true;
             case R.id.logout:
                 Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
