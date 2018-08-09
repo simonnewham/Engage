@@ -238,7 +238,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Intent intent = new Intent(SignUpActivity.this, SurveyActivity.class);
                 intent.putExtra("email", mEmail);
                 intent.putExtra("group", mGroup);
-                intent.putExtra("surveyID", "baseline.json"); //will change for http connection
+                intent.putExtra("surveyID", "BASELINE"); //will change for http connection
                 startActivity(intent);
                 finish();
             }

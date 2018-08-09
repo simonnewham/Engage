@@ -28,6 +28,7 @@ import com.engage.simonnewham.engageapp.models.Question;
 import com.engage.simonnewham.engageapp.models.Survey;
 import com.engage.simonnewham.engageapp.models.SurveyResponse;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +47,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +61,7 @@ public class SurveyActivity extends AppCompatActivity {
     private final String TAG = "SurveyActivity";
     LinearLayout lPanel;
     int current =-1; //int to keep track of question number being displayed
+
     Survey survey; //current survey object
     ArrayList<String> responses;
 
@@ -74,8 +77,8 @@ public class SurveyActivity extends AppCompatActivity {
     TextView title;
     TextView description;
 
-
-    private SurveyTask mAuthTask;
+    private SurveyDownload surveyDownload;
+    private SurveyUpload surveyUpload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +104,7 @@ public class SurveyActivity extends AppCompatActivity {
         if(extras != null) {
             email = extras.getString("email");
             user_group = extras.getString("group");
-            surveyID = extras.getString("surveyID");
+            surveyID = extras.getString("surveyID"); //for now just title of survey to search for
         }
 
         //setup toolbar
@@ -109,81 +112,16 @@ public class SurveyActivity extends AppCompatActivity {
         toolbar.setTitle("Survey");
         setSupportActionBar(toolbar);
 
-        loadSurvey(surveyID);
-    }
-
-    /**
-     * Method to load survey
-     * @param surveyID
-     */
-    public void loadSurvey(String surveyID){
-
-        //download survey from DB, http request will depend on surveyID
-
-
-        //set up Question model
-        ArrayList<Question> questionList = new ArrayList<>(); //hold all questions in survey
-
-        try{
-            JSONObject reader = new JSONObject(loadJSONFromAsset(surveyID));
-
-            //JSONObject jTitle = reader.getJSONObject("Title");
-           // jTitle = reader.getString("Title");
-            int q = reader.getInt("Qnumber"); //the number of questions
-            Log.i(TAG, "NUMBER OF QUESTIONS>>>>>>>>"+q);
-            //iterate over questions and create new question objects
-            for(int i=1; i<q+1; i++){
-
-                JSONObject jQuestion = reader.getJSONObject("Q"+i);
-                Question question=null;
-
-                if(jQuestion.getString("Type").equals("Text")){
-                    question = new Question(jQuestion.getString("Question"),jQuestion.getString("Type"));
-                }
-
-                else if (jQuestion.getString("Type").equals("MCQ")){
-                    ArrayList<String> options = new ArrayList<>();
-
-                    JSONArray jOptions = jQuestion.getJSONArray("Options");
-                    if(jOptions!=null){
-                        for (int k=0; k<jOptions.length(); k++){
-                            String option = jOptions.getString(k);
-                            options.add(option);
-
-                        }
-                    }
-
-                    question = new Question(jQuestion.getString("Question"),jQuestion.getString("Type"), options);
-
-                }
-                if(question !=null){
-                    questionList.add(question);
-                }
-
-           }
-
-            //create Survey object containing question list
-            if(questionList !=null){
-                survey = new Survey(reader.getString("Survey_ID"), reader.getString("Title"), reader.getString("Description"),reader.getString("News_ID"),
-                        reader.getString("Date_Created"),reader.getInt("Qnumber"),questionList);
-
-                displaySurvey(survey);
-
-            }
-
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        //Display survey in activity_survey based on question type
+        //download the survey
+        surveyDownload = new SurveyDownload(surveyID);
+        surveyDownload.execute((Void) null);
 
     }
 
     //displays the initial survey title and description
     public void displaySurvey(Survey s){
 
-        if(surveyID.equals("Baseline.json")){
+        if(surveyID.equals("BASELINE")){
             TextView thank = new TextView(this);
             thank.setText("Welcome "+email+"!"+"\n"+"\nThank you for signing up for ENGAGE, please complete the following questionnaire to finish the sign up process! \n");
             thank.setTypeface(null, Typeface.BOLD);
@@ -192,7 +130,7 @@ public class SurveyActivity extends AppCompatActivity {
         }
 
         title = new TextView(this);
-        title.setText("Survey Title: "+s.getTitle());
+        title.setText("Survey Title: "+s.getName());
         title.setTypeface(null, Typeface.BOLD);
         title.setTextSize(15);
         lPanel.addView(title);
@@ -204,12 +142,23 @@ public class SurveyActivity extends AppCompatActivity {
 
     }
     public void onBegin(View view){
-        begin.setVisibility(View.GONE);
-        title.setVisibility(View.GONE);
-        description.setVisibility(View.GONE);
-        questionTitle.setVisibility(View.VISIBLE);
-        next.setVisibility(View.VISIBLE);
-        onNext();
+        if(survey != null){
+            begin.setVisibility(View.GONE);
+            title.setVisibility(View.GONE);
+            description.setVisibility(View.GONE);
+            questionTitle.setVisibility(View.VISIBLE);
+            next.setVisibility(View.VISIBLE);
+            onNext();
+        }
+        else{
+            //error
+            title = new TextView(this);
+            title.setText("Server Error, please try again later.");
+            title.setTypeface(null, Typeface.BOLD);
+            title.setTextSize(25);
+            lPanel.addView(title);
+        }
+
 
     }
 
@@ -252,7 +201,7 @@ public class SurveyActivity extends AppCompatActivity {
             }
         }
 
-        if(current==survey.getqNum()){
+        if(current==survey.getQuestions().size()){ //last question has been answered
             //lPanel.removeAllViews();
             //remove all options after last question
             submit.setVisibility(View.VISIBLE);
@@ -283,7 +232,7 @@ public class SurveyActivity extends AppCompatActivity {
         //stop keyboard from showing
         current = (current+1); //for final question it will make current equal to question number
 
-        if( current < survey.getqNum()){
+        if( current < survey.getQuestions().size()){
             //lPanel.removeAllViews();
             editText.setText("");
             editText.setVisibility(View.GONE);
@@ -300,7 +249,7 @@ public class SurveyActivity extends AppCompatActivity {
             String type = toLoad.getType();
 
             //add option to input response
-            if(type.equals("Text")){
+            if(type.equals("TEXT")){
                 editText.setVisibility(View.VISIBLE);
             }
 
@@ -310,12 +259,11 @@ public class SurveyActivity extends AppCompatActivity {
                 radioGroup.setVisibility(View.VISIBLE);
                 ArrayList<String> options = toLoad.getOptions();
 
-                for(int i=0; i<options.size();i++){
+                for(int i=0; i<options.size();i++) {
                     RadioButton radioButton = new RadioButton(this);
                     radioButton.setText(options.get(i));
                     radioGroup.addView(radioButton);
                 }
-                //lPanel.addView(radioGroup);
             }
         }
     }
@@ -326,49 +274,289 @@ public class SurveyActivity extends AppCompatActivity {
      * @param view
      */
     public void onSubmit(View view){
-        Toast.makeText(this, "Survey Completed", Toast.LENGTH_SHORT).show();
-        //load survey complete image
-
-
+        //Toast.makeText(this, "Survey Completed", Toast.LENGTH_SHORT).show();
         //create survey resonse object and convert to JSON representation
         SurveyResponse surveyResponse = new SurveyResponse(email, user_group, surveyID, responses );
         Gson gson = new Gson();
         String json = gson.toJson(surveyResponse);
 
-        mAuthTask = new SurveyTask(email, user_group, json);
-        mAuthTask.execute((Void) null);
+        surveyUpload = new SurveyUpload(email, user_group, json);
+        surveyUpload.execute((Void) null);
 
         Log.i(TAG, ">>>>>>>JSON SURVEY RESPONSE<<<<<<<"+json);
-
-        //take user to user home page keeping track of email and group
-//        Intent intent = new Intent(this, MainActivity.class);
-//        intent.putExtra("email", email);
-//        intent.putExtra("group", user_group);
-//        startActivity(intent);
-//        finish();
     }
 
     /**
      * Method to convert a JSON file into a string
      * @return
      */
-    public String loadJSONFromAsset(String filename) {
-        String json = null;
-        try {
-            InputStream is = getAssets().open(filename);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
+//    public String loadJSONFromAsset(String filename) {
+//        String json = null;
+//        try {
+//            InputStream is = getAssets().open(filename);
+//            int size = is.available();
+//            byte[] buffer = new byte[size];
+//            is.read(buffer);
+//            is.close();
+//            json = new String(buffer, "UTF-8");
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//            return null;
+//        }
+//        return json;
+//    }
+
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class SurveyDownload extends AsyncTask<Void, Void, String> {
+
+        private final String mSurveyID;
+
+
+        SurveyDownload(String surveyID) {
+            mSurveyID = surveyID;
         }
-        return json;
+
+        /**
+         * Connect to API to upload surveyResponse to API
+         */
+        @Override
+        protected String doInBackground(Void... params) {
+
+            try{
+                URL url = new URL("https://engage.cs.uct.ac.za/android/get_survey"); //will return "Login Success:<user_group>"
+
+                HttpURLConnection httpConn = (HttpURLConnection)url.openConnection();
+                Log.i(TAG, "Connection established");
+
+                httpConn.setRequestMethod("POST");
+
+                httpConn.setDoOutput(true);
+                httpConn.setDoInput(true);
+                OutputStream opStream = httpConn.getOutputStream();
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(opStream, "UTF-8"));
+
+                // ***** Send POST message *****
+                String postData = URLEncoder.encode("survey", "UTF-8")+"="+URLEncoder.encode(mSurveyID, "UTF-8");
+
+                bufferedWriter.write(postData);
+                bufferedWriter.flush();
+                bufferedWriter.close();
+                opStream.close();
+
+                // Should receive raw JSON of survey
+                InputStream inputStream = httpConn.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                String result = "";
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null){
+                    result += line;
+                }
+
+                bufferedReader.close();
+                inputStream.close();
+                httpConn.disconnect();
+
+                Log.i(TAG, ">>>>>Response Result: "+result);
+
+                return result;
+
+            }
+            catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return "";
+        }
+
+        @Override
+        //runs after doInBackground
+        protected void onPostExecute(final String result) {
+            surveyDownload = null;
+            //showProgress(false);
+            if (result.startsWith("Error") || result.equals("")){
+                Log.i(TAG, "Server error:"+result);
+            }
+            else{
+                //convert from JSON string to JSONObject
+                ArrayList<Question> questionList = new ArrayList<>(); //hold all questions in survey
+
+                try {
+                    JSONObject newJObject = new JSONObject(result); //store survey as JSON object
+
+                    JSONArray questions = newJObject.getJSONArray("questions");
+                    if(questions!=null){
+                        for (int k=0; k<questions.length(); k++){
+
+                            JSONObject jQuestion = questions.getJSONObject(k);
+                            Question question = null;
+
+                            if(jQuestion.getString("type").equals("TEXT")){
+                                question = new Question(jQuestion.getString("content"),jQuestion.getString("type"));
+
+                            }
+
+                            else if (jQuestion.getString("type").equals("MCQ")){
+
+                                ArrayList<String> options = new ArrayList<>(); //store an array of answers for MCQ questions
+
+                                JSONArray jAnswers = jQuestion.getJSONArray("answers");
+
+                                if(jAnswers!=null){
+                                    for (int i=0; i<jAnswers.length(); i++){
+
+                                        JSONObject jTemp = jAnswers.getJSONObject(i);
+                                        String answer = jTemp.getString("content");
+                                        options.add(answer);
+                                    }
+                                }
+
+                                question = new Question(jQuestion.getString("content"),jQuestion.getString("type"), options);
+                            }
+
+                            if(question !=null){
+                                questionList.add(question);
+                            }
+
+                        }
+                    }
+
+                    //create Survey object containing question list
+                    if(questionList !=null){
+                        survey = new Survey(newJObject.getString("_id"), newJObject.getString("name"),
+                                newJObject.getString("description"), questionList);
+
+                        displaySurvey(survey);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            //show some error message
+        }
+
+        @Override
+        protected void onCancelled() {
+            surveyDownload = null;
+            //showProgress(false);
+        }
     }
 
+    /**
+     * Represents an asynchronous login/registration task used to authenticate
+     * the user.
+     */
+    public class SurveyUpload extends AsyncTask<Void, Void, String> {
 
+        private final String mEmail;
+        private final String mGroup;
+        private String mResponse;
+
+        SurveyUpload(String email, String user_group, String surveyR) {
+            mEmail = email;
+            mGroup = user_group;
+            mResponse=surveyR;
+        }
+
+        /**
+         * Connect to API to upload surveyResponse to API
+         */
+        @Override
+        protected String doInBackground(Void... params) {
+
+            try{
+                URL url = new URL("https://engage.cs.uct.ac.za/android/post_survey"); //will return "Login Success:<user_group>"
+
+                HttpURLConnection httpConn = (HttpURLConnection)url.openConnection();
+                Log.i(TAG, "Connection established");
+
+                httpConn.setRequestMethod("POST");
+                httpConn.setRequestProperty("Content-Type", "application/json");
+
+                httpConn.setDoOutput(true);
+                httpConn.setDoInput(true);
+
+                //place raw JSON into body of post
+                OutputStream opStream = httpConn.getOutputStream();
+                String str =  mResponse;
+                byte[] outputInBytes = str.getBytes("UTF-8");
+                opStream.write( outputInBytes );
+                opStream.close();
+
+                // ***** Receive result of post message *****
+                InputStream inputStream = httpConn.getInputStream();
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
+                String result = "";
+                String line = "";
+                while ((line = bufferedReader.readLine()) != null){
+                    result += line;
+                }
+
+                bufferedReader.close();
+                inputStream.close();
+                httpConn.disconnect();
+
+                Log.i(TAG, ">>>>>Response Result: "+result);
+
+                return result;
+
+            }
+            catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return "";
+        }
+
+        @Override
+        //runs after doInBackground
+        protected void onPostExecute(final String result) {
+            surveyUpload = null;
+            //showProgress(false);
+
+            if (result.startsWith("Upload Success")) {
+                Log.i(TAG, "SUCCESS");
+                String surveyStore ="";
+
+                if(result.contains(":")){
+                    int index = result.indexOf(":");
+                    surveyStore = result.substring(index+1);
+                }
+
+                Intent intent = new Intent(SurveyActivity.this, MainActivity.class);
+                intent.putExtra("email", mEmail);
+                intent.putExtra("group", mGroup);
+                startActivity(intent);
+                finish();
+            }
+            else {
+                Log.i(TAG, "Server error:"+result);
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            surveyUpload = null;
+            //showProgress(false);
+        }
+    }
+
+    //***** TOOLBAR *****
     //Method for setting up toolbar options
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -403,122 +591,6 @@ public class SurveyActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
-        }
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class SurveyTask extends AsyncTask<Void, Void, String> {
-
-        private final String mEmail;
-        private final String mGroup;
-        private String mResponse;
-
-        SurveyTask(String email, String user_group, String response) {
-            mEmail = email;
-            mGroup = user_group;
-            mResponse=response;
-        }
-
-        /**
-         * Connect to API to upload surveyResponse to API
-         */
-        @Override
-        protected String doInBackground(Void... params) {
-
-            try{
-                URL url = new URL("https://engage.cs.uct.ac.za/android/post_survey"); //will return "Login Success:<user_group>"
-
-                HttpURLConnection httpConn = (HttpURLConnection)url.openConnection();
-                Log.i(TAG, "Connection established");
-
-                httpConn.setRequestMethod("POST");
-                httpConn.setRequestProperty("Content-Type", "application/json");
-
-                httpConn.setDoOutput(true);
-                httpConn.setDoInput(true);
-                OutputStream opStream = httpConn.getOutputStream();
-
-                String str =  mResponse;
-                byte[] outputInBytes = str.getBytes("UTF-8");
-
-                opStream.write( outputInBytes );
-                opStream.close();
-
-//                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(opStream, "UTF-8"));
-//
-//                // ***** Send POST message *****
-//                String postData = URLEncoder.encode("surveyResponse", "UTF-8")+"="+URLEncoder.encode(mResponse, "UTF-8");
-//
-//                bufferedWriter.write(postData);
-//                bufferedWriter.flush();
-//                bufferedWriter.close();
-//                opStream.close();
-
-                // ***** Receive result of post message *****
-                InputStream inputStream = httpConn.getInputStream();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
-                String result = "";
-                String line = "";
-                while ((line = bufferedReader.readLine()) != null){
-                    result += line;
-                }
-
-                bufferedReader.close();
-                inputStream.close();
-                httpConn.disconnect();
-
-                Log.i(TAG, ">>>>>Response Result: "+result);
-                //>>>TESTING<<<<
-
-                return result;
-
-            }
-            catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            } catch (ProtocolException e) {
-                e.printStackTrace();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return "";
-        }
-
-        @Override
-        //runs after doInBackground
-        protected void onPostExecute(final String result) {
-            mAuthTask = null;
-            //showProgress(false);
-
-            if (result.startsWith("Upload Success")) {
-                Log.i(TAG, "SUCCESS");
-                String surveyStore ="";
-
-                if(result.contains(":")){
-                    int index = result.indexOf(":");
-                    surveyStore = result.substring(index+1);
-                }
-
-                Intent intent = new Intent(SurveyActivity.this, MainActivity.class);
-                intent.putExtra("email", mEmail);
-                intent.putExtra("group", mGroup);
-                startActivity(intent);
-                finish();
-            }
-            else {
-                Log.i(TAG, "Server error:"+result);
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            //showProgress(false);
         }
     }
 }

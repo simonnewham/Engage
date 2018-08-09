@@ -135,7 +135,7 @@ public class ContentActivity extends AppCompatActivity {
         Intent intent = new Intent(ContentActivity.this, SurveyActivity.class);
         intent.putExtra("email", email);
         intent.putExtra("group", user_group);
-        intent.putExtra("surveyID", "survey1.json"); //will change for http connection
+        intent.putExtra("surveyID", "test3"); //will change for http connection
         startActivity(intent);
     }
 

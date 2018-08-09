@@ -9,13 +9,13 @@ import java.util.ArrayList;
 public class SurveyResponse {
 
     private String email;
-    private String group;
+    private String user_group;
     private String surveyID;
     private ArrayList<String> responses;
 
     public SurveyResponse(String email, String group, String surveyID, ArrayList<String> responses) {
         this.email = email;
-        this.group = group;
+        this.user_group = group;
         this.surveyID = surveyID;
         this.responses = responses;
     }
@@ -29,11 +29,11 @@ public class SurveyResponse {
     }
 
     public String getGroup() {
-        return group;
+        return user_group;
     }
 
     public void setGroup(String group) {
-        this.group = group;
+        this.user_group = group;
     }
 
     public String getSurveyID() {
