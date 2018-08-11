@@ -35,30 +35,35 @@
         android:textColor="@color/colorPrimary"
         android:padding="4dp"/>
 
-     <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="4dp"
-            android:paddingRight="4dp"
-            android:paddingBottom="25dp" >
 
-         <TextView
-             android:id="@+id/content"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:text="Content Location" />
+    <TextView
+        android:id="@+id/Text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        />
 
-     </ScrollView>
+    <ImageView
+        android:id="@+id/Image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@color/colorAccent" />
+
+
+    <VideoView
+        android:id="@+id/Video"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/surveyButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
+        android:background="@color/colorOrange"
         android:onClick="loadSurvey"
         android:text="Answer Survey >>"
         android:textColor="@color/colorWhite"
         />
-
 
 </LinearLayout>

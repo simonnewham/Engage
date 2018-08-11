@@ -3,7 +3,9 @@ package com.engage.simonnewham.engageapp.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 
 import com.engage.simonnewham.engageapp.R;
 
@@ -13,6 +15,7 @@ import com.engage.simonnewham.engageapp.R;
 
 public class ContentListItemActivity extends AppCompatActivity {
 
+    private final String TAG = "MainActivity";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,11 +23,13 @@ public class ContentListItemActivity extends AppCompatActivity {
 
     }
 
-    public void loadNews(View view){
 
-        Intent intent = new Intent(this, ContentActivity.class);
-        startActivity(intent);
-        finish();
 
+    public void loadNews (View view) {
+
+//        Intent intent = new Intent(this, ContentActivity.class);
+//        startActivity(intent);
+//        finish();
+          //Log.i(TAG, "JSJJSJS"+String.valueOf(position));
     }
 }

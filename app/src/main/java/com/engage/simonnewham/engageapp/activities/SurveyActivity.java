@@ -76,6 +76,7 @@ public class SurveyActivity extends AppCompatActivity {
     //temporary views for begin survey
     TextView title;
     TextView description;
+    TextView thank;
 
     private SurveyDownload surveyDownload;
     private SurveyUpload surveyUpload;
@@ -122,7 +123,7 @@ public class SurveyActivity extends AppCompatActivity {
     public void displaySurvey(Survey s){
 
         if(surveyID.equals("BASELINE")){
-            TextView thank = new TextView(this);
+            thank = new TextView(this);
             thank.setText("Welcome "+email+"!"+"\n"+"\nThank you for signing up for ENGAGE, please complete the following questionnaire to finish the sign up process! \n");
             thank.setTypeface(null, Typeface.BOLD);
             thank.setTextSize(20);
@@ -143,6 +144,7 @@ public class SurveyActivity extends AppCompatActivity {
     }
     public void onBegin(View view){
         if(survey != null){
+            thank.setVisibility(View.GONE);
             begin.setVisibility(View.GONE);
             title.setVisibility(View.GONE);
             description.setVisibility(View.GONE);
@@ -533,11 +535,6 @@ public class SurveyActivity extends AppCompatActivity {
                 Log.i(TAG, "SUCCESS");
                 String surveyStore ="";
 
-                if(result.contains(":")){
-                    int index = result.indexOf(":");
-                    surveyStore = result.substring(index+1);
-                }
-
                 Intent intent = new Intent(SurveyActivity.this, MainActivity.class);
                 intent.putExtra("email", mEmail);
                 intent.putExtra("group", mGroup);
@@ -546,6 +543,7 @@ public class SurveyActivity extends AppCompatActivity {
             }
             else {
                 Log.i(TAG, "Server error:"+result);
+                onError();
             }
         }
 
@@ -596,5 +594,10 @@ public class SurveyActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+    public void onError(){
+        TextView error = new TextView(this);
+        error.setText("Server Error, please try again later");
+        lPanel.addView(error);
     }
 }

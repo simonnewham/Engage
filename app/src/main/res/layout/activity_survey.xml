@@ -24,6 +24,8 @@
             android:layout_weight="0.5"
             android:onClick="onBegin"
             android:text="Begin Survey>"
+            android:background="@color/colorOrange"
+            android:textColor="@color/colorWhite"
             />
 
         <Button
@@ -43,7 +45,9 @@
             android:layout_weight="0.5"
             android:text="Submit"
             android:visibility="gone"
-            android:onClick="onSubmit"/>
+            android:onClick="onSubmit"
+            android:background="@color/colorOrange"
+            android:textColor="@color/colorWhite"/>
 
     </LinearLayout>
 
@@ -66,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Question"
-                android:textSize="15dp"
+                android:textSize="20dp"
                 android:textStyle="bold"
                 android:visibility="gone"/>
 

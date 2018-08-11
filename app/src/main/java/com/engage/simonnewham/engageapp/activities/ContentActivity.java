@@ -1,24 +1,34 @@
 package com.engage.simonnewham.engageapp.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.engage.simonnewham.engageapp.R;
+import com.engage.simonnewham.engageapp.models.NewsItem;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 /**
  * @author simonnewham
@@ -32,9 +42,12 @@ public class ContentActivity extends AppCompatActivity {
     TextView title;
     TextView date;
     TextView content;
+    ImageView image;
+    VideoView video;
 
     String email;
     String user_group;
+    NewsItem item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +63,18 @@ public class ContentActivity extends AppCompatActivity {
 
         title = (TextView) findViewById(R.id.title);
         date = (TextView) findViewById(R.id.date);
-        content = (TextView) findViewById(R.id.content);
+        content = (TextView) findViewById(R.id.Text);
+        image = findViewById(R.id.Image);
+        video = (VideoView) findViewById(R.id.Video);
 
         //get Extra
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             email = extras.getString("email");
             user_group = extras.getString("group");
-
+            item = (NewsItem) getIntent().getSerializableExtra("News");
         }
 
-        //connect to DB and get Article details
-
-        //load article
         setItem();
 
     }
@@ -72,59 +84,34 @@ public class ContentActivity extends AppCompatActivity {
      */
     public void setItem(){
 
-        String jTitle="";
-        String jDate ="";
-        String jContent ="" ;
-        String jSource ="";
-        String jType ="";
+        title.setText(item.getName());
+        date.setText("Uploaded on: "+item.getDate());
+        String type = item.getType().toUpperCase();
 
-        try{
-            JSONObject reader = new JSONObject(loadJSONFromAsset());
 
-            //JSONObject jTitle = reader.getJSONObject("Title");
-            jTitle = reader.getString("Title");
-            jDate= reader.getString("Date");
-            jContent= reader.getString("Main_content");
-            jSource= reader.getString("Source");
-            jType= reader.getString("Content_type");
+        if(type.equals("IMAGE")){
+            new DownloadImageTask(image).execute("https://engage.cs.uct.ac.za/grid_fs_files/contents/5b697acefb9ca873cd4ac059");
 
         }
-        catch (JSONException e) {
-            e.printStackTrace();
+        else if(type.equals("VIDEO")){
+
+        }
+        else if(type.equals("TEXT")){
+            new DownloadTextTask(content).execute("https://engage.cs.uct.ac.za/grid_fs_files/contents/5b6f3271fb9ca84d83f86d6d");
+
+        }
+        else if(type.equals("AUDIO")){
+
         }
 
-        title.setText(jTitle);
-        date.setText("Uploaded on: "+jDate);
-        content.setText(jContent);
-
-        Log.i(TAG, "*********Content details********** Title:"+jTitle+" Type: "+jType+" Source"+jSource);
-
-    }
-
-    /**
-     * method to read from a JSON file located in the assets folder
-     * @return String
-     */
-    public String loadJSONFromAsset() {
-        String json = null;
-        try {
-            InputStream is = getAssets().open("item.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return json;
     }
 
 
     public boolean onSupportNavigateUp() {
         Toast.makeText(this, "Back", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(ContentActivity.this, MainActivity.class);
+        intent.putExtra("email", email);
+        intent.putExtra("group", user_group);
         startActivity(intent);
         finish();
         return true;
@@ -135,9 +122,110 @@ public class ContentActivity extends AppCompatActivity {
         Intent intent = new Intent(ContentActivity.this, SurveyActivity.class);
         intent.putExtra("email", email);
         intent.putExtra("group", user_group);
-        intent.putExtra("surveyID", "test3"); //will change for http connection
+        intent.putExtra("surveyID", "SURVEY1"); //will change for http connection
         startActivity(intent);
     }
+
+    /**
+     *
+     */
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }
+
+    /**
+     *
+     */
+    private class DownloadTextTask extends AsyncTask<String, Void, String> {
+        TextView textView;
+
+        public DownloadTextTask(TextView textView) {
+            this.textView = textView;
+        }
+
+        protected String doInBackground(String... urls) {
+            String urldisplay = urls[0];
+
+            try {
+                URL url = new URL(urldisplay);
+                BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+                String result="";
+                String line="";
+                while ((line = in.readLine()) != null) {
+                    result +=line;
+                }
+                in.close();
+                return result;
+
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return "";
+        }
+
+        protected void onPostExecute(String result) {
+            textView.setText(result);
+        }
+    }
+
+    /**
+     *
+     */
+    private class DownloadVideoTask extends AsyncTask<String, Void, String> {
+        VideoView videoView;
+
+        public DownloadVideoTask(VideoView v) {
+            this.videoView = v;
+        }
+
+        protected String doInBackground(String... urls) {
+            String urldisplay = urls[0];
+
+            try {
+                URL url = new URL(urldisplay);
+                BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+                String result="";
+                String line="";
+                while ((line = in.readLine()) != null) {
+                    result +=line;
+                }
+                in.close();
+                return result;
+
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return "";
+        }
+
+        protected void onPostExecute(String result) {
+
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -155,7 +243,6 @@ public class ContentActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.home:
-                Toast.makeText(this, "Home clicked", Toast.LENGTH_SHORT).show();
                 intent = new Intent(ContentActivity.this, MainActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
@@ -163,7 +250,6 @@ public class ContentActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.about:
-                Toast.makeText(this, "About clicked", Toast.LENGTH_SHORT).show();
                 intent = new Intent(ContentActivity.this, AboutActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
@@ -171,7 +257,6 @@ public class ContentActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.logout:
-                Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
                 intent = new Intent(ContentActivity.this, SignIn.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -181,4 +266,7 @@ public class ContentActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+
 }
