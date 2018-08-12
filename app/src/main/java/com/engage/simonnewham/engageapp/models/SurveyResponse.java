@@ -12,12 +12,21 @@ public class SurveyResponse {
     private String user_group;
     private String surveyID;
     private ArrayList<String> responses;
+    private String newsItem;
 
-    public SurveyResponse(String email, String group, String surveyID, ArrayList<String> responses) {
+    public SurveyResponse(String email, String group, String surveyID, String newsItem, ArrayList<String> responses) {
         this.email = email;
         this.user_group = group;
         this.surveyID = surveyID;
+        this.newsItem = newsItem;
         this.responses = responses;
+    }
+    public String getNewsItem() {
+        return newsItem;
+    }
+
+    public void setNewsItem(String newsItem) {
+        this.newsItem = newsItem;
     }
 
     public String getEmail() {

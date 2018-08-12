@@ -3,7 +3,12 @@ package com.engage.simonnewham.engageapp.activities;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -49,6 +55,9 @@ public class ContentActivity extends AppCompatActivity {
     String user_group;
     NewsItem item;
 
+    MediaPlayer mediaPlayer;
+    private VideoView audio;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +66,6 @@ public class ContentActivity extends AppCompatActivity {
         //setup toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -76,7 +84,6 @@ public class ContentActivity extends AppCompatActivity {
         }
 
         setItem();
-
     }
 
     /**
@@ -90,25 +97,42 @@ public class ContentActivity extends AppCompatActivity {
 
 
         if(type.equals("IMAGE")){
-            new DownloadImageTask(image).execute("https://engage.cs.uct.ac.za/grid_fs_files/contents/5b697acefb9ca873cd4ac059");
+            image.setVisibility(View.VISIBLE);
+            new DownloadImageTask(image).execute("https://engage.cs.uct.ac.za"+item.getPath());
 
         }
         else if(type.equals("VIDEO")){
+            String vidAddress = "https://engage.cs.uct.ac.za"+item.getPath();
+            Uri vidUri = Uri.parse(vidAddress);
+            MediaController vidControl = new MediaController(this);
+            vidControl.setAnchorView(video);
+            video.setMediaController(vidControl);
+            video.setVisibility(View.VISIBLE);
+            video.setVideoURI(vidUri);
+            video.start();
 
         }
         else if(type.equals("TEXT")){
-            new DownloadTextTask(content).execute("https://engage.cs.uct.ac.za/grid_fs_files/contents/5b6f3271fb9ca84d83f86d6d");
+            content.setVisibility(View.VISIBLE);
+            new DownloadTextTask(content).execute("https://engage.cs.uct.ac.za"+item.getPath());
 
         }
         else if(type.equals("AUDIO")){
-
+            video.setVisibility(View.VISIBLE);
+            video.setBackground(ContextCompat.getDrawable(this, R.drawable.logo2));
+            video.getLayoutParams().height = 400;
+            MediaController mediaController = new MediaController(this);
+            mediaController.setAnchorView(video);
+            Uri uri = Uri.parse("https://engage.cs.uct.ac.za"+item.getPath());
+            video.setMediaController(mediaController);
+            video.setVideoURI(uri);
+            video.start();
         }
 
     }
 
-
     public boolean onSupportNavigateUp() {
-        Toast.makeText(this, "Back", Toast.LENGTH_SHORT).show();
+
         Intent intent = new Intent(ContentActivity.this, MainActivity.class);
         intent.putExtra("email", email);
         intent.putExtra("group", user_group);
@@ -118,11 +142,13 @@ public class ContentActivity extends AppCompatActivity {
     }
 
     public void loadSurvey(View view){
+
         Toast.makeText(this, "Load Survey clicked", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(ContentActivity.this, SurveyActivity.class);
         intent.putExtra("email", email);
         intent.putExtra("group", user_group);
-        intent.putExtra("surveyID", "SURVEY1"); //will change for http connection
+        intent.putExtra("surveyID", "SURVEY1");
+        intent.putExtra("newsItem", item.getId());
         startActivity(intent);
     }
 
@@ -190,43 +216,6 @@ public class ContentActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     *
-     */
-    private class DownloadVideoTask extends AsyncTask<String, Void, String> {
-        VideoView videoView;
-
-        public DownloadVideoTask(VideoView v) {
-            this.videoView = v;
-        }
-
-        protected String doInBackground(String... urls) {
-            String urldisplay = urls[0];
-
-            try {
-                URL url = new URL(urldisplay);
-                BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-                String result="";
-                String line="";
-                while ((line = in.readLine()) != null) {
-                    result +=line;
-                }
-                in.close();
-                return result;
-
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return "";
-        }
-
-        protected void onPostExecute(String result) {
-
-        }
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -243,6 +232,7 @@ public class ContentActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.home:
+
                 intent = new Intent(ContentActivity.this, MainActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
@@ -250,6 +240,7 @@ public class ContentActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.about:
+
                 intent = new Intent(ContentActivity.this, AboutActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
@@ -257,6 +248,7 @@ public class ContentActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.logout:
+
                 intent = new Intent(ContentActivity.this, SignIn.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -266,7 +258,4 @@ public class ContentActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
-
-
 }

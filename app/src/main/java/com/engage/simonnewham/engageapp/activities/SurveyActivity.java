@@ -57,6 +57,7 @@ public class SurveyActivity extends AppCompatActivity {
     String email;
     String surveyID = null;
     String user_group;
+    String newsItem;
 
     private final String TAG = "SurveyActivity";
     LinearLayout lPanel;
@@ -99,19 +100,24 @@ public class SurveyActivity extends AppCompatActivity {
         questionTitle = (TextView) findViewById(R.id.text_question);
         next = (Button) findViewById(R.id.button_next);
         survey_tick = (ImageView) findViewById(R.id.imageView);
+        thank = new TextView(this);
 
         //get extra info
         Bundle extras = getIntent().getExtras();
         if(extras != null) {
             email = extras.getString("email");
             user_group = extras.getString("group");
-            surveyID = extras.getString("surveyID"); //for now just title of survey to search for
+            surveyID = extras.getString("surveyID");
+            newsItem = extras.getString("newsItem");
         }
 
         //setup toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Survey");
         setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //download the survey
         surveyDownload = new SurveyDownload(surveyID);
@@ -123,7 +129,6 @@ public class SurveyActivity extends AppCompatActivity {
     public void displaySurvey(Survey s){
 
         if(surveyID.equals("BASELINE")){
-            thank = new TextView(this);
             thank.setText("Welcome "+email+"!"+"\n"+"\nThank you for signing up for ENGAGE, please complete the following questionnaire to finish the sign up process! \n");
             thank.setTypeface(null, Typeface.BOLD);
             thank.setTextSize(20);
@@ -216,7 +221,7 @@ public class SurveyActivity extends AppCompatActivity {
             questionTitle.setVisibility(View.GONE);
 
             //TRACING
-            SurveyResponse surveyResponse = new SurveyResponse(email, user_group, surveyID, responses );
+            SurveyResponse surveyResponse = new SurveyResponse(email, user_group, surveyID, newsItem,responses );
             Gson gson = new Gson();
             String json = gson.toJson(surveyResponse);
             TextView test = new TextView(this);
@@ -278,7 +283,7 @@ public class SurveyActivity extends AppCompatActivity {
     public void onSubmit(View view){
         //Toast.makeText(this, "Survey Completed", Toast.LENGTH_SHORT).show();
         //create survey resonse object and convert to JSON representation
-        SurveyResponse surveyResponse = new SurveyResponse(email, user_group, surveyID, responses );
+        SurveyResponse surveyResponse = new SurveyResponse(email, user_group, surveyID, newsItem, responses );
         Gson gson = new Gson();
         String json = gson.toJson(surveyResponse);
 
@@ -599,5 +604,12 @@ public class SurveyActivity extends AppCompatActivity {
         TextView error = new TextView(this);
         error.setText("Server Error, please try again later");
         lPanel.addView(error);
+    }
+
+    //when back button is pressed
+    public boolean onSupportNavigateUp() {
+
+//
+        return true;
     }
 }

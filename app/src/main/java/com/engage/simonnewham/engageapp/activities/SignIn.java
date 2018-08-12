@@ -180,7 +180,7 @@ public class SignIn extends AppCompatActivity {
 
                 Log.i(TAG, ">>>>>Response Result: "+result);
                 //>>>TESTING<<<<
-                result = "Login Success:1";
+                result = "Login Success:2";
                 return result;
 
             }
@@ -194,7 +194,7 @@ public class SignIn extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            return "Login Success:1";
+            return "";
         }
 
         @Override

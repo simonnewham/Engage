@@ -15,6 +15,16 @@
         layout="@layout/toolbar"
         />
 
+    <Button
+        android:id="@+id/surveyButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorOrange"
+        android:onClick="loadSurvey"
+        android:text="Answer Survey >>"
+        android:textColor="@color/colorWhite"
+        />
+
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
@@ -41,29 +51,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""
+        android:visibility="gone"
         />
 
     <ImageView
         android:id="@+id/Image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:srcCompat="@color/colorAccent" />
+        app:srcCompat="@color/colorAccent"
+        android:visibility="gone"/>
 
 
     <VideoView
         android:id="@+id/Video"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
-
-    <Button
-        android:id="@+id/surveyButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorOrange"
-        android:onClick="loadSurvey"
-        android:text="Answer Survey >>"
-        android:textColor="@color/colorWhite"
+        android:visibility="gone"
         />
 
 </LinearLayout>
