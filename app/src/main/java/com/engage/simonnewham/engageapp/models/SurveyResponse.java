@@ -13,14 +13,25 @@ public class SurveyResponse {
     private String surveyID;
     private ArrayList<String> responses;
     private String newsItem;
+    private String date;
 
-    public SurveyResponse(String email, String group, String surveyID, String newsItem, ArrayList<String> responses) {
+    public SurveyResponse(String email, String user_group, String surveyID, ArrayList<String> responses, String newsItem, String date) {
         this.email = email;
-        this.user_group = group;
+        this.user_group = user_group;
         this.surveyID = surveyID;
-        this.newsItem = newsItem;
         this.responses = responses;
+        this.newsItem = newsItem;
+        this.date = date;
     }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public String getNewsItem() {
         return newsItem;
     }

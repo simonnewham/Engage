@@ -15,16 +15,6 @@
         layout="@layout/toolbar"
         />
 
-    <Button
-        android:id="@+id/surveyButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorOrange"
-        android:onClick="loadSurvey"
-        android:text="Answer Survey >>"
-        android:textColor="@color/colorWhite"
-        />
-
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
@@ -41,31 +31,56 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Date Location"
-        android:layout_weight="0.02"
         android:textColor="@color/colorPrimary"
-        android:padding="4dp"/>
+        android:padding="4dp"
+        android:layout_marginBottom="2dp"/>
 
-
-    <TextView
-        android:id="@+id/Text"
+    <Button
+        android:id="@+id/surveyButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
+        android:background="@color/colorOrange"
+        android:onClick="loadSurvey"
+        android:text="Answer Survey >>"
+        android:textColor="@color/colorWhite"
+        android:layout_marginBottom="5dp"/>
+
+    <ScrollView
+        android:id="@+id/text_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:visibility="gone"
-        />
+        android:layout_weight="1">
 
-    <ImageView
-        android:id="@+id/Image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:srcCompat="@color/colorAccent"
-        android:visibility="gone"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="2dp">
 
+            <TextView
+                android:id="@+id/Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:text=""
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/Image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:srcCompat="@color/colorAccent" />
+
+        </LinearLayout>
+    </ScrollView>
 
     <VideoView
         android:id="@+id/Video"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="2dp"
         android:visibility="gone"
         />
 

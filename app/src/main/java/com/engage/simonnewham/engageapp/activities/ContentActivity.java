@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -58,6 +59,8 @@ public class ContentActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer;
     private VideoView audio;
 
+    private ScrollView textScroll;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +77,7 @@ public class ContentActivity extends AppCompatActivity {
         content = (TextView) findViewById(R.id.Text);
         image = findViewById(R.id.Image);
         video = (VideoView) findViewById(R.id.Video);
+        textScroll = findViewById(R.id.text_scroll);
 
         //get Extra
         Bundle extras = getIntent().getExtras();
@@ -97,6 +101,7 @@ public class ContentActivity extends AppCompatActivity {
 
 
         if(type.equals("IMAGE")){
+            textScroll.setVisibility(View.VISIBLE);
             image.setVisibility(View.VISIBLE);
             new DownloadImageTask(image).execute("https://engage.cs.uct.ac.za"+item.getPath());
 
@@ -113,15 +118,21 @@ public class ContentActivity extends AppCompatActivity {
 
         }
         else if(type.equals("TEXT")){
+            textScroll.setVisibility(View.VISIBLE);
             content.setVisibility(View.VISIBLE);
             new DownloadTextTask(content).execute("https://engage.cs.uct.ac.za"+item.getPath());
 
         }
         else if(type.equals("AUDIO")){
             video.setVisibility(View.VISIBLE);
-            video.setBackground(ContextCompat.getDrawable(this, R.drawable.logo2));
-            video.getLayoutParams().height = 400;
-            MediaController mediaController = new MediaController(this);
+            //video.setBackground(ContextCompat.getDrawable(this, R.drawable.logo2));
+            video.setBackgroundResource(R.drawable.ic_music);
+            MediaController mediaController = new MediaController(this){
+                @Override
+                public void hide() {
+                //Do not hide.
+                }
+            };
             mediaController.setAnchorView(video);
             Uri uri = Uri.parse("https://engage.cs.uct.ac.za"+item.getPath());
             video.setMediaController(mediaController);
@@ -148,7 +159,7 @@ public class ContentActivity extends AppCompatActivity {
         intent.putExtra("email", email);
         intent.putExtra("group", user_group);
         intent.putExtra("surveyID", "SURVEY1");
-        intent.putExtra("newsItem", item.getId());
+        intent.putExtra("News", item);
         startActivity(intent);
     }
 
@@ -232,7 +243,6 @@ public class ContentActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.home:
-
                 intent = new Intent(ContentActivity.this, MainActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
@@ -240,7 +250,6 @@ public class ContentActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.about:
-
                 intent = new Intent(ContentActivity.this, AboutActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
@@ -248,7 +257,6 @@ public class ContentActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.logout:
-
                 intent = new Intent(ContentActivity.this, SignIn.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

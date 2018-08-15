@@ -18,6 +18,7 @@ public class AboutActivity extends AppCompatActivity {
 
     private String email;
     private String user_group;
+    TextView mUser;
     TextView mEmail;
 
     @Override
@@ -39,6 +40,8 @@ public class AboutActivity extends AppCompatActivity {
 
         mEmail = findViewById(R.id.user);
         mEmail.setText("User: "+email);
+        mUser = findViewById(R.id.user_group);
+        mUser.setText("User Group: "+user_group);
     }
 
     //***** TOOLBAR *****

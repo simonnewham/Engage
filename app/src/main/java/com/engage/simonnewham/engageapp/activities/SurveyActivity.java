@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.engage.simonnewham.engageapp.R;
+import com.engage.simonnewham.engageapp.models.NewsItem;
 import com.engage.simonnewham.engageapp.models.Question;
 import com.engage.simonnewham.engageapp.models.Survey;
 import com.engage.simonnewham.engageapp.models.SurveyResponse;
@@ -48,8 +49,11 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class SurveyActivity extends AppCompatActivity {
 
@@ -57,7 +61,7 @@ public class SurveyActivity extends AppCompatActivity {
     String email;
     String surveyID = null;
     String user_group;
-    String newsItem;
+    NewsItem newsItem;
 
     private final String TAG = "SurveyActivity";
     LinearLayout lPanel;
@@ -108,7 +112,7 @@ public class SurveyActivity extends AppCompatActivity {
             email = extras.getString("email");
             user_group = extras.getString("group");
             surveyID = extras.getString("surveyID");
-            newsItem = extras.getString("newsItem");
+            newsItem = (NewsItem) getIntent().getSerializableExtra("News");
         }
 
         //setup toolbar
@@ -116,8 +120,10 @@ public class SurveyActivity extends AppCompatActivity {
         toolbar.setTitle("Survey");
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        if(!surveyID.equals("BASELINE")){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
 
         //download the survey
         surveyDownload = new SurveyDownload(surveyID);
@@ -221,7 +227,15 @@ public class SurveyActivity extends AppCompatActivity {
             questionTitle.setVisibility(View.GONE);
 
             //TRACING
-            SurveyResponse surveyResponse = new SurveyResponse(email, user_group, surveyID, newsItem,responses );
+            String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+
+            SurveyResponse surveyResponse;
+            if (surveyID.equals("BASELINE") || newsItem==null){
+                surveyResponse = new SurveyResponse(email, user_group, surveyID, responses,"Baseline" , date );
+            }
+            else{
+                surveyResponse = new SurveyResponse(email, user_group, surveyID, responses, newsItem.getId() , date );
+            }
             Gson gson = new Gson();
             String json = gson.toJson(surveyResponse);
             TextView test = new TextView(this);
@@ -281,37 +295,21 @@ public class SurveyActivity extends AppCompatActivity {
      * @param view
      */
     public void onSubmit(View view){
-        //Toast.makeText(this, "Survey Completed", Toast.LENGTH_SHORT).show();
-        //create survey resonse object and convert to JSON representation
-        SurveyResponse surveyResponse = new SurveyResponse(email, user_group, surveyID, newsItem, responses );
+        String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        SurveyResponse surveyResponse;
+        if (surveyID.equals("BASELINE") || newsItem==null){
+            surveyResponse = new SurveyResponse(email, user_group, surveyID, responses,"Baseline" , date );
+        }
+        else{
+            surveyResponse = new SurveyResponse(email, user_group, surveyID, responses, newsItem.getId() , date );
+        }
         Gson gson = new Gson();
         String json = gson.toJson(surveyResponse);
-
         surveyUpload = new SurveyUpload(email, user_group, json);
         surveyUpload.execute((Void) null);
 
-        Log.i(TAG, ">>>>>>>JSON SURVEY RESPONSE<<<<<<<"+json);
+        Log.i(TAG, "JSON SURVEY RESPONSE"+json);
     }
-
-    /**
-     * Method to convert a JSON file into a string
-     * @return
-     */
-//    public String loadJSONFromAsset(String filename) {
-//        String json = null;
-//        try {
-//            InputStream is = getAssets().open(filename);
-//            int size = is.available();
-//            byte[] buffer = new byte[size];
-//            is.read(buffer);
-//            is.close();
-//            json = new String(buffer, "UTF-8");
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//            return null;
-//        }
-//        return json;
-//    }
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
@@ -608,8 +606,12 @@ public class SurveyActivity extends AppCompatActivity {
 
     //when back button is pressed
     public boolean onSupportNavigateUp() {
-
-//
+        Intent intent = new Intent(SurveyActivity.this, ContentActivity.class);
+        intent.putExtra("email", email);
+        intent.putExtra("group", user_group);
+        intent.putExtra("News", newsItem);
+        startActivity(intent);
+        finish();
         return true;
     }
 }

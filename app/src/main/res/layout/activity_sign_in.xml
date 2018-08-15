@@ -65,7 +65,7 @@
                 android:textColor="@color/colorWhite"
                 android:textColorHint="@color/colorBlack"
                 android:layout_gravity="center"
-                android:text="test@test.com"
+                android:text="nwhsim001@myuct.ac.za"
                 android:backgroundTint="@color/colorWhite"
 
                 />
@@ -84,7 +84,7 @@
                 android:backgroundTint="@color/colorWhite"
                 android:layout_gravity="center"
                 android:fontFamily="serif-monospace"
-                android:text="1234"
+                android:text="simon"
                 android:layout_marginBottom="40dp"/>
 
 

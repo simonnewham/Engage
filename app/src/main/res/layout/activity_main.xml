@@ -18,20 +18,24 @@
         android:id="@+id/tmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="Your Newsfeed"
+        android:textAlignment="center"
+        android:layout_margin="15dp"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        />
 
     <TextView
         android:id="@+id/tgroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="TextView"
+        android:visibility="gone"/>
 
     <ListView
         android:id="@+id/news_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="2dp"
-
         />
 
 </LinearLayout>

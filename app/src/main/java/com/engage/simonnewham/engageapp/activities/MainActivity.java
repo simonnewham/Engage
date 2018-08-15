@@ -19,9 +19,6 @@ import android.widget.Toast;
 import com.engage.simonnewham.engageapp.R;
 import com.engage.simonnewham.engageapp.adapters.NewsAdapter;
 import com.engage.simonnewham.engageapp.models.NewsItem;
-import com.engage.simonnewham.engageapp.models.NewsListItem;
-import com.engage.simonnewham.engageapp.models.Question;
-import com.engage.simonnewham.engageapp.models.Survey;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,14 +78,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //TRACING
-        TextView tmail = (TextView) findViewById(R.id.tmail);
-        tmail.setText("Email: "+email);
-        TextView tgroup = (TextView) findViewById(R.id.tgroup);
-        tgroup.setText("User Group: "+user_group);
+//        TextView tmail = (TextView) findViewById(R.id.tmail);
+//        tmail.setText("Email: "+email);
+//        TextView tgroup = (TextView) findViewById(R.id.tgroup);
+//        tgroup.setText("User Group: "+user_group);
 
-
-
-
+        main_panel = findViewById(R.id.main_panel);
 
         contentDownload = new ContentDownload(user_group);
         contentDownload.execute((Void) null);
@@ -113,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ContentActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
-                intent.putExtra("News", store.get(position)); //**UPDATE THIS WITH ACTUAL NEWS ID FOR DB
+                intent.putExtra("News", store.get(position));
                 startActivity(intent);
                 finish();
             }
@@ -204,10 +199,14 @@ public class MainActivity extends AppCompatActivity {
             //showProgress(false);
             if (result.startsWith("Error") || result.equals("")){
                 Log.i(TAG, "Server error:"+result);
-                //onError();
+                onError();
             }
             else if (result.equals("[]")){
                 //no new items
+                TextView error = new TextView(MainActivity.this);
+                error.setText("No New Contnet Today");
+                error.setTextSize(25);
+                main_panel.addView(error);
             }
             else{
                 //convert from JSON string to JSONObject
@@ -260,7 +259,10 @@ public class MainActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.home:
-                //Toast.makeText(this, "Home clicked", Toast.LENGTH_SHORT).show();
+                //Refresh from the server
+                Toast.makeText(this, "Refreshing Content", Toast.LENGTH_SHORT).show();
+                contentDownload = new ContentDownload(user_group);
+                contentDownload.execute((Void) null);
                 return true;
             case R.id.about:
                 //Toast.makeText(this, "About clicked", Toast.LENGTH_SHORT).show();

@@ -26,6 +26,9 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Login screen that allows users to login or create new account
@@ -55,7 +58,7 @@ public class SignIn extends AppCompatActivity {
         mPasswordView = (EditText) findViewById(R.id.password);
         mLoginFormView = findViewById(R.id.login_form);
         //mProgressView = findViewById(R.id.login_progress);
-
+        
     }
     /**
      * Method called when login button is clicked
@@ -180,7 +183,7 @@ public class SignIn extends AppCompatActivity {
 
                 Log.i(TAG, ">>>>>Response Result: "+result);
                 //>>>TESTING<<<<
-                result = "Login Success:2";
+                //result = "Login Success:2";
                 return result;
 
             }
