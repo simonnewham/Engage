@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
             else if (result.equals("[]")){
                 //no new items
                 TextView error = new TextView(MainActivity.this);
-                error.setText("No New Contnet Today");
+                error.setText("No New Content Today");
                 error.setTextSize(25);
                 main_panel.addView(error);
             }
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
                         JSONObject item = items.getJSONObject(i);
                         NewsItem newsItem = new NewsItem(item.getString("filename"),item.getString("uploadDate").substring(0,10), item.getString("type"), item.getString("id"), item.getString("path"),
-                                item.getString("topic"));
+                                item.getString("topic"), item.getString("survey_id"));
 
                        toDisplay.add(newsItem);
                     }

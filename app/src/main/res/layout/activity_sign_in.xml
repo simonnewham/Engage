@@ -63,10 +63,10 @@
                 android:inputType="textEmailAddress"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
-                android:textColorHint="@color/colorBlack"
+                android:textColorHint="@color/colorOffWhite"
                 android:layout_gravity="center"
-                android:text="nwhsim001@myuct.ac.za"
                 android:backgroundTint="@color/colorWhite"
+                android:hint="email"
 
                 />
 
@@ -83,9 +83,8 @@
                 android:textColorHint="@color/colorOffWhite"
                 android:backgroundTint="@color/colorWhite"
                 android:layout_gravity="center"
-                android:fontFamily="serif-monospace"
-                android:text="simon"
-                android:layout_marginBottom="40dp"/>
+                android:layout_marginBottom="40dp"
+                android:hint="password"/>
 
 
             <Button

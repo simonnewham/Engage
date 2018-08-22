@@ -120,15 +120,17 @@ public class SurveyActivity extends AppCompatActivity {
         toolbar.setTitle("Survey");
         setSupportActionBar(toolbar);
 
-        if(!surveyID.equals("BASELINE")){
+        if(surveyID.equals("ITEM")){ //if not baseline then load assigned survey
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
+            surveyDownload = new SurveyDownload(newsItem.getSurvey_id());
+            surveyDownload.execute((Void) null);
+
         }
-
-        //download the survey
-        surveyDownload = new SurveyDownload(surveyID);
-        surveyDownload.execute((Void) null);
-
+        else if (surveyID.equals("BASELINE")){ //if coming from sign up load the baseline
+            surveyDownload = new SurveyDownload("5b6d69e9fb9ca80fa8cc14a9");
+            surveyDownload.execute((Void) null);
+        }
     }
 
     //displays the initial survey title and description
@@ -171,8 +173,6 @@ public class SurveyActivity extends AppCompatActivity {
             title.setTextSize(25);
             lPanel.addView(title);
         }
-
-
     }
 
     //onClick listener for when next button is pressed
@@ -215,7 +215,6 @@ public class SurveyActivity extends AppCompatActivity {
         }
 
         if(current==survey.getQuestions().size()){ //last question has been answered
-            //lPanel.removeAllViews();
             //remove all options after last question
             submit.setVisibility(View.VISIBLE);
             next.setVisibility(View.GONE);
@@ -227,20 +226,20 @@ public class SurveyActivity extends AppCompatActivity {
             questionTitle.setVisibility(View.GONE);
 
             //TRACING
-            String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-
-            SurveyResponse surveyResponse;
-            if (surveyID.equals("BASELINE") || newsItem==null){
-                surveyResponse = new SurveyResponse(email, user_group, surveyID, responses,"Baseline" , date );
-            }
-            else{
-                surveyResponse = new SurveyResponse(email, user_group, surveyID, responses, newsItem.getId() , date );
-            }
-            Gson gson = new Gson();
-            String json = gson.toJson(surveyResponse);
-            TextView test = new TextView(this);
-            test.setText(json);
-            lPanel.addView(test);
+//            String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+//
+//            SurveyResponse surveyResponse;
+//            if (surveyID.equals("BASELINE") || newsItem==null){
+//                surveyResponse = new SurveyResponse(email, user_group, surveyID, responses,"Baseline" , date );
+//            }
+//            else{
+//                surveyResponse = new SurveyResponse(email, user_group, survey.getName(), responses, newsItem.getName() , date );
+//            }
+//            Gson gson = new Gson();
+//            String json = gson.toJson(surveyResponse);
+//            TextView test = new TextView(this);
+//            test.setText(json);
+//            lPanel.addView(test);
         }
     }
 
@@ -264,7 +263,6 @@ public class SurveyActivity extends AppCompatActivity {
             Question toLoad = survey.getQuestions().get(current);
 
             int temp = current+1;
-            //TextView q = new TextView(this);
             questionTitle.setText("Question "+temp+": "+toLoad.getQuestion());
 
             String type = toLoad.getType();
@@ -276,7 +274,6 @@ public class SurveyActivity extends AppCompatActivity {
 
             //add radio buttons for each option
             else if (type.equals("MCQ")){
-                //RadioGroup radioGroup = new RadioGroup(this);
                 radioGroup.setVisibility(View.VISIBLE);
                 ArrayList<String> options = toLoad.getOptions();
 
@@ -301,7 +298,7 @@ public class SurveyActivity extends AppCompatActivity {
             surveyResponse = new SurveyResponse(email, user_group, surveyID, responses,"Baseline" , date );
         }
         else{
-            surveyResponse = new SurveyResponse(email, user_group, surveyID, responses, newsItem.getId() , date );
+            surveyResponse = new SurveyResponse(email, user_group, survey.getName(), responses, newsItem.getName() , date );
         }
         Gson gson = new Gson();
         String json = gson.toJson(surveyResponse);
@@ -331,7 +328,7 @@ public class SurveyActivity extends AppCompatActivity {
         protected String doInBackground(Void... params) {
 
             try{
-                URL url = new URL("https://engage.cs.uct.ac.za/android/get_survey"); //will return "Login Success:<user_group>"
+                URL url = new URL("https://engage.cs.uct.ac.za/android/get_survey");
 
                 HttpURLConnection httpConn = (HttpURLConnection)url.openConnection();
                 Log.i(TAG, "Connection established");
@@ -573,7 +570,7 @@ public class SurveyActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.home:
-                //Toast.makeText(this, "Home clicked", Toast.LENGTH_SHORT).show();
+
                 intent = new Intent(SurveyActivity.this, MainActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
@@ -581,14 +578,14 @@ public class SurveyActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.about:
-                //Toast.makeText(this, "About clicked", Toast.LENGTH_SHORT).show();
+
                 intent = new Intent(this, AboutActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
                 startActivity(intent);
                 return true;
             case R.id.logout:
-                //Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
+
                 intent = new Intent(SurveyActivity.this, SignIn.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

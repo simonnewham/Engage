@@ -15,14 +15,16 @@ public class NewsItem implements Serializable {
     private String id;
     private String path;
     private String topic;
+    private String survey_id;
 
-    public NewsItem(String name, String date, String type, String id, String path, String topic) {
+    public NewsItem(String name, String date, String type, String id, String path, String topic, String survey_id) {
         this.name = name;
         this.date = date;
         this.type = type;
         this.id = id;
         this.path = path;
         this.topic = topic;
+        this.survey_id = survey_id;
     }
 
     public String getName() {
@@ -71,5 +73,13 @@ public class NewsItem implements Serializable {
 
     public void setTopic(String topic) {
         this.topic = topic;
+    }
+
+    public String getSurvey_id() {
+        return survey_id;
+    }
+
+    public void setSurvey_id(String survey_id) {
+        this.survey_id = survey_id;
     }
 }
