@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.ConsentFragment"
+    android:background="@color/colorAccent">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:padding="10dp"
+                android:id="@+id/text1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/consent1"
+                android:textColor="@color/colorWhite"/>
+
+            <Button
+                android:id="@+id/buttonAccept"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/colorOrange"
+                android:text="Continue"
+                android:textColor="@color/colorWhite" />
+
+            <Button
+                android:id="@+id/butonReject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/colorRed"
+                android:text="Go Back"
+                android:textColor="@color/colorWhite" />
+
+            <TextView
+                android:padding="10dp"
+                android:id="@+id/text2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/consent2"
+                android:textColor="@color/colorWhite"/>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

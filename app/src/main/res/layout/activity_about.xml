@@ -5,76 +5,76 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activities.AboutActivity">
+    tools:context=".activities.AboutActivity"
+    android:background="@color/colorAccent">
 
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/colorAccent"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp">
+        android:layout_height="match_parent">
 
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="match_parent"
-            android:layout_height="101dp"
-            android:layout_gravity="center"
-            android:src="@drawable/logo2" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:textAlignment="center">
-
-        <TextView
-            android:id="@+id/user"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="email"
-            android:textAlignment="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="20sp"/>
+            android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/user_group"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="email"
-            android:textAlignment="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:textSize="20sp"/>
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="match_parent"
+                android:layout_height="101dp"
+                android:layout_gravity="center"
+                android:src="@drawable/logo2" />
 
-        <TextView
-            android:id="@+id/version"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Version 1.0"
-            android:textAlignment="center"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/user_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:text="group"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"/>
 
-        <TextView
-            android:padding="5dp"
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/about"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            android:textSize="15sp"/>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
+                android:text="email"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"/>
+
+            <TextView
+                android:id="@+id/version"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Version 1.1"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorWhite"/>
+
+            <TextView
+                android:textAlignment="center"
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
+                android:padding="15dp"
+                android:text="@string/about"
+                android:textSize="15sp"
+                android:textColor="@color/colorWhite"/>
+        </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

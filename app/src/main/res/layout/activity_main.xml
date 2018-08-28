@@ -14,19 +14,12 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar"/>
 
-    <TextView
-        android:id="@+id/tmail"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Your Newsfeed"
-        android:textAlignment="center"
-        android:textSize="18dp"
-        android:textStyle="bold"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/colorWhite"
-        android:padding="8dp"
-        />
-
+        android:visibility="gone"/>
 
     <ListView
         android:id="@+id/news_list"

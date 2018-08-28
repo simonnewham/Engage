@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView news_list;
     private NewsAdapter newsAdapter;
     private LinearLayout main_panel;
+    private ProgressBar progressBar;
 
     private String email;
     private String user_group;
@@ -77,21 +79,14 @@ public class MainActivity extends AppCompatActivity {
             user_group = extras.getString("group");
         }
 
-        //TRACING
-//        TextView tmail = (TextView) findViewById(R.id.tmail);
-//        tmail.setText("Email: "+email);
-//        TextView tgroup = (TextView) findViewById(R.id.tgroup);
-//        tgroup.setText("User Group: "+user_group);
-
         main_panel = findViewById(R.id.main_panel);
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
 
         contentDownload = new ContentDownload(user_group);
         contentDownload.execute((Void) null);
 
     }
-
-
-
 
     public void displayNews(ArrayList<NewsItem> toDisplay){
 
@@ -203,10 +198,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else if (result.equals("[]")){
                 //no new items
-                TextView error = new TextView(MainActivity.this);
-                error.setText("No New Content Today");
-                error.setTextSize(25);
-                main_panel.addView(error);
+                onError();
             }
             else{
                 //convert from JSON string to JSONObject
@@ -222,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
 
                        toDisplay.add(newsItem);
                     }
-
+                    progressBar.setVisibility(View.GONE);
                     displayNews(toDisplay);
 
                 } catch (JSONException e) {
@@ -240,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onError(){
+        progressBar.setVisibility(View.GONE);
         TextView error = new TextView(this);
         error.setText("Server Error, please try again later");
         error.setTextSize(25);

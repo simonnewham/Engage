@@ -74,6 +74,9 @@ public class SignIn extends AppCompatActivity {
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
+        email = "@test";
+        password ="1234";
+
         boolean cancel = false;
         View focusView = null;
 

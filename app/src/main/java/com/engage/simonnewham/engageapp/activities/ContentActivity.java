@@ -18,8 +18,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,9 +51,12 @@ public class ContentActivity extends AppCompatActivity {
 
     TextView title;
     TextView date;
+    TextView titleF;
+    TextView dateF;
     TextView content;
     ImageView image;
     VideoView video;
+    Button surveyB;
 
     String email;
     String user_group;
@@ -58,8 +64,10 @@ public class ContentActivity extends AppCompatActivity {
 
     MediaPlayer mediaPlayer;
     private VideoView audio;
-
+    private ProgressBar progressBar;
     private ScrollView textScroll;
+
+    Boolean fullscreen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +86,10 @@ public class ContentActivity extends AppCompatActivity {
         image = findViewById(R.id.Image);
         video = (VideoView) findViewById(R.id.Video);
         textScroll = findViewById(R.id.text_scroll);
+        progressBar = findViewById(R.id.progressBar);
+        surveyB = findViewById(R.id.surveyButton);
+        titleF = findViewById(R.id.titleFixed);
+        dateF = findViewById(R.id.dateFixed);
 
         //get Extra
         Bundle extras = getIntent().getExtras();
@@ -95,18 +107,26 @@ public class ContentActivity extends AppCompatActivity {
      */
     public void setItem(){
 
-        title.setText(item.getName());
-        date.setText("Uploaded on: "+item.getDate());
         String type = item.getType().toUpperCase();
-
+        progressBar.setVisibility(View.VISIBLE);
 
         if(type.equals("IMAGE")){
-            textScroll.setVisibility(View.VISIBLE);
+            //set date and title
+            titleF.setVisibility(View.VISIBLE);
+            dateF.setVisibility(View.VISIBLE);
+            dateF.setText("Uploaded on: "+item.getDate());
+            titleF.setText(item.getName());
+
             image.setVisibility(View.VISIBLE);
             new DownloadImageTask(image).execute("https://engage.cs.uct.ac.za"+item.getPath());
 
         }
         else if(type.equals("VIDEO")){
+            titleF.setVisibility(View.VISIBLE);
+            dateF.setVisibility(View.VISIBLE);
+            dateF.setText("Uploaded on: "+item.getDate());
+            titleF.setText(item.getName());
+
             String vidAddress = "https://engage.cs.uct.ac.za"+item.getPath();
             Uri vidUri = Uri.parse(vidAddress);
             MediaController vidControl = new MediaController(this);
@@ -114,16 +134,25 @@ public class ContentActivity extends AppCompatActivity {
             video.setMediaController(vidControl);
             video.setVisibility(View.VISIBLE);
             video.setVideoURI(vidUri);
-            video.start();
+            //video.start();
+            progressBar.setVisibility(View.GONE);
 
         }
         else if(type.equals("TEXT")){
             textScroll.setVisibility(View.VISIBLE);
+            title.setText(item.getName());
+            date.setText("Uploaded on: "+item.getDate());
             content.setVisibility(View.VISIBLE);
             new DownloadTextTask(content).execute("https://engage.cs.uct.ac.za"+item.getPath());
 
         }
         else if(type.equals("AUDIO")){
+
+            titleF.setVisibility(View.VISIBLE);
+            dateF.setVisibility(View.VISIBLE);
+            dateF.setText("Uploaded on: "+item.getDate());
+            titleF.setText(item.getName());
+
             video.setVisibility(View.VISIBLE);
             //video.setBackground(ContextCompat.getDrawable(this, R.drawable.logo2));
             video.setBackgroundResource(R.drawable.ic_music);
@@ -137,7 +166,8 @@ public class ContentActivity extends AppCompatActivity {
             Uri uri = Uri.parse("https://engage.cs.uct.ac.za"+item.getPath());
             video.setMediaController(mediaController);
             video.setVideoURI(uri);
-            video.start();
+            //video.start();
+            progressBar.setVisibility(View.GONE);
         }
 
     }
@@ -161,6 +191,25 @@ public class ContentActivity extends AppCompatActivity {
         intent.putExtra("surveyID", "ITEM");
         intent.putExtra("News", item);
         startActivity(intent);
+    }
+
+    public void loadFull(View view) {
+        //Intent intent = new Intent(this, FullScreenImageActivity.class);
+        //startActivity(intent);
+        if(fullscreen){
+            titleF.setVisibility(View.VISIBLE);
+            dateF.setVisibility(View.VISIBLE);
+            surveyB.setVisibility(View.VISIBLE);
+            getSupportActionBar().show();
+            fullscreen=false;
+        }
+        else{
+            fullscreen = true;
+            titleF.setVisibility(View.GONE);
+            dateF.setVisibility(View.GONE);
+            surveyB.setVisibility(View.GONE);
+            getSupportActionBar().hide();
+        }
     }
 
     /**
@@ -187,6 +236,7 @@ public class ContentActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(Bitmap result) {
+            progressBar.setVisibility(View.GONE);
             bmImage.setImageBitmap(result);
         }
     }
@@ -223,6 +273,7 @@ public class ContentActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
+            progressBar.setVisibility(View.GONE);
             textView.setText(result);
         }
     }

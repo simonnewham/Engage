@@ -27,4 +27,13 @@
     <string name="about">Engaging Representations is a UCT Computer Science Honours project built by Simon Newham and Chris Mudongo.
     This tool seeks to measure your reaction to viewing different types of content, in order to asses its immediate and long term impact
     on decision making.\n\nCopyright © University of Cape Town</string>
+
+    <string name="consent1">By clicking continue below you are confirming that you consent to participate in the study based on the information
+        available in the Participant Information Sheet. You have had an opportunity to ask questions about the study,
+        and have received satisfactory answers to all of your questions.</string>
+
+    <string name="consent2">You are free to withdraw from the study:
+        \nat any time and without having to give a reason for withdrawing and
+	    \n(if relevant) without affecting your position in the University.
+        \nTo withdraw please send an email stating your intent to withdraw to drlaurensderooij@gmail.com .</string>
 </resources>

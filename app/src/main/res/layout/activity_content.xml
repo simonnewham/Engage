@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.engage.simonnewham.engageapp.activities.ContentActivity"
-    android:weightSum="1"
+
     >
 
     <include
@@ -15,48 +15,40 @@
         layout="@layout/toolbar"
         />
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="30dp"
-        android:textStyle="bold"
-        android:text="Title Location"
-        android:layout_weight="0.03"
-        android:paddingTop="10dp"
-        android:padding="4dp"/>
-
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Date Location"
-        android:textColor="@color/colorPrimary"
-        android:padding="4dp"
-        android:layout_marginBottom="2dp"/>
-
-    <Button
-        android:id="@+id/surveyButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorOrange"
-        android:onClick="loadSurvey"
-        android:text="Answer Survey >>"
-        android:textColor="@color/colorWhite"
-        android:layout_marginBottom="5dp"/>
-
     <ScrollView
         android:id="@+id/text_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_weight="0.8"
         android:visibility="gone"
-        android:layout_weight="1">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="2dp">
+            android:paddingBottom="2dp"
+            >
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                android:text="Title Location"
+                android:layout_weight="0.03"
+                android:paddingTop="10dp"
+                android:padding="4dp"/>
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date Location"
+                android:textColor="@color/colorPrimary"
+                android:padding="4dp"
+                android:layout_marginBottom="2dp"/>
 
             <TextView
                 android:id="@+id/Text"
@@ -66,22 +58,69 @@
                 android:text=""
                 android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/Image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:srcCompat="@color/colorAccent" />
-
         </LinearLayout>
+
     </ScrollView>
+
+    <TextView
+        android:id="@+id/titleFixed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:textStyle="bold"
+        android:text="Title Location"
+        android:paddingTop="10dp"
+        android:padding="4dp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/dateFixed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Date Location"
+        android:textColor="@color/colorPrimary"
+        android:padding="4dp"
+        android:layout_marginBottom="2dp"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/Image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:srcCompat="@color/cardview_shadow_end_color"
+        android:layout_weight="1"
+        android:onClick="loadFull"
+
+        />
+
+    <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
 
     <VideoView
         android:id="@+id/Video"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="2dp"
         android:visibility="gone"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        />
+
+    <Button
+        android:id="@+id/surveyButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorOrange"
+        android:onClick="loadSurvey"
+        android:text="Answer Survey >>"
+        android:textColor="@color/colorWhite"
+        android:layout_marginBottom="5dp"
+        android:layout_gravity="bottom"
         />
 
 </LinearLayout>

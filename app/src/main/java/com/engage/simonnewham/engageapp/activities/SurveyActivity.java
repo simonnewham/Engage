@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,6 +19,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -77,6 +79,7 @@ public class SurveyActivity extends AppCompatActivity {
     EditText editText;
     TextView questionTitle;
     ImageView survey_tick;
+    private ProgressBar progressBar;
 
     //temporary views for begin survey
     TextView title;
@@ -105,6 +108,7 @@ public class SurveyActivity extends AppCompatActivity {
         next = (Button) findViewById(R.id.button_next);
         survey_tick = (ImageView) findViewById(R.id.imageView);
         thank = new TextView(this);
+        progressBar = findViewById(R.id.progressBar);
 
         //get extra info
         Bundle extras = getIntent().getExtras();
@@ -133,7 +137,7 @@ public class SurveyActivity extends AppCompatActivity {
         }
     }
 
-    //displays the initial survey title and description
+    //displays the initial survey title and description after SurveyDownload is finished
     public void displaySurvey(Survey s){
 
         if(surveyID.equals("BASELINE")){
@@ -144,9 +148,10 @@ public class SurveyActivity extends AppCompatActivity {
         }
 
         title = new TextView(this);
-        title.setText("Survey Title: "+s.getName());
+        title.setText(s.getName());
         title.setTypeface(null, Typeface.BOLD);
         title.setTextSize(15);
+        title.setGravity(Gravity.CENTER);
         lPanel.addView(title);
 
         description = new TextView(this);
@@ -225,21 +230,6 @@ public class SurveyActivity extends AppCompatActivity {
             radioGroup.setVisibility(View.GONE);
             questionTitle.setVisibility(View.GONE);
 
-            //TRACING
-//            String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-//
-//            SurveyResponse surveyResponse;
-//            if (surveyID.equals("BASELINE") || newsItem==null){
-//                surveyResponse = new SurveyResponse(email, user_group, surveyID, responses,"Baseline" , date );
-//            }
-//            else{
-//                surveyResponse = new SurveyResponse(email, user_group, survey.getName(), responses, newsItem.getName() , date );
-//            }
-//            Gson gson = new Gson();
-//            String json = gson.toJson(surveyResponse);
-//            TextView test = new TextView(this);
-//            test.setText(json);
-//            lPanel.addView(test);
         }
     }
 
@@ -315,7 +305,6 @@ public class SurveyActivity extends AppCompatActivity {
     public class SurveyDownload extends AsyncTask<Void, Void, String> {
 
         private final String mSurveyID;
-
 
         SurveyDownload(String surveyID) {
             mSurveyID = surveyID;
@@ -435,7 +424,7 @@ public class SurveyActivity extends AppCompatActivity {
                     if(questionList !=null){
                         survey = new Survey(newJObject.getString("_id"), newJObject.getString("name"),
                                 newJObject.getString("description"), questionList);
-
+                        progressBar.setVisibility(View.GONE);
                         displaySurvey(survey);
                     }
 

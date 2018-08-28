@@ -87,6 +87,15 @@
                 android:hint="password"/>
 
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.28"
+                android:visibility="gone"
+                />
+
             <Button
                 android:id="@+id/login"
                 style="?android:textAppearanceSmall"

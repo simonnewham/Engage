@@ -1,6 +1,7 @@
 package com.engage.simonnewham.engageapp.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -36,6 +37,7 @@ public class AboutActivity extends AppCompatActivity {
         //setup toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("About");
+        //toolbar.setBackgroundColor(Color.parseColor("#3E92CC"));
         setSupportActionBar(toolbar);
 
         mEmail = findViewById(R.id.user);

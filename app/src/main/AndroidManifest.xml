@@ -26,7 +26,8 @@
         <activity android:name=".activities.SignUpActivity" />
         <activity android:name=".activities.ContentActivity" />
         <activity android:name=".activities.SurveyActivity" />
-        <activity android:name=".activities.AboutActivity"></activity>
+        <activity android:name=".activities.AboutActivity" />
+        <activity android:name=".activities.FullScreenImageActivity"></activity>
     </application>
 
 </manifest>

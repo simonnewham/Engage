@@ -12,49 +12,11 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/button_begin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:onClick="onBegin"
-            android:text="Begin Survey>"
-            android:background="@color/colorOrange"
-            android:textColor="@color/colorWhite"
-            />
-
-        <Button
-            android:id="@+id/button_next"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:onClick="checkInput"
-            android:text="Next"
-            android:visibility="gone"
-            />
-
-        <Button
-            android:id="@+id/button_submit"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:text="Submit"
-            android:visibility="gone"
-            android:onClick="onSubmit"
-            android:background="@color/colorOrange"
-            android:textColor="@color/colorWhite"/>
-
-    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.5"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.6"
         >
 
         <LinearLayout
@@ -64,6 +26,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/text_question"
@@ -106,5 +74,44 @@
 
     </ScrollView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom">
+
+        <Button
+            android:id="@+id/button_begin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:onClick="onBegin"
+            android:text="Begin Survey>"
+            android:background="@color/colorOrange"
+            android:textColor="@color/colorWhite"
+            />
+
+        <Button
+            android:id="@+id/button_next"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:onClick="checkInput"
+            android:text="Next"
+            android:visibility="gone"
+            />
+
+        <Button
+            android:id="@+id/button_submit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="Submit"
+            android:visibility="gone"
+            android:onClick="onSubmit"
+            android:background="@color/colorOrange"
+            android:textColor="@color/colorWhite"/>
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -4,21 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.engage.simonnewham.engageapp.activities.SignUpActivity"
+    tools:context=".activities.FullScreenImageActivity">
 
-    >
-
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        />
-
-    <android.support.v4.view.ViewPager
+    <ImageView
+        android:id="@+id/imageViewFull"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/container">
-
-    </android.support.v4.view.ViewPager>
+        android:layout_weight="1"
+        app:srcCompat="@color/cardview_shadow_start_color"
+        android:scaleType="fitXY"/>
 
 </LinearLayout>

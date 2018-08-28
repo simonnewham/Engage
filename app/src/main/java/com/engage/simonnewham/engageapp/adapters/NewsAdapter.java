@@ -59,15 +59,15 @@ public class NewsAdapter extends ArrayAdapter<NewsItem>{
         }
         else if(type.equals("VIDEO")){
             image.setImageResource(R.drawable.ic_video);
-            image.setBackgroundResource(R.color.colorOrange);
+
         }
         else if (type.equals("AUDIO")){
             image.setImageResource(R.drawable.ic_music);
-            image.setBackgroundResource(R.color.colorAccent);
+
         }
         else if (type.equals("IMAGE")){
             image.setImageResource(R.drawable.ic_image);
-            image.setBackgroundResource(R.color.colorPrimaryDark);
+
         }
 
         return listItem;
