@@ -8,7 +8,11 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +23,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
@@ -29,6 +34,12 @@ import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.engage.simonnewham.engageapp.R;
+import com.engage.simonnewham.engageapp.adapters.SectionsStatePagerAdapter;
+import com.engage.simonnewham.engageapp.fragments.AudioFragment;
+import com.engage.simonnewham.engageapp.fragments.ConsentFragment;
+import com.engage.simonnewham.engageapp.fragments.ImageFragment;
+import com.engage.simonnewham.engageapp.fragments.SignUpFragment;
+import com.engage.simonnewham.engageapp.fragments.VideoFragment;
 import com.engage.simonnewham.engageapp.models.NewsItem;
 
 import org.json.JSONException;
@@ -43,31 +54,32 @@ import java.net.URL;
 /**
  * @author simonnewham
  * Class to show individual news items downloaded from server
+ * Text items are rendered within the activity
+ * Image, Audio and Video items are rendered within their own fragment
  */
 
 public class ContentActivity extends AppCompatActivity {
 
     private final String TAG = "ContentActivity";
 
+
     TextView title;
     TextView date;
     TextView titleF;
     TextView dateF;
     TextView content;
-    ImageView image;
-    VideoView video;
     Button surveyB;
 
     String email;
     String user_group;
     NewsItem item;
 
-    MediaPlayer mediaPlayer;
-    private VideoView audio;
     private ProgressBar progressBar;
     private ScrollView textScroll;
+    private FrameLayout frameLayout;
 
-    Boolean fullscreen = false;
+    FragmentManager fragmentManager;
+    FragmentTransaction transaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,13 +95,12 @@ public class ContentActivity extends AppCompatActivity {
         title = (TextView) findViewById(R.id.title);
         date = (TextView) findViewById(R.id.date);
         content = (TextView) findViewById(R.id.Text);
-        image = findViewById(R.id.Image);
-        video = (VideoView) findViewById(R.id.Video);
         textScroll = findViewById(R.id.text_scroll);
         progressBar = findViewById(R.id.progressBar);
         surveyB = findViewById(R.id.surveyButton);
         titleF = findViewById(R.id.titleFixed);
         dateF = findViewById(R.id.dateFixed);
+        frameLayout = findViewById(R.id.container);
 
         //get Extra
         Bundle extras = getIntent().getExtras();
@@ -99,8 +110,10 @@ public class ContentActivity extends AppCompatActivity {
             item = (NewsItem) getIntent().getSerializableExtra("News");
         }
 
+        //set item on background thread?
         setItem();
     }
+
 
     /**
      * Method to set up the news article within the android view
@@ -112,29 +125,31 @@ public class ContentActivity extends AppCompatActivity {
 
         if(type.equals("IMAGE")){
             //set date and title
+            frameLayout.setVisibility(View.VISIBLE);
             titleF.setVisibility(View.VISIBLE);
             dateF.setVisibility(View.VISIBLE);
             dateF.setText("Uploaded on: "+item.getDate());
             titleF.setText(item.getName());
 
-            image.setVisibility(View.VISIBLE);
-            new DownloadImageTask(image).execute("https://engage.cs.uct.ac.za"+item.getPath());
+            fragmentManager = getSupportFragmentManager();
+            transaction = fragmentManager.beginTransaction();
+            transaction.add(R.id.container, new ImageFragment(item.getPath()));
+            transaction.commit();
+
+            progressBar.setVisibility(View.GONE);
 
         }
         else if(type.equals("VIDEO")){
+            frameLayout.setVisibility(View.VISIBLE);
             titleF.setVisibility(View.VISIBLE);
             dateF.setVisibility(View.VISIBLE);
             dateF.setText("Uploaded on: "+item.getDate());
             titleF.setText(item.getName());
 
-            String vidAddress = "https://engage.cs.uct.ac.za"+item.getPath();
-            Uri vidUri = Uri.parse(vidAddress);
-            MediaController vidControl = new MediaController(this);
-            vidControl.setAnchorView(video);
-            video.setMediaController(vidControl);
-            video.setVisibility(View.VISIBLE);
-            video.setVideoURI(vidUri);
-            //video.start();
+            fragmentManager = getSupportFragmentManager();
+            transaction = fragmentManager.beginTransaction();
+            transaction.add(R.id.container, new VideoFragment(item.getPath()));
+            transaction.commit();
             progressBar.setVisibility(View.GONE);
 
         }
@@ -143,30 +158,23 @@ public class ContentActivity extends AppCompatActivity {
             title.setText(item.getName());
             date.setText("Uploaded on: "+item.getDate());
             content.setVisibility(View.VISIBLE);
+
             new DownloadTextTask(content).execute("https://engage.cs.uct.ac.za"+item.getPath());
 
         }
         else if(type.equals("AUDIO")){
-
+            frameLayout.setVisibility(View.VISIBLE);
             titleF.setVisibility(View.VISIBLE);
             dateF.setVisibility(View.VISIBLE);
             dateF.setText("Uploaded on: "+item.getDate());
             titleF.setText(item.getName());
 
-            video.setVisibility(View.VISIBLE);
-            //video.setBackground(ContextCompat.getDrawable(this, R.drawable.logo2));
-            video.setBackgroundResource(R.drawable.ic_music);
-            MediaController mediaController = new MediaController(this){
-                @Override
-                public void hide() {
-                //Do not hide.
-                }
-            };
-            mediaController.setAnchorView(video);
-            Uri uri = Uri.parse("https://engage.cs.uct.ac.za"+item.getPath());
-            video.setMediaController(mediaController);
-            video.setVideoURI(uri);
-            //video.start();
+            //set fragment to audio version
+
+            fragmentManager = getSupportFragmentManager();
+            transaction = fragmentManager.beginTransaction();
+            transaction.add(R.id.container, new AudioFragment(item.getPath()));
+            transaction.commit();
             progressBar.setVisibility(View.GONE);
         }
 
@@ -184,61 +192,12 @@ public class ContentActivity extends AppCompatActivity {
 
     public void loadSurvey(View view){
 
-        Toast.makeText(this, "Load Survey clicked", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(ContentActivity.this, SurveyActivity.class);
         intent.putExtra("email", email);
         intent.putExtra("group", user_group);
         intent.putExtra("surveyID", "ITEM");
         intent.putExtra("News", item);
         startActivity(intent);
-    }
-
-    public void loadFull(View view) {
-        //Intent intent = new Intent(this, FullScreenImageActivity.class);
-        //startActivity(intent);
-        if(fullscreen){
-            titleF.setVisibility(View.VISIBLE);
-            dateF.setVisibility(View.VISIBLE);
-            surveyB.setVisibility(View.VISIBLE);
-            getSupportActionBar().show();
-            fullscreen=false;
-        }
-        else{
-            fullscreen = true;
-            titleF.setVisibility(View.GONE);
-            dateF.setVisibility(View.GONE);
-            surveyB.setVisibility(View.GONE);
-            getSupportActionBar().hide();
-        }
-    }
-
-    /**
-     *
-     */
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
-
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            progressBar.setVisibility(View.GONE);
-            bmImage.setImageBitmap(result);
-        }
     }
 
     /**
@@ -294,20 +253,23 @@ public class ContentActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.home:
+
                 intent = new Intent(ContentActivity.this, MainActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
                 startActivity(intent);
-                finish();
+                //finish();
                 return true;
             case R.id.about:
+
                 intent = new Intent(ContentActivity.this, AboutActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
                 startActivity(intent);
-                finish();
+                //finish();
                 return true;
             case R.id.logout:
+
                 intent = new Intent(ContentActivity.this, SignIn.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -316,5 +278,22 @@ public class ContentActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private Boolean removeFragment(){
+
+        String type = item.getType().toUpperCase();
+
+        if(type.equals("AUDIO")){
+
+        }
+        else if(type.equals("IMAGE")){
+
+        }
+        else if(type.equals("VIDEO")){
+
+        }
+        return true;
+
     }
 }

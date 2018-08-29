@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("group", user_group);
                 intent.putExtra("News", store.get(position));
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
 
@@ -263,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
                 startActivity(intent);
-                finish();
+                //finish();
                 return true;
             case R.id.logout:
                 //Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();

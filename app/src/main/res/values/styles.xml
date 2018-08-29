@@ -7,4 +7,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.GreenAccent">
+        <item name="colorAccent">@color/colorOrange</item>
+    </style>
+
 </resources>

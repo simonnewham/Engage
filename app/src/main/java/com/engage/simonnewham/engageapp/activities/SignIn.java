@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.engage.simonnewham.engageapp.R;
@@ -44,6 +45,7 @@ public class SignIn extends AppCompatActivity {
     //UI components
     private EditText mEmailView;
     private EditText mPasswordView;
+    private ProgressBar progressBar;
     //private View mProgressView;
     private View mLoginFormView; //no code included yet for progress
 
@@ -54,9 +56,10 @@ public class SignIn extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         //set up login form
-        mEmailView = (EditText) findViewById(R.id.email);
-        mPasswordView = (EditText) findViewById(R.id.password);
+        mEmailView = findViewById(R.id.email);
+        mPasswordView = findViewById(R.id.password);
         mLoginFormView = findViewById(R.id.login_form);
+        progressBar = findViewById(R.id.progressBar);
         //mProgressView = findViewById(R.id.login_progress);
         
     }
@@ -65,6 +68,8 @@ public class SignIn extends AppCompatActivity {
      * If errors occur then no login attempt is made
      */
     public void onLogin(View view) {
+
+        progressBar.setVisibility(View.VISIBLE);
 
         // Reset errors.
         mEmailView.setError(null);
@@ -113,7 +118,7 @@ public class SignIn extends AppCompatActivity {
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
+
         return email.contains("@");
     }
 
@@ -207,7 +212,7 @@ public class SignIn extends AppCompatActivity {
         //runs after doInBackground
         protected void onPostExecute(final String result) {
             mAuthTask = null;
-            //showProgress(false);
+            progressBar.setVisibility(View.GONE);
 
            if (result.startsWith("Login Success")) {
                 Log.i(TAG, "SUCCESS");
@@ -230,10 +235,5 @@ public class SignIn extends AppCompatActivity {
             }
         }
 
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            //showProgress(false);
-        }
     }
 }
