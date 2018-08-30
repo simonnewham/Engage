@@ -1,7 +1,9 @@
 package com.engage.simonnewham.engageapp.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -16,6 +18,10 @@ import com.engage.simonnewham.engageapp.R;
 import org.w3c.dom.Text;
 
 public class AboutActivity extends AppCompatActivity {
+
+    //shared preference code
+    private SharedPreferences mPreferences;
+    private SharedPreferences.Editor mEditor;
 
     private String email;
     private String user_group;
@@ -70,12 +76,16 @@ public class AboutActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.about:
-                //Toast.makeText(this, "About clicked", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.logout:
                 //Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
                 intent = new Intent(this, SignIn.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                //clear shared preferences on logout
+                mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                mEditor = mPreferences.edit();
+                mEditor.clear();
+                mEditor.commit();
                 startActivity(intent);
                 finish();
                 return true;

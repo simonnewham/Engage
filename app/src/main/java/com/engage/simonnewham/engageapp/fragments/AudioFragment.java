@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.engage.simonnewham.engageapp.R;
+import com.engage.simonnewham.engageapp.activities.ContentActivity;
 import com.engage.simonnewham.engageapp.activities.SignIn;
 import com.engage.simonnewham.engageapp.activities.SignUpActivity;
 
@@ -52,6 +53,7 @@ public class AudioFragment extends Fragment {
     private FloatingActionButton  backward;
     private SeekBar seekbar;
     private TextView progress;
+    private TextView total;
 
     private String path;
     private MediaPlayer mediaPlayer;
@@ -66,6 +68,8 @@ public class AudioFragment extends Fragment {
     private Boolean playing =false;
     Boolean ready = false;
 
+    DownloadAudioTask downloadAudioTask;
+
     @SuppressLint("ValidFragment")
     public AudioFragment(String path){
         this.path = path;
@@ -78,36 +82,23 @@ public class AudioFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_audio, container, false);
 
         play = view.findViewById(R.id.buttonPlay);
-        //pause = view.findViewById(R.id.buttonPause);
         forward = view.findViewById(R.id.buttonForward);
         backward = view.findViewById(R.id.buttonBack);
         progress = view.findViewById(R.id.textProgress);
         seekbar = view.findViewById(R.id.seekBar);
+        total = view.findViewById(R.id.textTotal);
 
         //download media
-//        String url = "https://engage.cs.uct.ac.za"+path;
-//        mediaPlayer = new MediaPlayer();
-//        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//        try {
-//            mediaPlayer.setDataSource(url);
-//            mediaPlayer.prepare();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-        new AudioFragment.DownloadAudioTask().execute("https://engage.cs.uct.ac.za"+path);
+        mediaPlayer = new MediaPlayer();
+        downloadAudioTask = new AudioFragment.DownloadAudioTask();
+        downloadAudioTask.execute("https://engage.cs.uct.ac.za"+path);
 
         seekbar.setClickable(false);
-
-//        progress.setText(String.format("%d min, %d sec",
-//                TimeUnit.MILLISECONDS.toMinutes((long) finalTime),
-//                TimeUnit.MILLISECONDS.toSeconds((long) finalTime) -
-//                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long)
-//                                finalTime)))
-//        );
+        //seekbar.setMax(mediaPlayer.getDuration());
 
         play.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
+
                 if(ready){
                     if(playing){
                         playing = false;
@@ -119,19 +110,22 @@ public class AudioFragment extends Fragment {
                         mediaPlayer.start();
                         playing = true;
                         play.setImageDrawable(ContextCompat.getDrawable(getContext(),R.drawable.ic_pause));
+
+                        seekbar.setMax(mediaPlayer.getDuration());
                         finalTime = mediaPlayer.getDuration();
+
+                        total.setText(String.format("%d min, %d sec",
+                                TimeUnit.MILLISECONDS.toMinutes((long) finalTime),
+                                TimeUnit.MILLISECONDS.toSeconds((long) finalTime)-
+                                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
+                                                toMinutes((long) finalTime)))
+                        );
                         startTime = mediaPlayer.getCurrentPosition();
-
-                        if (oneTimeOnly == 0) {
-                            seekbar.setMax((int) finalTime);
-                            oneTimeOnly = 1;
-                        }
-
                         seekbar.setProgress((int)startTime);
                         myHandler.postDelayed(UpdateSongTime,100);
 
-                    }
 
+                    }
                 }
             }
         });
@@ -165,7 +159,6 @@ public class AudioFragment extends Fragment {
                         Toast.makeText(getActivity(),"Cannot jump backward 5 seconds",Toast.LENGTH_SHORT).show();
                     }
                 }
-
             }
         });
 
@@ -175,15 +168,18 @@ public class AudioFragment extends Fragment {
 
     private Runnable UpdateSongTime = new Runnable() {
         public void run() {
-            startTime = mediaPlayer.getCurrentPosition();
-            progress.setText(String.format("%d min, %d sec",
-                    TimeUnit.MILLISECONDS.toMinutes((long) startTime),
-                    TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
-                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
-                                    toMinutes((long) startTime)))
-            );
-            seekbar.setProgress((int)startTime);
-            myHandler.postDelayed(this, 100);
+            if(mediaPlayer!=null){
+                startTime = mediaPlayer.getCurrentPosition();
+                //startTime = mediaPlayer.getDuration();
+                progress.setText(String.format("%d min, %d sec",
+                        TimeUnit.MILLISECONDS.toMinutes((long) startTime),
+                        TimeUnit.MILLISECONDS.toSeconds((long) startTime) -
+                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.
+                                        toMinutes((long) startTime)))
+                );
+                seekbar.setProgress((int)startTime);
+                myHandler.postDelayed(this, 100);
+            }
         }
     };
 
@@ -203,7 +199,6 @@ public class AudioFragment extends Fragment {
 
             try {
                 String url = urldisplay;
-                mediaPlayer = new MediaPlayer();
                 mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                 mediaPlayer.setDataSource(url);
                 mediaPlayer.prepare();
@@ -217,9 +212,24 @@ public class AudioFragment extends Fragment {
         }
 
         protected void onPostExecute(String result) {
+            downloadAudioTask = null;
             progress.setText("Item Ready");
             ready = true;
+
         }
+
+        protected void onCancelled() {
+            downloadAudioTask = null;
+
+        }
+
+    }
+
+    public void endMedia (){
+
+        mediaPlayer.release();
+        mediaPlayer =null;
+
     }
 
 }

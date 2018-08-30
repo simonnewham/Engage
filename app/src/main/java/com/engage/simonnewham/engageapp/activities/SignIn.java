@@ -1,7 +1,9 @@
 package com.engage.simonnewham.engageapp.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -38,6 +40,10 @@ import java.util.Locale;
 
 public class SignIn extends AppCompatActivity {
 
+    //shared preference code
+    private SharedPreferences mPreferences;
+    private SharedPreferences.Editor mEditor;
+
     //login task
     private UserLoginTask mAuthTask;
     private final String TAG = "UserSignIn";
@@ -51,15 +57,22 @@ public class SignIn extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //check shared preference if user already logged in
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mEditor = mPreferences.edit();
+        checkPrefs();
 
         //set up login form
         mEmailView = findViewById(R.id.email);
         mPasswordView = findViewById(R.id.password);
         mLoginFormView = findViewById(R.id.login_form);
         progressBar = findViewById(R.id.progressBar);
+
         //mProgressView = findViewById(R.id.login_progress);
         
     }
@@ -69,8 +82,6 @@ public class SignIn extends AppCompatActivity {
      */
     public void onLogin(View view) {
 
-        progressBar.setVisibility(View.VISIBLE);
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -78,9 +89,6 @@ public class SignIn extends AppCompatActivity {
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-
-        email = "@test";
-        password ="1234";
 
         boolean cancel = false;
         View focusView = null;
@@ -112,6 +120,7 @@ public class SignIn extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             //showProgress(true);
+            progressBar.setVisibility(View.VISIBLE);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
@@ -132,6 +141,30 @@ public class SignIn extends AppCompatActivity {
         finish();
 
     }
+
+    /**
+     * Method when user clicks on forgot password
+     * @param view
+     */
+    public void onForgot(View view) {
+
+    }
+
+    public void checkPrefs(){
+        String email = mPreferences.getString("email", "none");
+        String user_group = mPreferences.getString("user_group", "none");
+
+        Log.i(TAG, "User "+email);
+
+        if(!email.equals("none") && !user_group.equals("none")){
+            Intent intent = new Intent(SignIn.this, MainActivity.class);
+            intent.putExtra("email", email);
+            intent.putExtra("group", user_group);
+            startActivity(intent);
+            finish();
+        }
+    }
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
@@ -222,6 +255,17 @@ public class SignIn extends AppCompatActivity {
                     int index = result.indexOf(":");
                     mGroup = result.substring(index+1);
                 }
+
+                //store user details to avoid login
+                //mEditor = mPreferences.edit();
+                mEditor.putString("email", mEmail);
+                mEditor.commit();
+                mEditor.putString("user_group", mGroup);
+                mEditor.commit();
+
+                String test = mPreferences.getString("email","test");
+                Log.i(TAG, "User "+test);
+
 
                 Intent intent = new Intent(SignIn.this, MainActivity.class);
                 intent.putExtra("email", mEmail);

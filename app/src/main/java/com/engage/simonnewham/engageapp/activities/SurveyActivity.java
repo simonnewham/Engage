@@ -1,8 +1,10 @@
 package com.engage.simonnewham.engageapp.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -58,6 +60,10 @@ import java.util.List;
 import java.util.Locale;
 
 public class SurveyActivity extends AppCompatActivity {
+
+    //shared preference code
+    private SharedPreferences mPreferences;
+    private SharedPreferences.Editor mEditor;
 
     //extra info on user
     String email;
@@ -120,7 +126,7 @@ public class SurveyActivity extends AppCompatActivity {
         }
 
         //setup toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Survey");
         setSupportActionBar(toolbar);
 
@@ -547,9 +553,11 @@ public class SurveyActivity extends AppCompatActivity {
     //Method for setting up toolbar options
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.toolbar_menu, menu);
+        //if answering baseline do not give user option to go to home page
+        if(!surveyID.equals("BASELINE")){
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.toolbar_menu, menu);
+        }
         return true;
     }
 
@@ -574,9 +582,13 @@ public class SurveyActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.logout:
-
                 intent = new Intent(SurveyActivity.this, SignIn.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                //clear shared preferences on logout
+                mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                mEditor = mPreferences.edit();
+                mEditor.clear();
+                mEditor.commit();
                 startActivity(intent);
                 finish();
                 return true;

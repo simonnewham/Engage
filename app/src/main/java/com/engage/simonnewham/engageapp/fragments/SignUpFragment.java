@@ -1,18 +1,22 @@
 package com.engage.simonnewham.engageapp.fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.engage.simonnewham.engageapp.R;
+import com.engage.simonnewham.engageapp.activities.SignUpActivity;
 import com.engage.simonnewham.engageapp.activities.SurveyActivity;
 
 import java.io.BufferedReader;
@@ -34,10 +38,16 @@ import java.util.Random;
 public class SignUpFragment extends Fragment {
 
     private static final String TAG = "SignUpFragment";
+
+    //shared preference code
+    private SharedPreferences mPreferences;
+    private SharedPreferences.Editor mEditor;
+
     private UserSignUpTask mAuthTask;
     private EditText mEmail;
     private EditText mPassword;
     private EditText mPassword2;
+    private Button signUp;
 
     public SignUpFragment() {
         // Required empty public constructor
@@ -52,11 +62,18 @@ public class SignUpFragment extends Fragment {
         mEmail = view.findViewById(R.id.email);
         mPassword = view.findViewById(R.id.password);
         mPassword2 = view.findViewById(R.id.password2);
+        signUp = view.findViewById(R.id.signup);
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        signUp.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                onSignUp();
+            }
+        });
 
         return view;
     }
 
-    public void onSignUp(View view) {
+    public void onSignUp() {
 
         Boolean error = false;
 
@@ -196,7 +213,14 @@ public class SignUpFragment extends Fragment {
                     int index = result.indexOf(":");
                     mGroup = result.substring(index+1);
                 }
+                //Store email and user_group in stored preferences
+                mEditor = mPreferences.edit();
+                mEditor.putString("email", mEmail);
+                mEditor.commit();
+                mEditor.putString("user_group", mGroup);
+                mEditor.commit();
 
+                //load the next activity
                 Intent intent = new Intent(getActivity(), SurveyActivity.class);
                 intent.putExtra("email", mEmail);
                 intent.putExtra("group", mGroup);

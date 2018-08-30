@@ -7,16 +7,16 @@
     tools:context="com.engage.simonnewham.engageapp.activities.SignIn"
     android:orientation="vertical"
     android:background="@color/colorAccent"
-    android:weightSum="10"
+
 
     >
 
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="382dp"
-        android:paddingTop="20dp"
-        android:layout_weight="6">
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:paddingTop="5dp">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -27,72 +27,57 @@
 
             >
 
-            <TextView
-                android:id="@+id/editText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.28"
-                android:fontFamily="serif-monospace"
-                android:paddingTop="20dp"
-                android:text="ENGAGE"
-                android:textAlignment="center"
-                android:textColor="@color/colorWhite"
-                android:textSize="60sp"
-                android:textStyle="bold"
-                android:paddingBottom="25dp"
-                android:visibility="gone"/>
-
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="300dp"
                 android:layout_height="101dp"
-                android:layout_weight="0.28"
-                app:srcCompat="@drawable/logo2"
                 android:layout_gravity="center"
                 android:layout_marginBottom="30dp"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.28"
+                app:srcCompat="@drawable/logo2" />
 
             <EditText
                 android:id="@+id/email"
-                android:paddingLeft="5dp"
-                android:drawableLeft="@drawable/ic_mail_white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginBottom="20dp"
+                android:backgroundTint="@color/colorWhite"
+                android:drawableLeft="@drawable/ic_mail_white"
                 android:ems="10"
+                android:hint="email"
                 android:inputType="textEmailAddress"
+                android:paddingLeft="5dp"
                 android:textAlignment="center"
                 android:textColor="@color/colorWhite"
                 android:textColorHint="@color/colorOffWhite"
-                android:layout_gravity="center"
-                android:backgroundTint="@color/colorWhite"
-                android:hint="email"
 
                 />
 
             <EditText
                 android:id="@+id/password"
-                android:paddingLeft="5dp"
-                android:drawableLeft="@drawable/ic_lock_white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPassword"
-                android:textAlignment="center"
-                android:textColor="@color/colorWhite"
-                android:textColorHint="@color/colorOffWhite"
-                android:backgroundTint="@color/colorWhite"
                 android:layout_gravity="center"
                 android:layout_marginBottom="40dp"
-                android:hint="password"/>
+                android:backgroundTint="@color/colorWhite"
+                android:drawableLeft="@drawable/ic_lock_white"
+                android:ems="10"
+                android:hint="password"
+                android:inputType="textPassword"
+                android:paddingLeft="5dp"
+                android:textAlignment="center"
+                android:textColor="@color/colorWhite"
+                android:textColorHint="@color/colorOffWhite" />
 
 
             <ProgressBar
                 android:id="@+id/progressBar"
-                android:theme="@style/AppTheme.GreenAccent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.28"
+                android:theme="@style/AppTheme.GreenAccent"
                 android:visibility="gone"
 
                 />
@@ -103,19 +88,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="10.73"
-                android:onClick="onLogin"
-                android:text="Login"
-                android:textStyle="bold"
-                android:background="@drawable/round_buttons"
-                android:textColor="@color/colorWhite"
-                android:hint="email"
+                android:layout_marginBottom="20dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
-                />
-
+                android:layout_weight="10.73"
+                android:background="@drawable/round_buttons"
+                android:hint="email"
+                android:onClick="onLogin"
+                android:text="Login"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold" />
 
 
             <Button
@@ -124,18 +107,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="10.73"
-                android:onClick="SignUp"
-                android:text="No account? Sign Up"
-                android:textStyle="bold"
-                android:background="@drawable/round_button_accent"
-                android:textColor="@color/colorWhite"
+                android:layout_marginBottom="20dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginBottom="30dp"
+                android:layout_weight="10.73"
+                android:background="@drawable/round_button_accent"
                 android:hint="password"
-                />
+                android:onClick="SignUp"
+                android:text="No account? Sign Up"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.28"
+                android:text="Forgot Password?"
+                android:textColor="@color/colorWhite"
+                android:textAlignment="center"
+                android:onClick="onForgot"
+                android:textStyle="bold"
+               />
+
 
         </LinearLayout>
     </ScrollView>

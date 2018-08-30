@@ -1,6 +1,7 @@
 package com.engage.simonnewham.engageapp.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -8,6 +9,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -62,6 +64,9 @@ public class ContentActivity extends AppCompatActivity {
 
     private final String TAG = "ContentActivity";
 
+    //shared preference code
+    private SharedPreferences mPreferences;
+    private SharedPreferences.Editor mEditor;
 
     TextView title;
     TextView date;
@@ -80,6 +85,9 @@ public class ContentActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
+
+    //TEST
+    AudioFragment audio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,7 +181,8 @@ public class ContentActivity extends AppCompatActivity {
 
             fragmentManager = getSupportFragmentManager();
             transaction = fragmentManager.beginTransaction();
-            transaction.add(R.id.container, new AudioFragment(item.getPath()));
+            audio = new AudioFragment(item.getPath());
+            transaction.add(R.id.container, audio);
             transaction.commit();
             progressBar.setVisibility(View.GONE);
         }
@@ -181,6 +190,7 @@ public class ContentActivity extends AppCompatActivity {
     }
 
     public boolean onSupportNavigateUp() {
+        clearStack();
 
         Intent intent = new Intent(ContentActivity.this, MainActivity.class);
         intent.putExtra("email", email);
@@ -191,6 +201,7 @@ public class ContentActivity extends AppCompatActivity {
     }
 
     public void loadSurvey(View view){
+        clearStack();
 
         Intent intent = new Intent(ContentActivity.this, SurveyActivity.class);
         intent.putExtra("email", email);
@@ -198,6 +209,7 @@ public class ContentActivity extends AppCompatActivity {
         intent.putExtra("surveyID", "ITEM");
         intent.putExtra("News", item);
         startActivity(intent);
+
     }
 
     /**
@@ -253,7 +265,7 @@ public class ContentActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.home:
-
+                clearStack();
                 intent = new Intent(ContentActivity.this, MainActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
@@ -261,7 +273,7 @@ public class ContentActivity extends AppCompatActivity {
                 //finish();
                 return true;
             case R.id.about:
-
+                clearStack();
                 intent = new Intent(ContentActivity.this, AboutActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
@@ -269,9 +281,14 @@ public class ContentActivity extends AppCompatActivity {
                 //finish();
                 return true;
             case R.id.logout:
-
+                clearStack();
                 intent = new Intent(ContentActivity.this, SignIn.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                //clear shared preferences on logout
+                mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+                mEditor = mPreferences.edit();
+                mEditor.clear();
+                mEditor.commit();
                 startActivity(intent);
                 finish();
                 return true;
@@ -280,20 +297,14 @@ public class ContentActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean removeFragment(){
-
+    public void clearStack() {
+        //Here we are clearing back stack fragment entries
         String type = item.getType().toUpperCase();
 
         if(type.equals("AUDIO")){
-
+            if(audio!=null){
+                audio.endMedia();
+            }
         }
-        else if(type.equals("IMAGE")){
-
-        }
-        else if(type.equals("VIDEO")){
-
-        }
-        return true;
-
     }
 }

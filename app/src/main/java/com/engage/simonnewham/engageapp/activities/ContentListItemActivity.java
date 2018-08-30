@@ -23,13 +23,4 @@ public class ContentListItemActivity extends AppCompatActivity {
 
     }
 
-
-
-    public void loadNews (View view) {
-
-//        Intent intent = new Intent(this, ContentActivity.class);
-//        startActivity(intent);
-//        finish();
-          //Log.i(TAG, "JSJJSJS"+String.valueOf(position));
-    }
 }

@@ -1,8 +1,10 @@
 package com.engage.simonnewham.engageapp.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -51,6 +53,10 @@ public class MainActivity extends AppCompatActivity {
 
     private final String TAG = "MainActivity";
 
+    //shared preference code
+    private SharedPreferences mPreferences;
+    private SharedPreferences.Editor mEditor;
+
     private ListView news_list;
     private NewsAdapter newsAdapter;
     private LinearLayout main_panel;
@@ -82,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
         main_panel = findViewById(R.id.main_panel);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String email = mPreferences.getString("email", "chicken");
+        Log.i(TAG, "User "+email);
 
         contentDownload = new ContentDownload(user_group);
         contentDownload.execute((Void) null);
@@ -269,6 +279,12 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
                 intent = new Intent(MainActivity.this, SignIn.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                //clear shared preferences
+                mEditor = mPreferences.edit();
+                mEditor.clear();
+                mEditor.commit();
+
                 startActivity(intent);
                 //check
                 finish();
