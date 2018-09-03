@@ -86,7 +86,6 @@ public class ContentActivity extends AppCompatActivity {
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
 
-    //TEST
     AudioFragment audio;
 
     @Override

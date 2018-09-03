@@ -86,6 +86,7 @@ public class SurveyActivity extends AppCompatActivity {
     TextView questionTitle;
     ImageView survey_tick;
     private ProgressBar progressBar;
+    private ProgressBar progress;
 
     //temporary views for begin survey
     TextView title;
@@ -115,6 +116,7 @@ public class SurveyActivity extends AppCompatActivity {
         survey_tick = (ImageView) findViewById(R.id.imageView);
         thank = new TextView(this);
         progressBar = findViewById(R.id.progressBar);
+        progress = findViewById(R.id.progressBar2);
 
         //get extra info
         Bundle extras = getIntent().getExtras();
@@ -152,6 +154,8 @@ public class SurveyActivity extends AppCompatActivity {
             thank.setTextSize(20);
             lPanel.addView(thank);
         }
+
+        progress.setMax(s.getQuestions().size());
 
         title = new TextView(this);
         title.setText(s.getName());
@@ -226,15 +230,14 @@ public class SurveyActivity extends AppCompatActivity {
         }
 
         if(current==survey.getQuestions().size()){ //last question has been answered
-            //remove all options after last question
-            submit.setVisibility(View.VISIBLE);
+
             next.setVisibility(View.GONE);
-            survey_tick.setVisibility(View.VISIBLE);
             editText.setVisibility(View.GONE);
             radioGroup.removeAllViews();
             radioGroup.clearCheck();
             radioGroup.setVisibility(View.GONE);
             questionTitle.setVisibility(View.GONE);
+            onSubmit();
 
         }
     }
@@ -245,11 +248,11 @@ public class SurveyActivity extends AppCompatActivity {
      */
     public void onNext(){
 
-        //stop keyboard from showing
         current = (current+1); //for final question it will make current equal to question number
+        progress.setProgress(current);
 
         if( current < survey.getQuestions().size()){
-            //lPanel.removeAllViews();
+
             editText.setText("");
             editText.setVisibility(View.GONE);
             radioGroup.removeAllViews();
@@ -285,9 +288,9 @@ public class SurveyActivity extends AppCompatActivity {
     /**
      * onClick listener for when submit is clicked
      * Converts survey to JSON format and pushes document to DB
-     * @param view
+     *
      */
-    public void onSubmit(View view){
+    public void onSubmit(){
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         SurveyResponse surveyResponse;
         if (surveyID.equals("BASELINE") || newsItem==null){
@@ -304,9 +307,17 @@ public class SurveyActivity extends AppCompatActivity {
         Log.i(TAG, "JSON SURVEY RESPONSE"+json);
     }
 
+
+    public void onFinish(View view) {
+        Intent intent = new Intent(SurveyActivity.this, MainActivity.class);
+        intent.putExtra("email", email);
+        intent.putExtra("group", user_group);
+        startActivity(intent);
+        finish();
+    }
+
     /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
+     *
      */
     public class SurveyDownload extends AsyncTask<Void, Void, String> {
 
@@ -449,8 +460,7 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
     /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
+     *
      */
     public class SurveyUpload extends AsyncTask<Void, Void, String> {
 
@@ -469,6 +479,7 @@ public class SurveyActivity extends AppCompatActivity {
          */
         @Override
         protected String doInBackground(Void... params) {
+            progressBar.setVisibility(View.VISIBLE);
 
             try{
                 URL url = new URL("https://engage.cs.uct.ac.za/android/post_survey"); //will return "Login Success:<user_group>"
@@ -528,13 +539,11 @@ public class SurveyActivity extends AppCompatActivity {
 
             if (result.startsWith("Upload Success")) {
                 Log.i(TAG, "SUCCESS");
-                String surveyStore ="";
 
-                Intent intent = new Intent(SurveyActivity.this, MainActivity.class);
-                intent.putExtra("email", mEmail);
-                intent.putExtra("group", mGroup);
-                startActivity(intent);
-                finish();
+                progressBar.setVisibility(View.GONE);
+                submit.setVisibility(View.VISIBLE);
+                survey_tick.setVisibility(View.VISIBLE);
+
             }
             else {
                 Log.i(TAG, "Server error:"+result);
@@ -545,7 +554,7 @@ public class SurveyActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             surveyUpload = null;
-            //showProgress(false);
+
         }
     }
 
@@ -567,7 +576,6 @@ public class SurveyActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.home:
-
                 intent = new Intent(SurveyActivity.this, MainActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
@@ -575,7 +583,6 @@ public class SurveyActivity extends AppCompatActivity {
                 finish();
                 return true;
             case R.id.about:
-
                 intent = new Intent(this, AboutActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);

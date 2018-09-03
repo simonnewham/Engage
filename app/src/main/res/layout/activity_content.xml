@@ -97,7 +97,8 @@
         android:layout_height="match_parent"
         android:id="@+id/container"
         android:layout_weight="0.8"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
 
     </FrameLayout>
 
@@ -108,9 +109,11 @@
         android:background="@color/colorOrange"
         android:onClick="loadSurvey"
         android:text="Answer Survey >>"
+        android:textAllCaps="false"
         android:textColor="@color/colorWhite"
         android:layout_marginBottom="5dp"
         android:layout_gravity="bottom"
+
         />
 
 </LinearLayout>
