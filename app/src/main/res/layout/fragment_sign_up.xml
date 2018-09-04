@@ -95,10 +95,8 @@
                 android:layout_margin="10dp"
                 android:layout_weight="0.5"
                 android:background="@drawable/round_button_accent"
-                android:onClick="onSignUp"
                 android:text="Sign Up"
                 android:textColor="@color/colorWhite"
-
                 />
 
 
@@ -109,7 +107,6 @@
                 android:layout_margin="10dp"
                 android:layout_weight="0.5"
                 android:background="@color/colorPrimary"
-                android:onClick="onCancel"
                 android:text="Cancel"
                 android:textColor="@color/colorWhite"
                 android:visibility="gone"/>
