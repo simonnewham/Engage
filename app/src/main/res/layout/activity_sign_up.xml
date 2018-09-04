@@ -6,13 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.engage.simonnewham.engageapp.activities.SignUpActivity"
-
     >
-
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"
-        />
 
     <android.support.v4.view.ViewPager
         android:layout_width="match_parent"

@@ -168,8 +168,8 @@ public class SurveyActivity extends AppCompatActivity {
         description.setText("\n"+s.getDescription());
         description.setTextSize(15);
         lPanel.addView(description);
-
     }
+
     public void onBegin(View view){
         if(survey != null){
             thank.setVisibility(View.GONE);
@@ -193,7 +193,6 @@ public class SurveyActivity extends AppCompatActivity {
     //onClick listener for when next button is pressed
     //checks if user has supplied input to question before allowing user to answer next question
     public void checkInput(View view){
-
         //code to hide keyboard after each question
         try  {
             InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
@@ -238,7 +237,6 @@ public class SurveyActivity extends AppCompatActivity {
             radioGroup.setVisibility(View.GONE);
             questionTitle.setVisibility(View.GONE);
             onSubmit();
-
         }
     }
 
@@ -288,7 +286,6 @@ public class SurveyActivity extends AppCompatActivity {
     /**
      * onClick listener for when submit is clicked
      * Converts survey to JSON format and pushes document to DB
-     *
      */
     public void onSubmit(){
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
@@ -306,7 +303,6 @@ public class SurveyActivity extends AppCompatActivity {
 
         Log.i(TAG, "JSON SURVEY RESPONSE"+json);
     }
-
 
     public void onFinish(View view) {
         Intent intent = new Intent(SurveyActivity.this, MainActivity.class);
@@ -433,7 +429,6 @@ public class SurveyActivity extends AppCompatActivity {
                             if(question !=null){
                                 questionList.add(question);
                             }
-
                         }
                     }
 
@@ -535,7 +530,6 @@ public class SurveyActivity extends AppCompatActivity {
         //runs after doInBackground
         protected void onPostExecute(final String result) {
             surveyUpload = null;
-            //showProgress(false);
 
             if (result.startsWith("Upload Success")) {
                 Log.i(TAG, "SUCCESS");
@@ -558,7 +552,6 @@ public class SurveyActivity extends AppCompatActivity {
         }
     }
 
-    //***** TOOLBAR *****
     //Method for setting up toolbar options
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -589,7 +582,7 @@ public class SurveyActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.logout:
-                intent = new Intent(SurveyActivity.this, SignIn.class);
+                intent = new Intent(SurveyActivity.this, SignUpActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 //clear shared preferences on logout
                 mPreferences = PreferenceManager.getDefaultSharedPreferences(this);

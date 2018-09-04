@@ -117,10 +117,8 @@ public class ContentActivity extends AppCompatActivity {
             item = (NewsItem) getIntent().getSerializableExtra("News");
         }
 
-        //set item on background thread?
         setItem();
     }
-
 
     /**
      * Method to set up the news article within the android view
@@ -177,7 +175,6 @@ public class ContentActivity extends AppCompatActivity {
             titleF.setText(item.getName());
 
             //set fragment to audio version
-
             fragmentManager = getSupportFragmentManager();
             transaction = fragmentManager.beginTransaction();
             audio = new AudioFragment(item.getPath());
@@ -269,7 +266,6 @@ public class ContentActivity extends AppCompatActivity {
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
                 startActivity(intent);
-                //finish();
                 return true;
             case R.id.about:
                 clearStack();
@@ -277,11 +273,10 @@ public class ContentActivity extends AppCompatActivity {
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
                 startActivity(intent);
-                //finish();
                 return true;
             case R.id.logout:
                 clearStack();
-                intent = new Intent(ContentActivity.this, SignIn.class);
+                intent = new Intent(ContentActivity.this, SignUpActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 //clear shared preferences on logout
                 mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -295,9 +290,9 @@ public class ContentActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
+    //Stop MediaPlayer if audio fragment is loaded
     public void clearStack() {
-        //Here we are clearing back stack fragment entries
+
         String type = item.getType().toUpperCase();
 
         if(type.equals("AUDIO")){

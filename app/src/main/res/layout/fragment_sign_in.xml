@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.engage.simonnewham.engageapp.activities.SignIn"
-    android:orientation="vertical"
-    android:background="@color/colorAccent"
-
-
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.SignInFragment"
+    android:background="@color/colorAccent">
 
     <ScrollView
         android:id="@+id/login_form"
@@ -94,8 +90,6 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="10.73"
                 android:background="@drawable/round_buttons"
-                android:hint="email"
-                android:onClick="onLogin"
                 android:text="Login"
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold" />
@@ -110,29 +104,26 @@
                 android:layout_marginBottom="20dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="10.73"
                 android:background="@drawable/round_button_accent"
-                android:hint="password"
-                android:onClick="SignUp"
                 android:text="No account? Sign Up"
                 android:textColor="@color/colorWhite"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/forgotPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.28"
                 android:text="Forgot Password?"
                 android:textColor="@color/colorWhite"
                 android:textAlignment="center"
-                android:onClick="onForgot"
                 android:textStyle="bold"
-               />
+                />
 
 
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+</FrameLayout>

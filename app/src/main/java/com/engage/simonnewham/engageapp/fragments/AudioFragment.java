@@ -26,7 +26,6 @@ import android.widget.Toast;
 
 import com.engage.simonnewham.engageapp.R;
 import com.engage.simonnewham.engageapp.activities.ContentActivity;
-import com.engage.simonnewham.engageapp.activities.SignIn;
 import com.engage.simonnewham.engageapp.activities.SignUpActivity;
 
 import java.io.BufferedReader;

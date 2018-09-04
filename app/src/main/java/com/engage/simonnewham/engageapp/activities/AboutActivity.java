@@ -43,7 +43,6 @@ public class AboutActivity extends AppCompatActivity {
         //setup toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("About");
-        //toolbar.setBackgroundColor(Color.parseColor("#3E92CC"));
         setSupportActionBar(toolbar);
 
         mEmail = findViewById(R.id.user);
@@ -52,7 +51,6 @@ public class AboutActivity extends AppCompatActivity {
         mUser.setText("User Group: "+user_group);
     }
 
-    //***** TOOLBAR *****
     //Method for setting up toolbar options
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,7 +66,6 @@ public class AboutActivity extends AppCompatActivity {
 
         switch (item.getItemId()){
             case R.id.home:
-                //Toast.makeText(this, "Home clicked", Toast.LENGTH_SHORT).show();
                 intent = new Intent(this, MainActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
@@ -78,8 +75,7 @@ public class AboutActivity extends AppCompatActivity {
             case R.id.about:
                 return true;
             case R.id.logout:
-                //Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
-                intent = new Intent(this, SignIn.class);
+                intent = new Intent(this, SignUpActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 //clear shared preferences on logout
                 mPreferences = PreferenceManager.getDefaultSharedPreferences(this);

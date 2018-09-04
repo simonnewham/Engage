@@ -11,11 +11,13 @@ import android.view.WindowManager;
 import com.engage.simonnewham.engageapp.R;
 import com.engage.simonnewham.engageapp.adapters.SectionsStatePagerAdapter;
 import com.engage.simonnewham.engageapp.fragments.ConsentFragment;
+import com.engage.simonnewham.engageapp.fragments.EmailFragment;
+import com.engage.simonnewham.engageapp.fragments.SignInFragment;
 import com.engage.simonnewham.engageapp.fragments.SignUpFragment;
 
 /**
- * Class for when new user signs up
- *
+ * Activity that starts when user first opens the app
+ * Container the sign in, forgot password, user consent and user sign up fragments
  */
 
 public class SignUpActivity extends AppCompatActivity {
@@ -23,7 +25,7 @@ public class SignUpActivity extends AppCompatActivity {
     private SectionsStatePagerAdapter mSectionsStatePagerAdapter;
     private ViewPager mViewPager;
 
-    private final String TAG = "UserSignUp Activity";
+    private final String TAG = "StartActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,34 +33,19 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_up);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("");
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         mSectionsStatePagerAdapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.container);
-        //setup pager
         setupViewPager(mViewPager);
-
     }
 
     //method to manage fragment screens
     private void setupViewPager(ViewPager viewPager){
         SectionsStatePagerAdapter adapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new SignInFragment(), "User Sign In");
+        adapter.addFragment(new EmailFragment(), "Forgot Password");
         adapter.addFragment(new ConsentFragment(), "User Consent");
         adapter.addFragment(new SignUpFragment(), "User Sign Up");
         viewPager.setAdapter(adapter);
-    }
-
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        Intent intent = new Intent(this, SignIn.class);
-        startActivity(intent);
-        finish();
-        return true;
     }
 
     //provide access to allow fragments to change the fragment that is being displayed

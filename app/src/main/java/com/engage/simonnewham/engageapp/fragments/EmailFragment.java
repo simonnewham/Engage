@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.engage.simonnewham.engageapp.R;
+import com.engage.simonnewham.engageapp.activities.SignUpActivity;
 import com.engage.simonnewham.engageapp.activities.SurveyActivity;
 
 import java.io.BufferedReader;
@@ -35,13 +36,14 @@ import java.util.Random;
 
 /**
  * Class responsible for sending password to users email if they forget their password
- * Email sent as parameter to the server via a post request 
+ * Email sent as parameter to the server via a post request
  */
 public class EmailFragment extends Fragment {
 
     private static final String TAG = "EmailFragment";
 
     private Button send;
+    private Button back;
     private TextView text;
     private EditText email;
 
@@ -55,13 +57,14 @@ public class EmailFragment extends Fragment {
 
 
         send = view.findViewById(R.id.buttonSend);
+        back = view.findViewById(R.id.buttonBack);
         text = view.findViewById(R.id.textViewConfirm);
         email = view.findViewById(R.id.email);
 
         send.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
 
-                if(email.getText().equals("")){
+                if(email.getText().length()==0){
                     email.setError("PLease enter a valid email");
                 }
                 else{
@@ -69,6 +72,11 @@ public class EmailFragment extends Fragment {
                     userEmailTask = new UserEmailTask(toSend);
                     userEmailTask.execute((Void) null);
                 }
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view) {
+                ((SignUpActivity)getActivity()).setViewPager(0);
             }
         });
 
@@ -82,7 +90,6 @@ public class EmailFragment extends Fragment {
 
         UserEmailTask(String email) {
             mEmail = email;
-
         }
 
         /**

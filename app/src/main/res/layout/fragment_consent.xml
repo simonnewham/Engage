@@ -5,17 +5,20 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".fragments.ConsentFragment"
-    android:background="@color/colorAccent">
+    android:background="@color/colorAccent"
+    >
 
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:layout_gravity="center">
 
             <TextView
                 android:padding="10dp"
@@ -24,6 +27,15 @@
                 android:layout_height="wrap_content"
                 android:text="@string/consent1"
                 android:textColor="@color/colorWhite"/>
+
+            <TextView
+                android:padding="10dp"
+                android:id="@+id/text2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/consent2"
+                android:textColor="@color/colorWhite"
+                android:layout_marginBottom="30dp"/>
 
             <Button
                 android:id="@+id/buttonAccept"
@@ -43,13 +55,7 @@
                 android:text="Go Back"
                 android:textColor="@color/colorWhite" />
 
-            <TextView
-                android:padding="10dp"
-                android:id="@+id/text2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/consent2"
-                android:textColor="@color/colorWhite"/>
+
         </LinearLayout>
     </ScrollView>
 

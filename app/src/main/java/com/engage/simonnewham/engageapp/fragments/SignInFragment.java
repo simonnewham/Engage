@@ -1,20 +1,27 @@
-package com.engage.simonnewham.engageapp.activities;
+package com.engage.simonnewham.engageapp.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.engage.simonnewham.engageapp.R;
+import com.engage.simonnewham.engageapp.activities.MainActivity;
+import com.engage.simonnewham.engageapp.activities.SignUpActivity;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -29,16 +36,14 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
- * Login screen that allows users to login or create new account
+ * Login fragment that allows users to login or create new account
  * Adapted from Android Studio login template
  */
+public class SignInFragment extends Fragment {
 
-public class SignIn extends AppCompatActivity {
+    private static final String TAG = "SignInFragment";
 
     //shared preference code
     private SharedPreferences mPreferences;
@@ -46,41 +51,81 @@ public class SignIn extends AppCompatActivity {
 
     //login task
     private UserLoginTask mAuthTask;
-    private final String TAG = "UserSignIn";
 
     //UI components
     private EditText mEmailView;
     private EditText mPasswordView;
     private ProgressBar progressBar;
-    //private View mProgressView;
-    private View mLoginFormView; //no code included yet for progress
+    private Button login;
+    private Button signUp;
+    private TextView forgot;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        //check shared preference if user already logged in
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
 
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mEditor = mPreferences.edit();
         checkPrefs();
 
-        //set up login form
-        mEmailView = findViewById(R.id.email);
-        mPasswordView = findViewById(R.id.password);
-        mLoginFormView = findViewById(R.id.login_form);
-        progressBar = findViewById(R.id.progressBar);
+        mEmailView = view.findViewById(R.id.email);
+        mPasswordView = view.findViewById(R.id.password);
+        progressBar = view.findViewById(R.id.progressBar);
+        login = view.findViewById(R.id.login);
+        signUp = view.findViewById(R.id.SignUp);
+        forgot = view.findViewById(R.id.forgotPassword);
 
-        //mProgressView = findViewById(R.id.login_progress);
-        
+        //onClick listeners
+        login.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                onLogin();
+            }
+        });
+        signUp.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                onSignUp();
+            }
+        });
+        forgot.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                onForgot();
+            }
+        });
+
+        return view;
     }
+
+    /**
+     * Method to check if user has logged in before, if they have skip login procedure
+     */
+    public void checkPrefs(){
+        String email = mPreferences.getString("email", "none");
+        String user_group = mPreferences.getString("user_group", "none");
+
+        Log.i(TAG, "User "+email);
+
+        if(!email.equals("none") && !user_group.equals("none")){
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            intent.putExtra("email", email);
+            intent.putExtra("group", user_group);
+            startActivity(intent);
+            getActivity().finish();
+        }
+    }
+
+    private boolean isEmailValid(String email) {
+        return email.contains("@");
+    }
+
     /**
      * Method called when login button is clicked
      * If errors occur then no login attempt is made
      */
-    public void onLogin(View view) {
+    public void onLogin() {
 
         // Reset errors.
         mEmailView.setError(null);
@@ -112,57 +157,28 @@ public class SignIn extends AppCompatActivity {
         }
 
         if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
             focusView.requestFocus();
         }
         else {
-            // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
-            //showProgress(true);
+            // Show a progress spinner, and start login process
             progressBar.setVisibility(View.VISIBLE);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
     }
 
-    private boolean isEmailValid(String email) {
-
-        return email.contains("@");
+    /**
+     * Method to switch to sign up fragment
+     */
+    public void onSignUp() {
+        ((SignUpActivity)getActivity()).setViewPager(2);
     }
 
     /**
-     * Method called to sign up new user
+     * Method to switch to forgot password fragment
      */
-    public void SignUp(View view) {
-
-        Intent intent = new Intent(this, SignUpActivity.class);
-        startActivity(intent);
-        finish();
-
-    }
-
-    /**
-     * Method when user clicks on forgot password
-     * @param view
-     */
-    public void onForgot(View view) {
-
-    }
-
-    public void checkPrefs(){
-        String email = mPreferences.getString("email", "none");
-        String user_group = mPreferences.getString("user_group", "none");
-
-        Log.i(TAG, "User "+email);
-
-        if(!email.equals("none") && !user_group.equals("none")){
-            Intent intent = new Intent(SignIn.this, MainActivity.class);
-            intent.putExtra("email", email);
-            intent.putExtra("group", user_group);
-            startActivity(intent);
-            finish();
-        }
+    public void onForgot() {
+        ((SignUpActivity)getActivity()).setViewPager(1);
     }
 
     /**
@@ -200,7 +216,7 @@ public class SignIn extends AppCompatActivity {
                 OutputStream opStream = httpConn.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(opStream, "UTF-8"));
 
-                // ***** Send POST message *****
+                //Send POST message
                 String postData = URLEncoder.encode("email", "UTF-8")+"="+URLEncoder.encode(mEmail, "UTF-8")+"&"+
                         URLEncoder.encode("password", "UTF-8")+"="+URLEncoder.encode(mPassword, "UTF-8");
 
@@ -209,7 +225,7 @@ public class SignIn extends AppCompatActivity {
                 bufferedWriter.close();
                 opStream.close();
 
-                // ***** Receive result of post message *****
+                //Receive result of post message
                 InputStream inputStream = httpConn.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
                 String result = "";
@@ -247,7 +263,7 @@ public class SignIn extends AppCompatActivity {
             mAuthTask = null;
             progressBar.setVisibility(View.GONE);
 
-           if (result.startsWith("Login Success")) {
+            if (result.startsWith("Login Success")) {
                 Log.i(TAG, "SUCCESS");
                 String mGroup ="";
 
@@ -257,7 +273,6 @@ public class SignIn extends AppCompatActivity {
                 }
 
                 //store user details to avoid login
-                //mEditor = mPreferences.edit();
                 mEditor.putString("email", mEmail);
                 mEditor.commit();
                 mEditor.putString("user_group", mGroup);
@@ -267,11 +282,11 @@ public class SignIn extends AppCompatActivity {
                 Log.i(TAG, "User "+test);
 
 
-                Intent intent = new Intent(SignIn.this, MainActivity.class);
+                Intent intent = new Intent( getActivity(), MainActivity.class);
                 intent.putExtra("email", mEmail);
                 intent.putExtra("group", mGroup);
                 startActivity(intent);
-                finish();
+                getActivity().finish();
             }
             else {
                 mPasswordView.setError("Incorrect Password");

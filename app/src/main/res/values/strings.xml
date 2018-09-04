@@ -15,14 +15,8 @@
         completions."
     </string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_side_bar">SideBarActivity</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="action_settings">Settings</string>
+    <string name="forgot_password">Please enter the email address linked to your account.
+    Your password will be emailed to this address.</string>
 
     <string name="about">Engaging Representations is a UCT Computer Science Honours project built by Simon Newham and Chris Mudongo.
     This tool seeks to measure your reaction to viewing different types of content, in order to asses its immediate and long term impact
@@ -32,8 +26,8 @@
         available in the Participant Information Sheet. You have had an opportunity to ask questions about the study,
         and have received satisfactory answers to all of your questions.</string>
 
-    <string name="consent2">You are free to withdraw from the study:
-        \nat any time and without having to give a reason for withdrawing and
+    <string name="consent2">You are free to withdraw from the study
+        at any time and without having to give a reason for withdrawing and
 	    (if relevant) without affecting your position in the University.
-        \nTo withdraw please send an email stating your intent to withdraw to drlaurensderooij@gmail.com .</string>
+        \nTo withdraw please send an email stating your intent to withdraw to <u>drlaurensderooij@gmail.com</u>.</string>
 </resources>

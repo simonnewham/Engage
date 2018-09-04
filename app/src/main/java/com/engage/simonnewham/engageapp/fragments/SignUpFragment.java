@@ -34,7 +34,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Random;
 
-
 public class SignUpFragment extends Fragment {
 
     private static final String TAG = "SignUpFragment";
@@ -48,11 +47,7 @@ public class SignUpFragment extends Fragment {
     private EditText mPassword;
     private EditText mPassword2;
     private Button signUp;
-
-    public SignUpFragment() {
-        // Required empty public constructor
-    }
-
+    private Button cancel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +58,8 @@ public class SignUpFragment extends Fragment {
         mPassword = view.findViewById(R.id.password);
         mPassword2 = view.findViewById(R.id.password2);
         signUp = view.findViewById(R.id.signup);
+        cancel = view.findViewById(R.id.cancel);
+
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         signUp.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
@@ -70,13 +67,17 @@ public class SignUpFragment extends Fragment {
             }
         });
 
+        cancel.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                ((SignUpActivity)getActivity()).setViewPager(0);
+            }
+        });
         return view;
     }
 
     public void onSignUp() {
 
         Boolean error = false;
-
         //get values from form
         String email = mEmail.getText().toString();
         String password = mPassword.getText().toString();
@@ -103,19 +104,13 @@ public class SignUpFragment extends Fragment {
             error = true;
         }
 
-
         //if successful load mainActivity
         if(error == false) {
-
             //create user JSON document and send to DB
             mAuthTask = new SignUpFragment.UserSignUpTask(email, password);
             mAuthTask.execute((Void) null);
 
         }
-        else{
-
-        }
-
     }
 
     private boolean isEmailValid(String email) {
@@ -157,7 +152,7 @@ public class SignUpFragment extends Fragment {
                 OutputStream opStream = httpConn.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(opStream, "UTF-8"));
 
-                // ***** Send POST message *****
+                //Send POST message
                 String postData = URLEncoder.encode("email", "UTF-8")+"="+URLEncoder.encode(mEmail, "UTF-8")+"&"+
                         URLEncoder.encode("password", "UTF-8")+"="+URLEncoder.encode(mPassword, "UTF-8")+"&"+
                         URLEncoder.encode("user_group", "UTF-8")+"="+URLEncoder.encode(mGroup, "UTF-8");
@@ -167,7 +162,7 @@ public class SignUpFragment extends Fragment {
                 bufferedWriter.close();
                 opStream.close();
 
-                // ***** Receive result of post message *****
+                //Receive result of post message
                 InputStream inputStream = httpConn.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
                 String result = "";
@@ -181,7 +176,6 @@ public class SignUpFragment extends Fragment {
                 httpConn.disconnect();
 
                 Log.i(TAG, ">>>>>Response Result: "+result);
-                //>>>TESTING<<<<
 
                 return result;
 

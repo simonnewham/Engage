@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.engage.simonnewham.engageapp.R;
-import com.engage.simonnewham.engageapp.activities.SignIn;
 import com.engage.simonnewham.engageapp.activities.SignUpActivity;
 
 /**
@@ -39,13 +38,12 @@ public class ConsentFragment extends Fragment {
 
         accept.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                ((SignUpActivity)getActivity()).setViewPager(1);
+                ((SignUpActivity)getActivity()).setViewPager(3);
             }
         });
         reject.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                Intent intent = new Intent (getActivity(), SignIn.class);
-                startActivity(intent);
+                ((SignUpActivity)getActivity()).setViewPager(0);
             }
         });
 

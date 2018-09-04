@@ -47,6 +47,7 @@ import java.util.ArrayList;
 /**
  * user home page with list of news items
  * Load particular news item when user clicks on item
+ * @author simonnewham
  */
 
 public class MainActivity extends AppCompatActivity {
@@ -95,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
 
         contentDownload = new ContentDownload(user_group);
         contentDownload.execute((Void) null);
-
     }
 
     public void displayNews(ArrayList<NewsItem> toDisplay){
@@ -118,8 +118,6 @@ public class MainActivity extends AppCompatActivity {
                 //finish();
             }
         });
-
-
     }
 
     /**
@@ -130,9 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
         private final String mGroup;
 
-
         ContentDownload(String user_group) {
-
             mGroup = user_group;
         }
 
@@ -198,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Take in API result array
          */
-
         protected void onPostExecute(final String result) {
             contentDownload = null;
             //showProgress(false);
@@ -231,7 +226,6 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-
         }
 
         @Override
@@ -268,30 +262,23 @@ public class MainActivity extends AppCompatActivity {
                 contentDownload.execute((Void) null);
                 return true;
             case R.id.about:
-                //Toast.makeText(this, "About clicked", Toast.LENGTH_SHORT).show();
                 intent = new Intent(this, AboutActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
                 startActivity(intent);
-                //finish();
                 return true;
             case R.id.logout:
-                //Toast.makeText(this, "Logout clicked", Toast.LENGTH_SHORT).show();
-                intent = new Intent(MainActivity.this, SignIn.class);
+                intent = new Intent(MainActivity.this, SignUpActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
                 //clear shared preferences
                 mEditor = mPreferences.edit();
                 mEditor.clear();
                 mEditor.commit();
-
                 startActivity(intent);
-                //check
                 finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
 }
