@@ -112,6 +112,7 @@ public class SignInFragment extends Fragment {
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.putExtra("email", email);
             intent.putExtra("group", user_group);
+            intent.putExtra("load", "online");
             startActivity(intent);
             getActivity().finish();
         }

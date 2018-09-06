@@ -69,6 +69,7 @@ public class ImageFragment extends Fragment {
         }
 
         protected void onPostExecute(Bitmap result) {
+            //((ContentActivity)getActivity()).hideProgress();
             bmImage.setImageBitmap(result);
         }
     }

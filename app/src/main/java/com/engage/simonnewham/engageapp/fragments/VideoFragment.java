@@ -12,6 +12,7 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 import com.engage.simonnewham.engageapp.R;
+import com.engage.simonnewham.engageapp.activities.ContentActivity;
 
 
 @SuppressLint("ValidFragment")
@@ -39,6 +40,7 @@ public class VideoFragment extends Fragment {
         video.setMediaController(vidControl);
         video.setVisibility(View.VISIBLE);
         video.setVideoURI(vidUri);
+       // ((ContentActivity)getActivity()).hideProgress();
         video.start();
 
         return view;

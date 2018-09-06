@@ -213,6 +213,7 @@ public class AudioFragment extends Fragment {
         protected void onPostExecute(String result) {
             downloadAudioTask = null;
             progress.setText("Item Ready");
+            //((ContentActivity)getActivity()).hideProgress();
             ready = true;
 
         }

@@ -30,4 +30,7 @@
         at any time and without having to give a reason for withdrawing and
 	    (if relevant) without affecting your position in the University.
         \nTo withdraw please send an email stating your intent to withdraw to <u>drlaurensderooij@gmail.com</u>.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

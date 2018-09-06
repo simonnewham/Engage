@@ -106,14 +106,14 @@ public class SurveyActivity extends AppCompatActivity {
         responses = new ArrayList<>();
 
         //View elements
-        lPanel = (LinearLayout) findViewById(R.id.survey_panel);
-        begin = (Button) findViewById(R.id.button_begin);
-        submit = (Button) findViewById(R.id.button_submit);
-        radioGroup = (RadioGroup) findViewById(R.id.RadioGroup);
-        editText = (EditText) findViewById(R.id.editText);
-        questionTitle = (TextView) findViewById(R.id.text_question);
-        next = (Button) findViewById(R.id.button_next);
-        survey_tick = (ImageView) findViewById(R.id.imageView);
+        lPanel = findViewById(R.id.survey_panel);
+        begin = findViewById(R.id.button_begin);
+        submit = findViewById(R.id.button_submit);
+        radioGroup = findViewById(R.id.RadioGroup);
+        editText = findViewById(R.id.editText);
+        questionTitle = findViewById(R.id.text_question);
+        next = findViewById(R.id.button_next);
+        survey_tick = findViewById(R.id.imageView);
         thank = new TextView(this);
         progressBar = findViewById(R.id.progressBar);
         progress = findViewById(R.id.progressBar2);
@@ -306,6 +306,10 @@ public class SurveyActivity extends AppCompatActivity {
 
     public void onFinish(View view) {
         Intent intent = new Intent(SurveyActivity.this, MainActivity.class);
+        //first time load for new users
+        if (surveyID.equals("BASELINE")){
+            intent.putExtra("load", "online");
+        }
         intent.putExtra("email", email);
         intent.putExtra("group", user_group);
         startActivity(intent);
@@ -313,7 +317,7 @@ public class SurveyActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Downloads surveys from the server based on the SurveyID
      */
     public class SurveyDownload extends AsyncTask<Void, Void, String> {
 
@@ -364,7 +368,6 @@ public class SurveyActivity extends AppCompatActivity {
                 httpConn.disconnect();
 
                 Log.i(TAG, ">>>>>Response Result: "+result);
-
                 return result;
 
             }
@@ -450,12 +453,11 @@ public class SurveyActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             surveyDownload = null;
-            //showProgress(false);
         }
     }
 
     /**
-     *
+     * Uploads user survey response to the server via an HTML post request
      */
     public class SurveyUpload extends AsyncTask<Void, Void, String> {
 
@@ -537,7 +539,6 @@ public class SurveyActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 submit.setVisibility(View.VISIBLE);
                 survey_tick.setVisibility(View.VISIBLE);
-
             }
             else {
                 Log.i(TAG, "Server error:"+result);
@@ -548,7 +549,6 @@ public class SurveyActivity extends AppCompatActivity {
         @Override
         protected void onCancelled() {
             surveyUpload = null;
-
         }
     }
 

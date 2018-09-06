@@ -35,53 +35,6 @@
         android:layout_marginBottom="2dp"
         android:visibility="gone"/>
 
-    <ScrollView
-        android:id="@+id/text_scroll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.8"
-        android:visibility="gone"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="2dp"
-            >
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="30dp"
-                android:textStyle="bold"
-                android:text="Title Location"
-                android:layout_weight="0.03"
-                android:paddingTop="10dp"
-                android:padding="4dp"/>
-
-            <TextView
-                android:id="@+id/date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Date Location"
-                android:textColor="@color/colorPrimary"
-                android:padding="4dp"
-                android:layout_marginBottom="2dp"/>
-
-            <TextView
-                android:id="@+id/Text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text=""
-                android:visibility="gone"
-                />
-
-        </LinearLayout>
-
-    </ScrollView>
 
     <ProgressBar
             android:id="@+id/progressBar"
@@ -97,7 +50,7 @@
         android:layout_height="match_parent"
         android:id="@+id/container"
         android:layout_weight="0.8"
-        android:visibility="gone"
+
         >
 
     </FrameLayout>
@@ -111,7 +64,6 @@
         android:text="Answer Survey >>"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
-        android:layout_marginBottom="5dp"
         android:layout_gravity="bottom"
 
         />

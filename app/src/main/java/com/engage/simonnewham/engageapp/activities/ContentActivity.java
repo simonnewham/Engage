@@ -41,6 +41,7 @@ import com.engage.simonnewham.engageapp.fragments.AudioFragment;
 import com.engage.simonnewham.engageapp.fragments.ConsentFragment;
 import com.engage.simonnewham.engageapp.fragments.ImageFragment;
 import com.engage.simonnewham.engageapp.fragments.SignUpFragment;
+import com.engage.simonnewham.engageapp.fragments.TextFragment;
 import com.engage.simonnewham.engageapp.fragments.VideoFragment;
 import com.engage.simonnewham.engageapp.models.NewsItem;
 
@@ -56,8 +57,7 @@ import java.net.URL;
 /**
  * @author simonnewham
  * Class to show individual news items downloaded from server
- * Text items are rendered within the activity
- * Image, Audio and Video items are rendered within their own fragment
+ * Image, Audio and Video and Text items are rendered within their own fragment
  */
 
 public class ContentActivity extends AppCompatActivity {
@@ -68,11 +68,8 @@ public class ContentActivity extends AppCompatActivity {
     private SharedPreferences mPreferences;
     private SharedPreferences.Editor mEditor;
 
-    TextView title;
-    TextView date;
     TextView titleF;
     TextView dateF;
-    TextView content;
     Button surveyB;
 
     String email;
@@ -80,7 +77,6 @@ public class ContentActivity extends AppCompatActivity {
     NewsItem item;
 
     private ProgressBar progressBar;
-    private ScrollView textScroll;
     private FrameLayout frameLayout;
 
     FragmentManager fragmentManager;
@@ -94,15 +90,11 @@ public class ContentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_content);
 
         //setup toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        title = (TextView) findViewById(R.id.title);
-        date = (TextView) findViewById(R.id.date);
-        content = (TextView) findViewById(R.id.Text);
-        textScroll = findViewById(R.id.text_scroll);
         progressBar = findViewById(R.id.progressBar);
         surveyB = findViewById(R.id.surveyButton);
         titleF = findViewById(R.id.titleFixed);
@@ -116,8 +108,11 @@ public class ContentActivity extends AppCompatActivity {
             user_group = extras.getString("group");
             item = (NewsItem) getIntent().getSerializableExtra("News");
         }
-
+        fragmentManager = getSupportFragmentManager();
+        transaction = fragmentManager.beginTransaction();
         setItem();
+
+        Log.i(TAG, "Displaying Item"+item.getPath());
     }
 
     /**
@@ -136,13 +131,9 @@ public class ContentActivity extends AppCompatActivity {
             dateF.setText("Uploaded on: "+item.getDate());
             titleF.setText(item.getName());
 
-            fragmentManager = getSupportFragmentManager();
-            transaction = fragmentManager.beginTransaction();
-            transaction.add(R.id.container, new ImageFragment(item.getPath()));
+            transaction.add(R.id.container, new ImageFragment(item.getPath()),"ImageFrag");
             transaction.commit();
-
-            progressBar.setVisibility(View.GONE);
-
+            //progressBar.setVisibility(View.GONE);
         }
         else if(type.equals("VIDEO")){
             frameLayout.setVisibility(View.VISIBLE);
@@ -151,22 +142,18 @@ public class ContentActivity extends AppCompatActivity {
             dateF.setText("Uploaded on: "+item.getDate());
             titleF.setText(item.getName());
 
-            fragmentManager = getSupportFragmentManager();
-            transaction = fragmentManager.beginTransaction();
             transaction.add(R.id.container, new VideoFragment(item.getPath()));
             transaction.commit();
-            progressBar.setVisibility(View.GONE);
-
+            //progressBar.setVisibility(View.GONE);
         }
+
         else if(type.equals("TEXT")){
-            textScroll.setVisibility(View.VISIBLE);
-            title.setText(item.getName());
-            date.setText("Uploaded on: "+item.getDate());
-            content.setVisibility(View.VISIBLE);
+            transaction.add(R.id.container, new TextFragment(item), "TextFrag");
+            transaction.commit();
 
-            new DownloadTextTask(content).execute("https://engage.cs.uct.ac.za"+item.getPath());
-
+            progressBar.setVisibility(View.GONE);
         }
+
         else if(type.equals("AUDIO")){
             frameLayout.setVisibility(View.VISIBLE);
             titleF.setVisibility(View.VISIBLE);
@@ -175,14 +162,12 @@ public class ContentActivity extends AppCompatActivity {
             titleF.setText(item.getName());
 
             //set fragment to audio version
-            fragmentManager = getSupportFragmentManager();
-            transaction = fragmentManager.beginTransaction();
             audio = new AudioFragment(item.getPath());
-            transaction.add(R.id.container, audio);
+            transaction.add(R.id.container, audio, "AudioFrag");
             transaction.commit();
-            progressBar.setVisibility(View.GONE);
-        }
 
+            //progressBar.setVisibility(View.GONE);
+        }
     }
 
     public boolean onSupportNavigateUp() {
@@ -206,43 +191,6 @@ public class ContentActivity extends AppCompatActivity {
         intent.putExtra("News", item);
         startActivity(intent);
 
-    }
-
-    /**
-     *
-     */
-    private class DownloadTextTask extends AsyncTask<String, Void, String> {
-        TextView textView;
-
-        public DownloadTextTask(TextView textView) {
-            this.textView = textView;
-        }
-
-        protected String doInBackground(String... urls) {
-            String urldisplay = urls[0];
-
-            try {
-                URL url = new URL(urldisplay);
-                BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-                String result="";
-                String line="";
-                while ((line = in.readLine()) != null) {
-                    result +=line;
-                }
-                in.close();
-                return result;
-
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return "";
-        }
-
-        protected void onPostExecute(String result) {
-            progressBar.setVisibility(View.GONE);
-            textView.setText(result);
-        }
     }
 
     @Override
@@ -297,8 +245,15 @@ public class ContentActivity extends AppCompatActivity {
 
         if(type.equals("AUDIO")){
             if(audio!=null){
+                //transaction.remove(audio);
+                //transaction.commit();
                 audio.endMedia();
+
             }
         }
+    }
+
+    public void hideProgress(){
+        progressBar.setVisibility(View.GONE);
     }
 }

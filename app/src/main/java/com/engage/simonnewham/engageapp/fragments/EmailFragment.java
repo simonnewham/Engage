@@ -153,9 +153,9 @@ public class EmailFragment extends Fragment {
         protected void onPostExecute(final String result) {
             userEmailTask = null;
 
-            if (result.startsWith("Email Success")) {
+            if (result.equals("Email Success")) {
                 Log.i(TAG, "Email Sent");
-                text.setText("Thank you, your password has been sent to"+mEmail);
+                text.setText("Thank you, your password has been sent to "+mEmail);
 
 
             } else {

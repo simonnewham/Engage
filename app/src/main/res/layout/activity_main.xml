@@ -21,6 +21,16 @@
         android:layout_height="wrap_content"
         android:visibility="gone"/>
 
+    <TextView
+        android:id="@+id/textInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Press the home icon to load news content"
+        android:textAlignment="center"
+        android:paddingTop="5dp"
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
     <ListView
         android:id="@+id/news_list"
         android:layout_width="match_parent"

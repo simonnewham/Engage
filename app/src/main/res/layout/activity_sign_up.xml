@@ -8,11 +8,17 @@
     tools:context="com.engage.simonnewham.engageapp.activities.SignUpActivity"
     >
 
-    <android.support.v4.view.ViewPager
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/container">
+        android:fillViewport="true" >
 
-    </android.support.v4.view.ViewPager>
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/container"
+            />
 
+    </HorizontalScrollView>
 </LinearLayout>

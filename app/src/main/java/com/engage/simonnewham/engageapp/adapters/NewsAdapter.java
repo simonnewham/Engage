@@ -46,7 +46,7 @@ public class NewsAdapter extends ArrayAdapter<NewsItem>{
         name.setText(currentItem.getName());
 
         TextView release = (TextView) listItem.findViewById(R.id.News_date);
-        release.setText("Upload Date: "+currentItem.getDate());
+        release.setText("Uploaded: "+currentItem.getDate());
 
         TextView description = (TextView) listItem.findViewById(R.id.News_description);
         description.setText("Topic: "+(currentItem.getTopic()));

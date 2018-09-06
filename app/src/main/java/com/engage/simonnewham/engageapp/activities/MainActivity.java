@@ -1,5 +1,6 @@
 package com.engage.simonnewham.engageapp.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -29,6 +30,9 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -46,6 +50,7 @@ import java.util.ArrayList;
 
 /**
  * user home page with list of news items
+ * Page will load from online server when the app is launched or offline storage when the app is running to save data
  * Load particular news item when user clicks on item
  * @author simonnewham
  */
@@ -62,9 +67,10 @@ public class MainActivity extends AppCompatActivity {
     private NewsAdapter newsAdapter;
     private LinearLayout main_panel;
     private ProgressBar progressBar;
-
+    private TextView info;
     private String email;
     private String user_group;
+    private String load;
 
     private ContentDownload contentDownload;
 
@@ -76,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //setup toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //get extra info to load personalised content
@@ -84,24 +90,30 @@ public class MainActivity extends AppCompatActivity {
         if(extras != null) {
             email = extras.getString("email");
             user_group = extras.getString("group");
+            load = extras.getString("load");
         }
 
         main_panel = findViewById(R.id.main_panel);
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
+        info = findViewById(R.id.textInfo);
 
-        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String email = mPreferences.getString("email", "chicken");
-        Log.i(TAG, "User "+email);
-
-        contentDownload = new ContentDownload(user_group);
-        contentDownload.execute((Void) null);
+        if(load == null){
+            //offlineDL
+            Log.i(TAG, "Loading from offline");
+            offlineDownload();
+        }
+        else{
+            //onlineDL
+            Log.i(TAG, "Loading from online");
+            onlineDownload();
+        }
     }
 
     public void displayNews(ArrayList<NewsItem> toDisplay){
 
         store = toDisplay;
-        news_list = (ListView) findViewById(R.id.news_list);
+        news_list = findViewById(R.id.news_list);
         newsAdapter = new NewsAdapter(this, toDisplay);
         news_list.setAdapter(newsAdapter);
 
@@ -115,9 +127,25 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("group", user_group);
                 intent.putExtra("News", store.get(position));
                 startActivity(intent);
-                //finish();
             }
         });
+    }
+
+    //load news from internal storage, used once content has been updated
+    public void offlineDownload(){
+        String newsList = readFromFile(getApplicationContext());
+        //Log.i(TAG, "Offline news "+newsList);
+        displayNews(getNews(newsList));
+        progressBar.setVisibility(View.GONE);
+        info.setVisibility(View.VISIBLE);
+        info.setText("Loaded offline, press the home icon to refresh");
+
+    }
+
+    //load news from server, used when user opens app for first time
+    public void onlineDownload(){
+        contentDownload = new ContentDownload(user_group);
+        contentDownload.execute((Void) null);
     }
 
     /**
@@ -151,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 OutputStream opStream = httpConn.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(opStream, "UTF-8"));
 
-                // ***** Send POST message *****
+                // ***** Log.i(TAG, "Connection established");Send POST message *****
                 String postData = URLEncoder.encode("user_group", "UTF-8")+"="+URLEncoder.encode(mGroup, "UTF-8");
 
                 bufferedWriter.write(postData);
@@ -177,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                 return result;
 
             }
-            catch (UnsupportedEncodingException e) {
+            catch (UnsupportedEncodingException e)  {
                 e.printStackTrace();
             } catch (ProtocolException e) {
                 e.printStackTrace();
@@ -185,9 +213,9 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-            }
 
-            return "";
+            }
+            return "Error";
         }
 
         @Override
@@ -206,41 +234,91 @@ public class MainActivity extends AppCompatActivity {
                 onError();
             }
             else{
-                //convert from JSON string to JSONObject
-                ArrayList<NewsItem> toDisplay = new ArrayList<>();
-                try {
-                    JSONArray items = new JSONArray(result);
-
-                    for (int i=0; i<items.length(); i++){
-
-                        JSONObject item = items.getJSONObject(i);
-                        NewsItem newsItem = new NewsItem(item.getString("filename"),item.getString("uploadDate").substring(0,10), item.getString("type"), item.getString("id"), item.getString("path"),
-                                item.getString("topic"), item.getString("survey_id"));
-
-                       toDisplay.add(newsItem);
-                    }
-                    progressBar.setVisibility(View.GONE);
-                    displayNews(toDisplay);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                ArrayList<NewsItem> toDisplay = getNews(result);
+                progressBar.setVisibility(View.GONE);
+                //write file to internal memory
+                writeToFile(result, getApplicationContext());
+                //display array
+                displayNews(toDisplay);
             }
         }
 
         @Override
         protected void onCancelled() {
             contentDownload = null;
-            //showProgress(false);
         }
+    }
+
+    /**
+     *
+     */
+    private void writeToFile(String data,Context context) {
+        try {
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("newsList.txt", Context.MODE_PRIVATE));
+            outputStreamWriter.write(data);
+            outputStreamWriter.close();
+        }
+        catch (IOException e) {
+            Log.e("Exception", "File write failed: " + e.toString());
+        }
+    }
+
+    private String readFromFile(Context context) {
+
+        String ret = "";
+
+        try {
+            InputStream inputStream = context.openFileInput("newsList.txt");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Cannot read file: " + e.toString());
+        }
+        return ret;
+    }
+
+    /**
+     *
+     * @param result
+     * @return
+     */
+    private ArrayList<NewsItem> getNews(String result) {
+        ArrayList<NewsItem> toDisplay = new ArrayList<>();
+        try {
+            JSONArray items = new JSONArray(result);
+            for (int i = 0; i < items.length(); i++) {
+                JSONObject item = items.getJSONObject(i);
+                NewsItem newsItem = new NewsItem(item.getString("filename"), item.getString("uploadDate").substring(0, 10), item.getString("type"), item.getString("id"), item.getString("path"),
+                        item.getString("topic"), item.getString("survey_id"));
+                toDisplay.add(newsItem);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return toDisplay;
     }
 
     public void onError(){
         progressBar.setVisibility(View.GONE);
-        TextView error = new TextView(this);
-        error.setText("Server Error, please try again later");
-        error.setTextSize(25);
-        main_panel.addView(error);
+        info.setVisibility(View.VISIBLE);
+        info.setTextSize(25);
+        info.setText("Server error, please try again later");
     }
 
     @Override
@@ -258,8 +336,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.home:
                 //Refresh from the server
                 Toast.makeText(this, "Refreshing Content", Toast.LENGTH_SHORT).show();
-                contentDownload = new ContentDownload(user_group);
-                contentDownload.execute((Void) null);
+                info.setVisibility(View.GONE);
+                onlineDownload();
                 return true;
             case R.id.about:
                 intent = new Intent(this, AboutActivity.class);
