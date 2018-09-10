@@ -76,7 +76,6 @@ public class ContentActivity extends AppCompatActivity {
     String user_group;
     NewsItem item;
 
-    private ProgressBar progressBar;
     private FrameLayout frameLayout;
 
     FragmentManager fragmentManager;
@@ -95,7 +94,6 @@ public class ContentActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        progressBar = findViewById(R.id.progressBar);
         surveyB = findViewById(R.id.surveyButton);
         titleF = findViewById(R.id.titleFixed);
         dateF = findViewById(R.id.dateFixed);
@@ -121,7 +119,6 @@ public class ContentActivity extends AppCompatActivity {
     public void setItem(){
 
         String type = item.getType().toUpperCase();
-        progressBar.setVisibility(View.VISIBLE);
 
         if(type.equals("IMAGE")){
             //set date and title
@@ -133,7 +130,6 @@ public class ContentActivity extends AppCompatActivity {
 
             transaction.add(R.id.container, new ImageFragment(item.getPath()),"ImageFrag");
             transaction.commit();
-            //progressBar.setVisibility(View.GONE);
         }
         else if(type.equals("VIDEO")){
             frameLayout.setVisibility(View.VISIBLE);
@@ -144,14 +140,11 @@ public class ContentActivity extends AppCompatActivity {
 
             transaction.add(R.id.container, new VideoFragment(item.getPath()));
             transaction.commit();
-            //progressBar.setVisibility(View.GONE);
         }
 
         else if(type.equals("TEXT")){
             transaction.add(R.id.container, new TextFragment(item), "TextFrag");
             transaction.commit();
-
-            progressBar.setVisibility(View.GONE);
         }
 
         else if(type.equals("AUDIO")){
@@ -166,7 +159,6 @@ public class ContentActivity extends AppCompatActivity {
             transaction.add(R.id.container, audio, "AudioFrag");
             transaction.commit();
 
-            //progressBar.setVisibility(View.GONE);
         }
     }
 
@@ -251,9 +243,5 @@ public class ContentActivity extends AppCompatActivity {
 
             }
         }
-    }
-
-    public void hideProgress(){
-        progressBar.setVisibility(View.GONE);
     }
 }

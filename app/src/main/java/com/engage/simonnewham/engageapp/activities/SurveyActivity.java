@@ -85,6 +85,7 @@ public class SurveyActivity extends AppCompatActivity {
     EditText editText;
     TextView questionTitle;
     ImageView survey_tick;
+    TextView uploadText;
     private ProgressBar progressBar;
     private ProgressBar progress;
 
@@ -117,6 +118,7 @@ public class SurveyActivity extends AppCompatActivity {
         thank = new TextView(this);
         progressBar = findViewById(R.id.progressBar);
         progress = findViewById(R.id.progressBar2);
+        uploadText = findViewById(R.id.textUpload);
 
         //get extra info
         Bundle extras = getIntent().getExtras();
@@ -290,6 +292,7 @@ public class SurveyActivity extends AppCompatActivity {
     public void onSubmit(){
         String date = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         SurveyResponse surveyResponse;
+
         if (surveyID.equals("BASELINE") || newsItem==null){
             surveyResponse = new SurveyResponse(email, user_group, surveyID, responses,"Baseline" , date );
         }
@@ -298,6 +301,8 @@ public class SurveyActivity extends AppCompatActivity {
         }
         Gson gson = new Gson();
         String json = gson.toJson(surveyResponse);
+        progressBar.setVisibility(View.VISIBLE);
+        uploadText.setVisibility(View.VISIBLE);
         surveyUpload = new SurveyUpload(email, user_group, json);
         surveyUpload.execute((Void) null);
 
@@ -309,6 +314,12 @@ public class SurveyActivity extends AppCompatActivity {
         //first time load for new users
         if (surveyID.equals("BASELINE")){
             intent.putExtra("load", "online");
+            //change prefs so baseline is'nt loaded on startup
+//            mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+//            mEditor = mPreferences.edit();
+//            mEditor.putString("basline", "1");
+//            mEditor.commit();
+
         }
         intent.putExtra("email", email);
         intent.putExtra("group", user_group);
@@ -388,7 +399,7 @@ public class SurveyActivity extends AppCompatActivity {
         //runs after doInBackground
         protected void onPostExecute(final String result) {
             surveyDownload = null;
-            //showProgress(false);
+
             if (result.startsWith("Error") || result.equals("")){
                 Log.i(TAG, "Server error:"+result);
             }
@@ -476,7 +487,6 @@ public class SurveyActivity extends AppCompatActivity {
          */
         @Override
         protected String doInBackground(Void... params) {
-            progressBar.setVisibility(View.VISIBLE);
 
             try{
                 URL url = new URL("https://engage.cs.uct.ac.za/android/post_survey"); //will return "Login Success:<user_group>"
@@ -539,6 +549,13 @@ public class SurveyActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
                 submit.setVisibility(View.VISIBLE);
                 survey_tick.setVisibility(View.VISIBLE);
+                uploadText.setVisibility(View.GONE);
+
+                //change prefs so baseline is'nt loaded on startup
+                mPreferences = PreferenceManager.getDefaultSharedPreferences(SurveyActivity.this);
+                mEditor = mPreferences.edit();
+                mEditor.putString("baseline", "1");
+                mEditor.commit();
             }
             else {
                 Log.i(TAG, "Server error:"+result);

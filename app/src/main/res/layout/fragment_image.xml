@@ -5,13 +5,18 @@
     android:layout_height="wrap_content"
     tools:context=".fragments.ImageFragment">
 
+    <ProgressBar
+        android:id="@+id/progressContent"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.03" />
+
     <ImageView
         android:id="@+id/Image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-
-
         />
 
 </FrameLayout>

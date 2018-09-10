@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.engage.simonnewham.engageapp.R;
 import com.engage.simonnewham.engageapp.activities.ContentActivity;
@@ -25,6 +26,7 @@ public class ImageFragment extends Fragment {
 
     private ImageView image;
     private String path;
+    ProgressBar progressBar;
 
     public ImageFragment(String path){
             this.path = path;
@@ -38,6 +40,7 @@ public class ImageFragment extends Fragment {
         View view =inflater.inflate(R.layout.fragment_image, container, false);
 
         image = view.findViewById(R.id.Image);
+        progressBar = view.findViewById(R.id.progressContent);
 
         //download image
         new ImageFragment.DownloadImageTask(image).execute("https://engage.cs.uct.ac.za"+path);
@@ -69,7 +72,7 @@ public class ImageFragment extends Fragment {
         }
 
         protected void onPostExecute(Bitmap result) {
-            //((ContentActivity)getActivity()).hideProgress();
+            progressBar.setVisibility(View.GONE);
             bmImage.setImageBitmap(result);
         }
     }

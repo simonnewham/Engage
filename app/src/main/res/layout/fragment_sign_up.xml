@@ -90,6 +90,16 @@
                 android:textColor="@color/colorWhite"
                 />
 
+            <ProgressBar
+                android:id="@+id/progressUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.28"
+                android:theme="@style/AppTheme.GreenAccent"
+                android:visibility="gone"
+
+                />
+
             <Button
                 android:id="@+id/signup"
                 android:layout_width="match_parent"

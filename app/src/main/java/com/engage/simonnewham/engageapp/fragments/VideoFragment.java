@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.VideoView;
 
 import com.engage.simonnewham.engageapp.R;
@@ -20,6 +21,7 @@ public class VideoFragment extends Fragment {
 
     VideoView video;
     private String path;
+    ProgressBar progressBar;
 
     public VideoFragment (String path){
         this.path = path;
@@ -31,6 +33,7 @@ public class VideoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_video, container, false);
 
         video = view.findViewById(R.id.Video);
+        progressBar = view.findViewById(R.id.progressContent);
 
         //download video
         String vidAddress = "https://engage.cs.uct.ac.za"+path;
@@ -40,7 +43,7 @@ public class VideoFragment extends Fragment {
         video.setMediaController(vidControl);
         video.setVisibility(View.VISIBLE);
         video.setVideoURI(vidUri);
-       // ((ContentActivity)getActivity()).hideProgress();
+        progressBar.setVisibility(View.GONE);
         video.start();
 
         return view;

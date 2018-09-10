@@ -29,17 +29,6 @@
                 android:src="@drawable/logo2" />
 
             <TextView
-                android:id="@+id/user_group"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="10dp"
-                android:text="group"
-                android:textAlignment="center"
-                android:textSize="20sp"
-                android:textColor="@color/colorWhite"/>
-
-            <TextView
                 android:id="@+id/user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,12 +40,23 @@
                 android:textColor="@color/colorWhite"/>
 
             <TextView
+                android:id="@+id/user_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:text="group"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textColor="@color/colorWhite"/>
+
+            <TextView
                 android:id="@+id/version"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="20dp"
-                android:text="Version 1.1"
+                android:text="Version 1.2"
                 android:textAlignment="center"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -75,6 +75,5 @@
                 android:textColor="@color/colorWhite"/>
         </LinearLayout>
     </ScrollView>
-
 
 </LinearLayout>

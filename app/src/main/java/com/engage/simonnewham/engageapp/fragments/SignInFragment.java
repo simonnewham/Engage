@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.engage.simonnewham.engageapp.R;
 import com.engage.simonnewham.engageapp.activities.MainActivity;
 import com.engage.simonnewham.engageapp.activities.SignUpActivity;
+import com.engage.simonnewham.engageapp.activities.SurveyActivity;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -105,10 +106,21 @@ public class SignInFragment extends Fragment {
     public void checkPrefs(){
         String email = mPreferences.getString("email", "none");
         String user_group = mPreferences.getString("user_group", "none");
+        String baseline = mPreferences.getString("baseline", "1");
 
         Log.i(TAG, "User "+email);
+        Log.i(TAG, "Baseline "+baseline);
 
-        if(!email.equals("none") && !user_group.equals("none")){
+        //if baseline equals 0 the user has not completed the baseline survey yet
+        if(baseline.equals("0")){
+            Intent intent = new Intent(getActivity(), SurveyActivity.class);
+            intent.putExtra("email", email);
+            intent.putExtra("group", user_group);
+            intent.putExtra("surveyID", "BASELINE"); //will change for http connection
+            startActivity(intent);
+
+        }
+        else if(!email.equals("none") && !user_group.equals("none")){
             Intent intent = new Intent(getActivity(), MainActivity.class);
             intent.putExtra("email", email);
             intent.putExtra("group", user_group);
@@ -282,10 +294,10 @@ public class SignInFragment extends Fragment {
                 String test = mPreferences.getString("email","test");
                 Log.i(TAG, "User "+test);
 
-
                 Intent intent = new Intent( getActivity(), MainActivity.class);
                 intent.putExtra("email", mEmail);
                 intent.putExtra("group", mGroup);
+                intent.putExtra("load", "online");
                 startActivity(intent);
                 getActivity().finish();
             }

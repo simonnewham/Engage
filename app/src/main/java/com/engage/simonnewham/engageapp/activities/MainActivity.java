@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
         info = findViewById(R.id.textInfo);
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         if(load == null){
             //offlineDL

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.engage.simonnewham.engageapp.R;
@@ -28,8 +29,8 @@ public class TextFragment extends Fragment {
     TextView title;
     TextView date;
     TextView content;
-
     NewsItem item;
+    ProgressBar progressBar;
 
     public TextFragment(NewsItem item) {
         this.item = item;
@@ -43,6 +44,7 @@ public class TextFragment extends Fragment {
         title = view.findViewById(R.id.title);
         date = view.findViewById(R.id.date);
         content = view.findViewById(R.id.Text);
+        progressBar = view.findViewById(R.id.progressContent);
 
         title.setText(item.getName());
         date.setText("Uploaded on: "+item.getDate());
@@ -51,7 +53,6 @@ public class TextFragment extends Fragment {
 
         return view;
     }
-
 
     /**
      *
@@ -86,9 +87,7 @@ public class TextFragment extends Fragment {
 
         protected void onPostExecute(String result) {
             textView.setText(result);
-            ((ContentActivity)getActivity()).hideProgress();
+            progressBar.setVisibility(View.GONE);
         }
     }
-
-
 }

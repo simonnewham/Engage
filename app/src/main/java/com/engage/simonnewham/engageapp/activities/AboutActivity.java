@@ -48,7 +48,7 @@ public class AboutActivity extends AppCompatActivity {
         mEmail = findViewById(R.id.user);
         mEmail.setText("User: "+email);
         mUser = findViewById(R.id.user_group);
-        mUser.setText("User Group: "+user_group);
+        mUser.setText("Group Number: "+user_group);
     }
 
     //Method for setting up toolbar options

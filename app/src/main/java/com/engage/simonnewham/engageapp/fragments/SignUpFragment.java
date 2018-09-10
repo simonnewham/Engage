@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.engage.simonnewham.engageapp.R;
@@ -48,6 +49,7 @@ public class SignUpFragment extends Fragment {
     private EditText mPassword2;
     private Button signUp;
     private Button cancel;
+    ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +61,7 @@ public class SignUpFragment extends Fragment {
         mPassword2 = view.findViewById(R.id.password2);
         signUp = view.findViewById(R.id.signup);
         cancel = view.findViewById(R.id.cancel);
+        progressBar = view.findViewById(R.id.progressUser);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         signUp.setOnClickListener(new View.OnClickListener(){
@@ -109,7 +112,6 @@ public class SignUpFragment extends Fragment {
             //create user JSON document and send to DB
             mAuthTask = new SignUpFragment.UserSignUpTask(email, password);
             mAuthTask.execute((Void) null);
-
         }
     }
 
@@ -125,6 +127,7 @@ public class SignUpFragment extends Fragment {
         private final String mGroup;
 
         UserSignUpTask(String email, String password) {
+            progressBar.setVisibility(View.VISIBLE);
             mEmail = email;
             mPassword = password;
 
@@ -197,7 +200,7 @@ public class SignUpFragment extends Fragment {
         //runs after doInBackground
         protected void onPostExecute(final String result) {
             mAuthTask = null;
-            //showProgress(false);
+            progressBar.setVisibility(View.GONE);
 
             if (result.startsWith("SignUp Success")) {
                 Log.i(TAG, "SUCCESS");
@@ -207,11 +210,14 @@ public class SignUpFragment extends Fragment {
                     int index = result.indexOf(":");
                     mGroup = result.substring(index+1);
                 }
+
                 //Store email and user_group in stored preferences
                 mEditor = mPreferences.edit();
                 mEditor.putString("email", mEmail);
                 mEditor.commit();
                 mEditor.putString("user_group", mGroup);
+                mEditor.commit();
+                mEditor.putString("baseline", "0");
                 mEditor.commit();
 
                 //load the next activity

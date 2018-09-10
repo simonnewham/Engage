@@ -36,9 +36,9 @@ import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Class reponsible for handling audio file logic
- *  Adapted from Tutorials Point Media Player Tutorial https://www.tutorialspoint.com/android/android_mediaplayer.htm
- *  @author simonnewham
+ * Class responsible for handling audio file logic
+ * Adapted from Tutorials Point Media Player Tutorial https://www.tutorialspoint.com/android/android_mediaplayer.htm
+ * @author simonnewham
  */
 
 @SuppressLint("ValidFragment")
@@ -47,7 +47,6 @@ public class AudioFragment extends Fragment {
     private static final String TAG = "AudioFragment";
 
     private FloatingActionButton play;
-    private Button pause;
     private FloatingActionButton  forward;
     private FloatingActionButton  backward;
     private SeekBar seekbar;
@@ -62,7 +61,6 @@ public class AudioFragment extends Fragment {
     private int forwardTime = 5000;
     private int backwardTime = 5000;
     private Handler myHandler = new Handler();;
-    public static int oneTimeOnly = 0;
 
     private Boolean playing =false;
     Boolean ready = false;
@@ -93,7 +91,6 @@ public class AudioFragment extends Fragment {
         downloadAudioTask.execute("https://engage.cs.uct.ac.za"+path);
 
         seekbar.setClickable(false);
-        //seekbar.setMax(mediaPlayer.getDuration());
 
         play.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
@@ -122,7 +119,6 @@ public class AudioFragment extends Fragment {
                         startTime = mediaPlayer.getCurrentPosition();
                         seekbar.setProgress((int)startTime);
                         myHandler.postDelayed(UpdateSongTime,100);
-
 
                     }
                 }
@@ -186,11 +182,8 @@ public class AudioFragment extends Fragment {
      *
      */
     private class DownloadAudioTask extends AsyncTask<String, Void, String> {
-        //MediaPlayer mediaPlayer;
 
         public DownloadAudioTask() {
-
-            //this.mediaPlayer = mediaPlayer;
         }
 
         protected String doInBackground(String... urls) {
@@ -213,14 +206,12 @@ public class AudioFragment extends Fragment {
         protected void onPostExecute(String result) {
             downloadAudioTask = null;
             progress.setText("Item Ready");
-            //((ContentActivity)getActivity()).hideProgress();
             ready = true;
 
         }
 
         protected void onCancelled() {
             downloadAudioTask = null;
-
         }
 
     }
@@ -229,7 +220,6 @@ public class AudioFragment extends Fragment {
 
         mediaPlayer.release();
         mediaPlayer =null;
-
     }
 
 }

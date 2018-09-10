@@ -35,22 +35,11 @@
         android:layout_marginBottom="2dp"
         android:visibility="gone"/>
 
-
-    <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            />
-
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/container"
         android:layout_weight="0.8"
-
         >
 
     </FrameLayout>
@@ -61,7 +50,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorOrange"
         android:onClick="loadSurvey"
-        android:text="Answer Survey >>"
+        android:text="Answer Survey"
         android:textAllCaps="false"
         android:textColor="@color/colorWhite"
         android:layout_gravity="bottom"
