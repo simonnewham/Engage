@@ -17,7 +17,8 @@ import com.engage.simonnewham.engageapp.fragments.SignUpFragment;
 
 /**
  * Activity that starts when user first opens the app
- * Container the sign in, forgot password, user consent and user sign up fragments
+ * Container for sign in, forgot password, user consent and user sign up fragments
+ * @author simonnewham
  */
 
 public class SignUpActivity extends AppCompatActivity {
@@ -38,7 +39,10 @@ public class SignUpActivity extends AppCompatActivity {
         setupViewPager(mViewPager);
     }
 
-    //method to manage fragment screens
+    /**
+     * method to setup and manage fragment screens
+     * SignInFagment loaded first by default
+     */
     private void setupViewPager(ViewPager viewPager){
         SectionsStatePagerAdapter adapter = new SectionsStatePagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new SignInFragment(), "User Sign In");

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by simonnewham on 2018/07/31.
  * Data model for a survey question
+ * @author simonnewham
  */
 
 public class Question {
@@ -20,7 +20,7 @@ public class Question {
         this.type = type;
     }
 
-    //options will be null for non-mcq type question
+    //constructor for MCQ question with array of options
     public Question(String question, String type, ArrayList<String> options) {
         this.question = question;
         this.type = type;

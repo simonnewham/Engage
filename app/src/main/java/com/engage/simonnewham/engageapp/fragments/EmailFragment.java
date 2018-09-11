@@ -37,6 +37,7 @@ import java.util.Random;
 /**
  * Class responsible for sending password to users email if they forget their password
  * Email sent as parameter to the server via a post request
+ * @author simonnewham
  */
 public class EmailFragment extends Fragment {
 
@@ -46,7 +47,6 @@ public class EmailFragment extends Fragment {
     private Button back;
     private TextView text;
     private EditText email;
-
     private UserEmailTask userEmailTask;
 
     @Override
@@ -54,7 +54,6 @@ public class EmailFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_email, container, false);
-
 
         send = view.findViewById(R.id.buttonSend);
         back = view.findViewById(R.id.buttonBack);
@@ -80,13 +79,13 @@ public class EmailFragment extends Fragment {
             }
         });
 
-
         return view;
     }
+
+    //Thread to call forgot_password on API to send user password
     public class UserEmailTask extends AsyncTask<Void, Void, String> {
 
         private final String mEmail;
-
 
         UserEmailTask(String email) {
             mEmail = email;
@@ -110,7 +109,7 @@ public class EmailFragment extends Fragment {
                 OutputStream opStream = httpConn.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(opStream, "UTF-8"));
 
-                // ***** Send POST message *****
+                //Send POST message
                 String postData = URLEncoder.encode("email", "UTF-8") + "=" + URLEncoder.encode(mEmail, "UTF-8");
 
                 bufferedWriter.write(postData);
@@ -118,7 +117,7 @@ public class EmailFragment extends Fragment {
                 bufferedWriter.close();
                 opStream.close();
 
-                // ***** Receive result of post message *****
+                //Receive result of post message
                 InputStream inputStream = httpConn.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
                 String result = "";
@@ -131,7 +130,7 @@ public class EmailFragment extends Fragment {
                 inputStream.close();
                 httpConn.disconnect();
 
-                Log.i(TAG, ">>>>>Response Result: " + result);
+                Log.i(TAG, "Response Result: " + result);
 
                 return result;
 
@@ -144,12 +143,11 @@ public class EmailFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return "";
         }
 
         @Override
-        //runs after doInBackground
+        //Display success message or error
         protected void onPostExecute(final String result) {
             userEmailTask = null;
 
@@ -157,11 +155,9 @@ public class EmailFragment extends Fragment {
                 Log.i(TAG, "Email Sent");
                 text.setText("Thank you, your password has been sent to "+mEmail);
 
-
             } else {
                 Toast.makeText(getActivity(), "Error with email", Toast.LENGTH_SHORT).show();
             }
         }
     }
-
 }

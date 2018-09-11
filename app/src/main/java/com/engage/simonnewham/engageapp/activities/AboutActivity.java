@@ -17,6 +17,11 @@ import com.engage.simonnewham.engageapp.R;
 
 import org.w3c.dom.Text;
 
+/**
+ * Class responsible for handling logic of activity_about
+ * Displays current user and user group
+ * @author simonnewham
+ */
 public class AboutActivity extends AppCompatActivity {
 
     //shared preference code
@@ -60,6 +65,7 @@ public class AboutActivity extends AppCompatActivity {
         return true;
     }
 
+    //Method to handle toolbar actions
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = null;

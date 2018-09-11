@@ -1,15 +1,11 @@
 package com.engage.simonnewham.engageapp.fragments;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-
 import com.engage.simonnewham.engageapp.R;
 import com.engage.simonnewham.engageapp.activities.SignUpActivity;
 
@@ -25,7 +21,6 @@ public class ConsentFragment extends Fragment {
     private Button reject;
 
     public ConsentFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -36,11 +31,13 @@ public class ConsentFragment extends Fragment {
         accept = view.findViewById(R.id.buttonAccept);
         reject = view.findViewById(R.id.butonReject);
 
+        //Direct user to signUp fragment if they accept message
         accept.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 ((SignUpActivity)getActivity()).setViewPager(3);
             }
         });
+        //direct back to signIn activity on rejection
         reject.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 ((SignUpActivity)getActivity()).setViewPager(0);

@@ -10,12 +10,13 @@ import android.widget.ListView;
 import com.engage.simonnewham.engageapp.R;
 
 /**
- * Created by simonnewham on 2018/07/27.
+ * Class to create the News List Item within the MainActivity
+ * @author simonnewham
  */
 
 public class ContentListItemActivity extends AppCompatActivity {
 
-    private final String TAG = "MainActivity";
+    private final String TAG = "NewsListItem";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

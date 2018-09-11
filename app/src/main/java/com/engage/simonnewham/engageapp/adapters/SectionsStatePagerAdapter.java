@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * Class responsible for swapping in and out fragments
- * Simon Newham
+/**
+ * Class responsible for swapping in and out fragments in SignUpActivity
+ * @author simonnewham
  */
 
 public class SectionsStatePagerAdapter extends FragmentStatePagerAdapter{

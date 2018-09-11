@@ -22,7 +22,10 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-
+/**
+ * Class to download text articles from the server
+ * @author simonnewham
+ */
 @SuppressLint("ValidFragment")
 public class TextFragment extends Fragment {
 
@@ -55,7 +58,7 @@ public class TextFragment extends Fragment {
     }
 
     /**
-     *
+     * Download text item from the server and display to user
      */
     private class DownloadTextTask extends AsyncTask<String, Void, String> {
         TextView textView;
@@ -64,6 +67,7 @@ public class TextFragment extends Fragment {
             this.textView = textView;
         }
 
+        //download of text item from server
         protected String doInBackground(String... urls) {
             String urldisplay = urls[0];
 
@@ -85,6 +89,7 @@ public class TextFragment extends Fragment {
             return "";
         }
 
+        //display to user
         protected void onPostExecute(String result) {
             textView.setText(result);
             progressBar.setVisibility(View.GONE);

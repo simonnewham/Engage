@@ -41,6 +41,7 @@ import java.net.URLEncoder;
 /**
  * Login fragment that allows users to login or create new account
  * Adapted from Android Studio login template
+ * @author simonnewham
  */
 public class SignInFragment extends Fragment {
 
@@ -136,7 +137,7 @@ public class SignInFragment extends Fragment {
 
     /**
      * Method called when login button is clicked
-     * If errors occur then no login attempt is made
+     * If errors occured then no login attempt is made
      */
     public void onLogin() {
 
@@ -252,8 +253,6 @@ public class SignInFragment extends Fragment {
                 httpConn.disconnect();
 
                 Log.i(TAG, ">>>>>Response Result: "+result);
-                //>>>TESTING<<<<
-                //result = "Login Success:2";
                 return result;
 
             }
@@ -266,12 +265,11 @@ public class SignInFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return "";
         }
 
         @Override
-        //runs after doInBackground
+        //Method to check if login was successful and load the next activity
         protected void onPostExecute(final String result) {
             mAuthTask = null;
             progressBar.setVisibility(View.GONE);
@@ -291,8 +289,9 @@ public class SignInFragment extends Fragment {
                 mEditor.putString("user_group", mGroup);
                 mEditor.commit();
 
-                String test = mPreferences.getString("email","test");
-                Log.i(TAG, "User "+test);
+                //TRACING
+                //String test = mPreferences.getString("email","test");
+                //Log.i(TAG, "User "+test);
 
                 Intent intent = new Intent( getActivity(), MainActivity.class);
                 intent.putExtra("email", mEmail);
@@ -306,6 +305,5 @@ public class SignInFragment extends Fragment {
                 mPasswordView.requestFocus();
             }
         }
-
     }
 }

@@ -46,11 +46,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-//import android.support.v7.app.AppCompatActivity;
-
 /**
- * user home page with list of news items
- * Page will load from online server when the app is launched or offline storage when the app is running to save data
+ * User home page with list of news items
+ * Page will load from online server when the app is launched or offline storage when the app is running
  * Load particular news item when user clicks on item
  * @author simonnewham
  */
@@ -73,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
     private String load;
 
     private ContentDownload contentDownload;
-
     ArrayList<NewsItem> store;
 
     @Override
@@ -111,6 +108,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to display downloaded news items in a List View
+     * Uses the NewsAdapter class to create each item
+     * @param toDisplay
+     */
     public void displayNews(ArrayList<NewsItem> toDisplay){
 
         store = toDisplay;
@@ -122,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
 
             public void onItemClick(AdapterView<?> arg0, View v, int position, long id)
             {
-               //Toast.makeText(MainActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(MainActivity.this, ContentActivity.class);
                 intent.putExtra("email", email);
                 intent.putExtra("group", user_group);
@@ -139,8 +140,8 @@ public class MainActivity extends AppCompatActivity {
         displayNews(getNews(newsList));
         progressBar.setVisibility(View.GONE);
         info.setVisibility(View.VISIBLE);
+        info.setTextSize(10);
         info.setText("Loaded offline, press the home icon to refresh");
-
     }
 
     //load news from server, used when user opens app for first time
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                 OutputStream opStream = httpConn.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(opStream, "UTF-8"));
 
-                // ***** Log.i(TAG, "Connection established");Send POST message *****
+                //Send POST message
                 String postData = URLEncoder.encode("user_group", "UTF-8")+"="+URLEncoder.encode(mGroup, "UTF-8");
 
                 bufferedWriter.write(postData);
@@ -204,7 +205,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, ">>>>>Response Result: "+result);
 
                 return result;
-
             }
             catch (UnsupportedEncodingException e)  {
                 e.printStackTrace();
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
          */
         protected void onPostExecute(final String result) {
             contentDownload = null;
-            //showProgress(false);
+
             if (result.startsWith("Error") || result.equals("")){
                 Log.i(TAG, "Server error:"+result);
                 onError();
@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     *
+     * Method to write server response to internal memory to reduce data usage
      */
     private void writeToFile(String data,Context context) {
         try {
@@ -264,6 +264,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to read news items from internal memory
+     */
     private String readFromFile(Context context) {
 
         String ret = "";
@@ -271,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             InputStream inputStream = context.openFileInput("newsList.txt");
 
-            if ( inputStream != null ) {
+            if (inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                 String receiveString = "";
@@ -280,23 +283,20 @@ public class MainActivity extends AppCompatActivity {
                 while ( (receiveString = bufferedReader.readLine()) != null ) {
                     stringBuilder.append(receiveString);
                 }
-
                 inputStream.close();
                 ret = stringBuilder.toString();
             }
         }
         catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
+            Log.e(TAG, "File not found: " + e.toString());
         } catch (IOException e) {
-            Log.e("login activity", "Cannot read file: " + e.toString());
+            Log.e(TAG, "Cannot read file: " + e.toString());
         }
         return ret;
     }
 
     /**
-     *
-     * @param result
-     * @return
+     * Method to convert a JSON string of news items into an ArrayList of NewsItem objects
      */
     private ArrayList<NewsItem> getNews(String result) {
         ArrayList<NewsItem> toDisplay = new ArrayList<>();
@@ -315,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
         return toDisplay;
     }
 
+    //Display a error message to the user
     public void onError(){
         progressBar.setVisibility(View.GONE);
         info.setVisibility(View.VISIBLE);
@@ -322,6 +323,7 @@ public class MainActivity extends AppCompatActivity {
         info.setText("Server error, please try again later");
     }
 
+    //Method for setting up toolbar options
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -329,6 +331,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //Method to handle toolbar actions
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = null;

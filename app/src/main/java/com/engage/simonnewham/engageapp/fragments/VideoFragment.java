@@ -15,7 +15,10 @@ import android.widget.VideoView;
 import com.engage.simonnewham.engageapp.R;
 import com.engage.simonnewham.engageapp.activities.ContentActivity;
 
-
+/**
+ * Class to download and display video items to users
+ * @author simonnewham
+ */
 @SuppressLint("ValidFragment")
 public class VideoFragment extends Fragment {
 
@@ -35,7 +38,7 @@ public class VideoFragment extends Fragment {
         video = view.findViewById(R.id.Video);
         progressBar = view.findViewById(R.id.progressContent);
 
-        //download video
+        //download video from provided item path
         String vidAddress = "https://engage.cs.uct.ac.za"+path;
         Uri vidUri = Uri.parse(vidAddress);
         MediaController vidControl = new MediaController(getActivity());
@@ -48,6 +51,4 @@ public class VideoFragment extends Fragment {
 
         return view;
     }
-
-
 }

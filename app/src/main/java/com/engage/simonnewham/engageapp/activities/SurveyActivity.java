@@ -59,6 +59,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Class that handles activity_survey logic
+ * Preforms the downloading and uploading of surveys to and from the database
+ */
 public class SurveyActivity extends AppCompatActivity {
 
     //shared preference code
@@ -141,13 +145,17 @@ public class SurveyActivity extends AppCompatActivity {
             surveyDownload.execute((Void) null);
 
         }
+        //if a basline survey load specific surveyID
         else if (surveyID.equals("BASELINE")){ //if coming from sign up load the baseline
             surveyDownload = new SurveyDownload("5b6d69e9fb9ca80fa8cc14a9");
             surveyDownload.execute((Void) null);
         }
     }
 
-    //displays the initial survey title and description after SurveyDownload is finished
+    /**
+     * Displays the initial survey title and description after SurveyDownload is finished
+     * Uses a survey object created by SurveyDownload
+     */
     public void displaySurvey(Survey s){
 
         if(surveyID.equals("BASELINE")){
@@ -172,6 +180,7 @@ public class SurveyActivity extends AppCompatActivity {
         lPanel.addView(description);
     }
 
+    //Method to clear the title page and display the first question
     public void onBegin(View view){
         if(survey != null){
             thank.setVisibility(View.GONE);
@@ -200,7 +209,6 @@ public class SurveyActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         } catch (Exception e) {
-
         }
 
         //add current response to responses before allow user to go to next question
@@ -244,7 +252,7 @@ public class SurveyActivity extends AppCompatActivity {
 
     /**
      * Method to populate the next question
-     *
+     * Uses question type to load either editText or radioGroup
      */
     public void onNext(){
 
@@ -309,17 +317,15 @@ public class SurveyActivity extends AppCompatActivity {
         Log.i(TAG, "JSON SURVEY RESPONSE"+json);
     }
 
+    /**
+     * Onclick listener for when finish button is clicked
+     * Directs user back to the home page
+     */
     public void onFinish(View view) {
         Intent intent = new Intent(SurveyActivity.this, MainActivity.class);
         //first time load for new users
         if (surveyID.equals("BASELINE")){
             intent.putExtra("load", "online");
-            //change prefs so baseline is'nt loaded on startup
-//            mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-//            mEditor = mPreferences.edit();
-//            mEditor.putString("basline", "1");
-//            mEditor.commit();
-
         }
         intent.putExtra("email", email);
         intent.putExtra("group", user_group);
@@ -339,7 +345,7 @@ public class SurveyActivity extends AppCompatActivity {
         }
 
         /**
-         * Connect to API to upload surveyResponse to API
+         * Connect to API to download survey from the server
          */
         @Override
         protected String doInBackground(Void... params) {
@@ -357,7 +363,7 @@ public class SurveyActivity extends AppCompatActivity {
                 OutputStream opStream = httpConn.getOutputStream();
                 BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(opStream, "UTF-8"));
 
-                // ***** Send POST message *****
+                //Send POST message
                 String postData = URLEncoder.encode("survey", "UTF-8")+"="+URLEncoder.encode(mSurveyID, "UTF-8");
 
                 bufferedWriter.write(postData);
@@ -391,12 +397,13 @@ public class SurveyActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return "";
         }
 
         @Override
-        //runs after doInBackground
+        /**
+         * Method to convert JSON survey string into a Survey Object
+         */
         protected void onPostExecute(final String result) {
             surveyDownload = null;
 
@@ -436,7 +443,6 @@ public class SurveyActivity extends AppCompatActivity {
                                         options.add(answer);
                                     }
                                 }
-
                                 question = new Question(jQuestion.getString("content"),jQuestion.getString("type"), options);
                             }
 
@@ -458,7 +464,6 @@ public class SurveyActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-            //show some error message
         }
 
         @Override
@@ -507,7 +512,7 @@ public class SurveyActivity extends AppCompatActivity {
                 opStream.write( outputInBytes );
                 opStream.close();
 
-                // ***** Receive result of post message *****
+                //Receive result of post message
                 InputStream inputStream = httpConn.getInputStream();
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
                 String result = "";
@@ -539,7 +544,7 @@ public class SurveyActivity extends AppCompatActivity {
         }
 
         @Override
-        //runs after doInBackground
+        //Method to load success message when survey has been uploaded to server
         protected void onPostExecute(final String result) {
             surveyUpload = null;
 
@@ -551,7 +556,7 @@ public class SurveyActivity extends AppCompatActivity {
                 survey_tick.setVisibility(View.VISIBLE);
                 uploadText.setVisibility(View.GONE);
 
-                //change prefs so baseline is'nt loaded on startup
+                //change prefs so baseline is not loaded on startup
                 mPreferences = PreferenceManager.getDefaultSharedPreferences(SurveyActivity.this);
                 mEditor = mPreferences.edit();
                 mEditor.putString("baseline", "1");
@@ -580,6 +585,7 @@ public class SurveyActivity extends AppCompatActivity {
         return true;
     }
 
+    //Method to handle toolbar actions
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = null;
@@ -613,13 +619,14 @@ public class SurveyActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+    //Method to display error message to user
     public void onError(){
         TextView error = new TextView(this);
         error.setText("Server Error, please try again later");
         lPanel.addView(error);
     }
 
-    //when back button is pressed
+    //handle back button logic
     public boolean onSupportNavigateUp() {
         Intent intent = new Intent(SurveyActivity.this, ContentActivity.class);
         intent.putExtra("email", email);

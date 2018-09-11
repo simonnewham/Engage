@@ -3,8 +3,8 @@ package com.engage.simonnewham.engageapp.models;
 import java.io.Serializable;
 
 /**
- * Created by simonnewham on 2018/07/31.
- * Data Model for a news article loaded via API JSON response
+ * Data Model for a News Item loaded via API JSON response
+ * @author simonnewham
  */
 
 public class NewsItem implements Serializable {

@@ -20,7 +20,10 @@ import com.engage.simonnewham.engageapp.activities.ContentActivity;
 
 import java.io.InputStream;
 
-
+/**
+ * Class to handle the downloading of images to display to user
+ * @author simonnewham
+ */
 @SuppressLint("ValidFragment")
 public class ImageFragment extends Fragment {
 
@@ -38,18 +41,17 @@ public class ImageFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view =inflater.inflate(R.layout.fragment_image, container, false);
-
         image = view.findViewById(R.id.Image);
         progressBar = view.findViewById(R.id.progressContent);
 
-        //download image
+        //download image from download path provided
         new ImageFragment.DownloadImageTask(image).execute("https://engage.cs.uct.ac.za"+path);
 
         return view;
     }
 
     /**
-     *
+     * Downloads image from the server and displays it to user
      */
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
@@ -58,6 +60,7 @@ public class ImageFragment extends Fragment {
             this.bmImage = bmImage;
         }
 
+        //download image from server
         protected Bitmap doInBackground(String... urls) {
             String urldisplay = urls[0];
             Bitmap mIcon11 = null;
@@ -71,11 +74,10 @@ public class ImageFragment extends Fragment {
             return mIcon11;
         }
 
+        //display image to user
         protected void onPostExecute(Bitmap result) {
             progressBar.setVisibility(View.GONE);
             bmImage.setImageBitmap(result);
         }
     }
-
-
 }

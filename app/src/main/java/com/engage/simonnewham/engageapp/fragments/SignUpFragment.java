@@ -35,6 +35,10 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Random;
 
+/**
+ * Class to handle the signing up of new users
+ * @author simonnewham
+ */
 public class SignUpFragment extends Fragment {
 
     private static final String TAG = "SignUpFragment";
@@ -64,12 +68,14 @@ public class SignUpFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressUser);
 
         mPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        //method when sign up button is pressed
         signUp.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 onSignUp();
             }
         });
 
+        //Method when cancel button is pressed
         cancel.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 ((SignUpActivity)getActivity()).setViewPager(0);
@@ -109,17 +115,19 @@ public class SignUpFragment extends Fragment {
 
         //if successful load mainActivity
         if(error == false) {
-            //create user JSON document and send to DB
             mAuthTask = new SignUpFragment.UserSignUpTask(email, password);
             mAuthTask.execute((Void) null);
         }
     }
 
+    //Check if inputted email is valid
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return email.contains("@");
     }
 
+    /**
+     * Connects to server to upload new user details
+     */
     public class UserSignUpTask extends AsyncTask<Void, Void, String> {
 
         private final String mEmail;
@@ -131,13 +139,15 @@ public class SignUpFragment extends Fragment {
             mEmail = email;
             mPassword = password;
 
+            //random group between 1 and 3
             Random random = new Random();
-            int val = random.nextInt(3) +1; //random group between 1 and 3
+            int val = random.nextInt(3) +1;
             mGroup = String.valueOf(val);
         }
 
         /**
          * Connect to API to signUp new user
+         * User details sent as parameters
          */
         @Override
         protected String doInBackground(Void... params) {
@@ -192,12 +202,11 @@ public class SignUpFragment extends Fragment {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
             return "";
         }
 
         @Override
-        //runs after doInBackground
+        //Method to display baseline survey on successful sign up or error
         protected void onPostExecute(final String result) {
             mAuthTask = null;
             progressBar.setVisibility(View.GONE);
@@ -232,7 +241,5 @@ public class SignUpFragment extends Fragment {
                 Toast.makeText(getActivity(), "SignUp error: Email already in use",Toast.LENGTH_SHORT).show();
             }
         }
-
     }
-
 }

@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by simonnewham on 2018/07/27.
+ * Class to display News List Items in a List View
+ * @author simonnewham
  */
 
 public class NewsAdapter extends ArrayAdapter<NewsItem>{
@@ -42,18 +43,19 @@ public class NewsAdapter extends ArrayAdapter<NewsItem>{
 
         NewsItem currentItem = newsList.get(position);
 
-        TextView name = (TextView) listItem.findViewById(R.id.textView_name);
+        TextView name = listItem.findViewById(R.id.textView_name);
         name.setText(currentItem.getName());
 
-        TextView release = (TextView) listItem.findViewById(R.id.News_date);
+        TextView release = listItem.findViewById(R.id.News_date);
         release.setText("Uploaded: "+currentItem.getDate());
 
-        TextView description = (TextView) listItem.findViewById(R.id.News_description);
+        TextView description = listItem.findViewById(R.id.News_description);
         description.setText("Topic: "+(currentItem.getTopic()));
 
         ImageView image = listItem.findViewById(R.id.image);
         String type = currentItem.getType().toUpperCase();
 
+        //display content icon depending on type
         if(type.equals("TEXT")){
             image.setImageResource(R.drawable.ic_text);
         }
@@ -69,7 +71,6 @@ public class NewsAdapter extends ArrayAdapter<NewsItem>{
             image.setImageResource(R.drawable.ic_image);
 
         }
-
         return listItem;
     }
 }

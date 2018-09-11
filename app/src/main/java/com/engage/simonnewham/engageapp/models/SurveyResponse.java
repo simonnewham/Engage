@@ -3,7 +3,9 @@ package com.engage.simonnewham.engageapp.models;
 import java.util.ArrayList;
 
 /**
- * Created by simonnewham on 2018/08/01.
+ * Data model for a survey response
+ * Model used the survey response is uploaded to the server
+ * @author simonnewham
  */
 
 public class SurveyResponse {

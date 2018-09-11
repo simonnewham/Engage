@@ -55,9 +55,9 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 /**
- * @author simonnewham
  * Class to show individual news items downloaded from server
  * Image, Audio and Video and Text items are rendered within their own fragment
+ * @author simonnewham
  */
 
 public class ContentActivity extends AppCompatActivity {
@@ -71,16 +71,13 @@ public class ContentActivity extends AppCompatActivity {
     TextView titleF;
     TextView dateF;
     Button surveyB;
-
     String email;
     String user_group;
     NewsItem item;
-
     private FrameLayout frameLayout;
 
     FragmentManager fragmentManager;
     FragmentTransaction transaction;
-
     AudioFragment audio;
 
     @Override
@@ -115,6 +112,7 @@ public class ContentActivity extends AppCompatActivity {
 
     /**
      * Method to set up the news article within the android view
+     * Uses item type to render fragment
      */
     public void setItem(){
 
@@ -158,10 +156,10 @@ public class ContentActivity extends AppCompatActivity {
             audio = new AudioFragment(item.getPath());
             transaction.add(R.id.container, audio, "AudioFrag");
             transaction.commit();
-
         }
     }
 
+    //back button logic
     public boolean onSupportNavigateUp() {
         clearStack();
 
@@ -173,6 +171,8 @@ public class ContentActivity extends AppCompatActivity {
         return true;
     }
 
+    //method to load the attached survey when survey button pressed
+    //NewsItem object contains surveyID which SurveyActivity will use to download correct survey
     public void loadSurvey(View view){
         clearStack();
 
@@ -182,9 +182,9 @@ public class ContentActivity extends AppCompatActivity {
         intent.putExtra("surveyID", "ITEM");
         intent.putExtra("News", item);
         startActivity(intent);
-
     }
 
+    //Method for setting up toolbar options
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -192,10 +192,8 @@ public class ContentActivity extends AppCompatActivity {
         return true;
     }
 
+    //Method responsible for handling events on the toolbar
     @Override
-    /**
-     * Method responsible for handling events on the toolbar
-     */
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent intent = null;
 
@@ -230,7 +228,7 @@ public class ContentActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    //Stop MediaPlayer if audio fragment is loaded
+    //Stop MediaPlayer from playing in background if audio fragment is loaded
     public void clearStack() {
 
         String type = item.getType().toUpperCase();

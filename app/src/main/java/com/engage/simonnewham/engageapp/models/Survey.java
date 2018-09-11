@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by simonnewham on 2018/07/31.
  * Data Model for a survey loaded via a JSON response
+ * Used in SurveyActivity
+ * @author simonnewham
  */
 
 public class Survey {
@@ -13,6 +14,7 @@ public class Survey {
     private String ID;
     private String name;
     private String description;
+    //array of question objects to be displayed
     private ArrayList<Question> questions;
 
     public Survey(String ID, String name, String description, ArrayList<Question> questions) {
@@ -53,6 +55,5 @@ public class Survey {
     public void setSurveyID(String surveyID) {
         this.ID = surveyID;
     }
-
 
 }

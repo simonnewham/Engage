@@ -92,6 +92,7 @@ public class AudioFragment extends Fragment {
 
         seekbar.setClickable(false);
 
+        //Method to handle play and pause functionality
         play.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
 
@@ -125,7 +126,7 @@ public class AudioFragment extends Fragment {
             }
         });
 
-
+        //Method to move audio item 5 seconds forward
         forward.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
                 if(ready){
@@ -140,7 +141,7 @@ public class AudioFragment extends Fragment {
                 }
             }
         });
-
+        //Method to move audio item 5 seconds backwards
        backward.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
 
@@ -160,7 +161,7 @@ public class AudioFragment extends Fragment {
         return view;
     }
 
-
+    //Thread to update progressBar as song plays
     private Runnable UpdateSongTime = new Runnable() {
         public void run() {
             if(mediaPlayer!=null){
@@ -179,7 +180,7 @@ public class AudioFragment extends Fragment {
     };
 
     /**
-     *
+     * Method to download audio item from the server
      */
     private class DownloadAudioTask extends AsyncTask<String, Void, String> {
 
@@ -216,10 +217,10 @@ public class AudioFragment extends Fragment {
 
     }
 
+    //Method to release mediaPlayer when user leaves ContentActivity
     public void endMedia (){
 
         mediaPlayer.release();
         mediaPlayer =null;
     }
-
 }
