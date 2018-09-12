@@ -117,6 +117,10 @@ public class ContentActivity extends AppCompatActivity {
     public void setItem(){
 
         String type = item.getType().toUpperCase();
+        //Set up parameter details
+        Bundle bundle = new Bundle();
+        String path = item.getPath();
+        bundle.putString("path", path );
 
         if(type.equals("IMAGE")){
             //set date and title
@@ -126,8 +130,11 @@ public class ContentActivity extends AppCompatActivity {
             dateF.setText("Uploaded on: "+item.getDate());
             titleF.setText(item.getName());
 
-            transaction.add(R.id.container, new ImageFragment(item.getPath()),"ImageFrag");
+            ImageFragment image = new ImageFragment();
+            image.setArguments(bundle);
+            transaction.replace(R.id.container, image);
             transaction.commit();
+
         }
         else if(type.equals("VIDEO")){
             frameLayout.setVisibility(View.VISIBLE);
@@ -136,12 +143,21 @@ public class ContentActivity extends AppCompatActivity {
             dateF.setText("Uploaded on: "+item.getDate());
             titleF.setText(item.getName());
 
-            transaction.add(R.id.container, new VideoFragment(item.getPath()));
+            VideoFragment video = new VideoFragment();
+            video.setArguments(bundle);
+            transaction.replace(R.id.container, video);
             transaction.commit();
+
         }
 
         else if(type.equals("TEXT")){
-            transaction.add(R.id.container, new TextFragment(item), "TextFrag");
+            TextFragment text = new TextFragment();
+            text.setArguments(bundle);
+            String title = item.getName();
+            String date = item.getDate();
+            bundle.putString("title", title );
+            bundle.putString("date", date );
+            transaction.replace(R.id.container, text);
             transaction.commit();
         }
 
@@ -153,8 +169,9 @@ public class ContentActivity extends AppCompatActivity {
             titleF.setText(item.getName());
 
             //set fragment to audio version
-            audio = new AudioFragment(item.getPath());
-            transaction.add(R.id.container, audio, "AudioFrag");
+            audio = new AudioFragment();
+            audio.setArguments(bundle);
+            transaction.replace(R.id.container, audio);
             transaction.commit();
         }
     }

@@ -17,22 +17,23 @@ import android.widget.ProgressBar;
 
 import com.engage.simonnewham.engageapp.R;
 import com.engage.simonnewham.engageapp.activities.ContentActivity;
+import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.InputStream;
 
 /**
  * Class to handle the downloading of images to display to user
+ * Makes use of PhotoView from https://github.com/chrisbanes/PhotoView
  * @author simonnewham
  */
-@SuppressLint("ValidFragment")
 public class ImageFragment extends Fragment {
 
-    private ImageView image;
+    PhotoView image;
     private String path;
     ProgressBar progressBar;
 
-    public ImageFragment(String path){
-            this.path = path;
+    public ImageFragment(){
+
     }
 
     @Override
@@ -40,12 +41,13 @@ public class ImageFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
+        String itemPath = this.getArguments().getString("path");
         View view =inflater.inflate(R.layout.fragment_image, container, false);
         image = view.findViewById(R.id.Image);
         progressBar = view.findViewById(R.id.progressContent);
 
         //download image from download path provided
-        new ImageFragment.DownloadImageTask(image).execute("https://engage.cs.uct.ac.za"+path);
+        new ImageFragment.DownloadImageTask(image).execute("https://engage.cs.uct.ac.za"+itemPath);
 
         return view;
     }
@@ -54,9 +56,9 @@ public class ImageFragment extends Fragment {
      * Downloads image from the server and displays it to user
      */
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
+        PhotoView bmImage;
 
-        public DownloadImageTask(ImageView bmImage) {
+        public DownloadImageTask(PhotoView bmImage) {
             this.bmImage = bmImage;
         }
 

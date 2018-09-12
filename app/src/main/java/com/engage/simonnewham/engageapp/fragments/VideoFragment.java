@@ -19,27 +19,27 @@ import com.engage.simonnewham.engageapp.activities.ContentActivity;
  * Class to download and display video items to users
  * @author simonnewham
  */
-@SuppressLint("ValidFragment")
 public class VideoFragment extends Fragment {
 
     VideoView video;
     private String path;
     ProgressBar progressBar;
 
-    public VideoFragment (String path){
-        this.path = path;
+    public VideoFragment (){
+
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        String itemPath = this.getArguments().getString("path");
         View view = inflater.inflate(R.layout.fragment_video, container, false);
 
         video = view.findViewById(R.id.Video);
         progressBar = view.findViewById(R.id.progressContent);
 
         //download video from provided item path
-        String vidAddress = "https://engage.cs.uct.ac.za"+path;
+        String vidAddress = "https://engage.cs.uct.ac.za"+itemPath;
         Uri vidUri = Uri.parse(vidAddress);
         MediaController vidControl = new MediaController(getActivity());
         vidControl.setAnchorView(video);

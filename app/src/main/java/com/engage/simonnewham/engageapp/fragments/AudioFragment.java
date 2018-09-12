@@ -41,7 +41,6 @@ import java.util.concurrent.TimeUnit;
  * @author simonnewham
  */
 
-@SuppressLint("ValidFragment")
 public class AudioFragment extends Fragment {
 
     private static final String TAG = "AudioFragment";
@@ -67,15 +66,15 @@ public class AudioFragment extends Fragment {
 
     DownloadAudioTask downloadAudioTask;
 
-    @SuppressLint("ValidFragment")
-    public AudioFragment(String path){
-        this.path = path;
+    public AudioFragment(){
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        String itemPath = this.getArguments().getString("path");
         View view = inflater.inflate(R.layout.fragment_audio, container, false);
 
         play = view.findViewById(R.id.buttonPlay);
@@ -88,7 +87,7 @@ public class AudioFragment extends Fragment {
         //download media
         mediaPlayer = new MediaPlayer();
         downloadAudioTask = new AudioFragment.DownloadAudioTask();
-        downloadAudioTask.execute("https://engage.cs.uct.ac.za"+path);
+        downloadAudioTask.execute("https://engage.cs.uct.ac.za"+itemPath);
 
         seekbar.setClickable(false);
 

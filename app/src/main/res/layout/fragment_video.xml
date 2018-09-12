@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".fragments.VideoFragment">
+    tools:context=".fragments.VideoFragment"
+    android:layout_gravity="center">
 
     <ProgressBar
         android:id="@+id/progressContent"

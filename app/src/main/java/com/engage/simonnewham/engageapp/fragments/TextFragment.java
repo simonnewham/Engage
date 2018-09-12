@@ -26,33 +26,35 @@ import java.net.URL;
  * Class to download text articles from the server
  * @author simonnewham
  */
-@SuppressLint("ValidFragment")
 public class TextFragment extends Fragment {
 
     TextView title;
     TextView date;
     TextView content;
-    NewsItem item;
     ProgressBar progressBar;
 
-    public TextFragment(NewsItem item) {
-        this.item = item;
+    public TextFragment() {
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        String itemPath = this.getArguments().getString("path");
+        String titleT = this.getArguments().getString("title");
+        String dateT = this.getArguments().getString("date");
+
         View view = inflater.inflate(R.layout.fragment_text, container, false);
         title = view.findViewById(R.id.title);
         date = view.findViewById(R.id.date);
         content = view.findViewById(R.id.Text);
         progressBar = view.findViewById(R.id.progressContent);
 
-        title.setText(item.getName());
-        date.setText("Uploaded on: "+item.getDate());
+        title.setText(titleT);
+        date.setText("Uploaded on: "+dateT);
 
-        new DownloadTextTask(content).execute("https://engage.cs.uct.ac.za"+item.getPath());
+        new DownloadTextTask(content).execute("https://engage.cs.uct.ac.za"+itemPath);
 
         return view;
     }

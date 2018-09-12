@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context=".fragments.ImageFragment">
+    tools:context=".fragments.ImageFragment"
+    android:layout_gravity="center">
 
     <ProgressBar
         android:id="@+id/progressContent"
@@ -12,11 +13,11 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.03" />
 
-    <ImageView
+
+    <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/Image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         />
 
 </FrameLayout>
