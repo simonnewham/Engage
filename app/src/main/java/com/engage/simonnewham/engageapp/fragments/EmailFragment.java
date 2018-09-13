@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +50,7 @@ public class EmailFragment extends Fragment {
     private TextView text;
     private EditText email;
     private UserEmailTask userEmailTask;
+    private ProgressBar progress;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,8 +60,9 @@ public class EmailFragment extends Fragment {
 
         send = view.findViewById(R.id.buttonSend);
         back = view.findViewById(R.id.buttonBack);
-        text = view.findViewById(R.id.textViewConfirm);
+        text = view.findViewById(R.id.textView);
         email = view.findViewById(R.id.email);
+        progress  = view.findViewById(R.id.progressBar);
 
         send.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
@@ -70,6 +74,7 @@ public class EmailFragment extends Fragment {
                     String toSend = email.getText().toString();
                     userEmailTask = new UserEmailTask(toSend);
                     userEmailTask.execute((Void) null);
+                    progress.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -150,9 +155,11 @@ public class EmailFragment extends Fragment {
         //Display success message or error
         protected void onPostExecute(final String result) {
             userEmailTask = null;
+            progress.setVisibility(View.GONE);
 
             if (result.equals("Email Success")) {
                 Log.i(TAG, "Email Sent");
+                email.setText("");
                 text.setText("Thank you, your password has been sent to "+mEmail);
 
             } else {

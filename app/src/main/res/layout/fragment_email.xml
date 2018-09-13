@@ -48,6 +48,13 @@
                 android:layout_marginBottom="50dp"
                 />
 
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/AppTheme.GreenAccent"
+                android:visibility="gone"/>
+
             <Button
                 android:id="@+id/buttonSend"
                 android:layout_width="match_parent"

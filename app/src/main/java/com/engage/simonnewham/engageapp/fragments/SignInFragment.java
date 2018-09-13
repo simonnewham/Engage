@@ -60,7 +60,7 @@ public class SignInFragment extends Fragment {
     private ProgressBar progressBar;
     private Button login;
     private Button signUp;
-    private TextView forgot;
+    private Button forgot;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
