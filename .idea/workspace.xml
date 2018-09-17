@@ -22,35 +22,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9911c273-1c8c-4fe4-ac99-40e3fda8458c" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__bg_devlabs_fullscreenvideoview_library_0_0_9.xml" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/resourceHashesCache.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/resourceHashesCache.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/classAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/classAnalysis.bin" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/jarAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/jarAnalysis.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/javaCompile.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/javaCompile.lock" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskHistory.bin" />
-      <change beforePath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskJars.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/javaCompile/taskJars.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.bin" />
       <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" />
-      <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" afterPath="$PROJECT_DIR$/app/build.gradle" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/activities/ContentActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/activities/ContentActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/activities/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/activities/MainActivity.java" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/activities/SurveyActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/activities/SurveyActivity.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/fragments/AudioFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/fragments/AudioFragment.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/fragments/ImageFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/fragments/ImageFragment.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/fragments/VideoFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/fragments/VideoFragment.java" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_content.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_content.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_main.xml" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/activity_survey.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/activity_survey.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_audio.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_audio.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_image.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_image.xml" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_video.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_video.xml" />
     </list>
     <ignored path="EngageApp.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -99,8 +81,8 @@
       <file leaf-file-name="activity_survey.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_survey.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="298">
-              <caret line="110" column="11" lean-forward="true" selection-start-line="110" selection-start-column="11" selection-end-line="110" selection-end-column="37" />
+            <state relative-caret-position="283">
+              <caret line="109" column="49" lean-forward="false" selection-start-line="109" selection-start-column="49" selection-end-line="109" selection-end-column="49" />
               <folding />
             </state>
           </provider>
@@ -109,17 +91,17 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="SurveyActivity.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="SurveyActivity.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/activities/SurveyActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="264">
-              <caret line="459" column="49" lean-forward="true" selection-start-line="459" selection-start-column="49" selection-end-line="459" selection-end-column="49" />
+            <state relative-caret-position="130">
+              <caret line="459" column="47" lean-forward="false" selection-start-line="459" selection-start-column="47" selection-end-line="459" selection-end-column="47" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ContentActivity.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ContentActivity.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/activities/ContentActivity.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1200">
@@ -3237,10 +3219,18 @@
         <state />
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/activities/ContentActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1200">
+          <caret line="132" column="0" lean-forward="false" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_survey.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="110" column="11" lean-forward="true" selection-start-line="110" selection-start-column="11" selection-end-line="110" selection-end-column="37" />
+        <state relative-caret-position="283">
+          <caret line="109" column="49" lean-forward="false" selection-start-line="109" selection-start-column="49" selection-end-line="109" selection-end-column="49" />
           <folding />
         </state>
       </provider>
@@ -3250,16 +3240,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/activities/SurveyActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="459" column="49" lean-forward="true" selection-start-line="459" selection-start-column="49" selection-end-line="459" selection-end-column="49" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/engage/simonnewham/engageapp/activities/ContentActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1200">
-          <caret line="132" column="0" lean-forward="false" selection-start-line="132" selection-start-column="0" selection-end-line="132" selection-end-column="0" />
+        <state relative-caret-position="130">
+          <caret line="459" column="47" lean-forward="false" selection-start-line="459" selection-start-column="47" selection-end-line="459" selection-end-column="47" />
           <folding />
         </state>
       </provider>
