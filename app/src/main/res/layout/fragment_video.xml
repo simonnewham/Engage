@@ -4,21 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".fragments.VideoFragment"
-    android:layout_gravity="center">
+    >
 
-    <ProgressBar
-        android:id="@+id/progressContent"
-        style="?android:attr/progressBarStyle"
+    <bg.devlabs.fullscreenvideoview.FullscreenVideoView
+        android:id="@+id/fullscreenVideoView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.03" />
-
-    <VideoView
-        android:id="@+id/Video"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="1"
         />
 
 </FrameLayout>

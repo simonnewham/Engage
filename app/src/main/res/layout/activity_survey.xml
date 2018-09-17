@@ -108,6 +108,7 @@
             android:textAllCaps="false"
             android:background="@color/colorOrange"
             android:textColor="@color/colorWhite"
+            android:clickable="false"
             />
 
         <Button

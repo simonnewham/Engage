@@ -4,20 +4,52 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".fragments.ImageFragment"
-    android:layout_gravity="center">
+    >
 
-    <ProgressBar
-        android:id="@+id/progressContent"
-        style="?android:attr/progressBarStyle"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.03" />
+        android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <com.github.chrisbanes.photoview.PhotoView
-        android:id="@+id/Image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+            <TextView
+                android:id="@+id/titleFixed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="4dp"
+                android:paddingTop="10dp"
+                android:text="Title Location"
+                android:textSize="30dp"
+                android:textStyle="bold"
+                 />
+
+            <TextView
+                android:id="@+id/dateFixed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:padding="4dp"
+                android:text="Date Location"
+                android:textColor="@color/colorPrimary"
+                />
+
+            <ProgressBar
+                android:id="@+id/progressContent"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.03" />
+
+            <com.github.chrisbanes.photoview.PhotoView
+                android:id="@+id/Image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.03" />
+        </LinearLayout>
+    </ScrollView>
+
 
 </FrameLayout>

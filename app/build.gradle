@@ -35,5 +35,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.0.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.0.2'
     testImplementation 'junit:junit:4.12'
+    implementation 'bg.devlabs.fullscreenvideoview:library:0.0.9'
 
 }

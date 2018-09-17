@@ -14,9 +14,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.engage.simonnewham.engageapp.R;
 import com.engage.simonnewham.engageapp.activities.ContentActivity;
+import com.engage.simonnewham.engageapp.models.NewsItem;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.io.InputStream;
@@ -32,6 +34,9 @@ public class ImageFragment extends Fragment {
     private String path;
     ProgressBar progressBar;
 
+    private TextView title;
+    private TextView date;
+
     public ImageFragment(){
 
     }
@@ -42,10 +47,16 @@ public class ImageFragment extends Fragment {
 
         // Inflate the layout for this fragment
         String itemPath = this.getArguments().getString("path");
+        NewsItem item = (NewsItem) this.getArguments().getSerializable("Item");
+
         View view =inflater.inflate(R.layout.fragment_image, container, false);
         image = view.findViewById(R.id.Image);
         progressBar = view.findViewById(R.id.progressContent);
+        title = view.findViewById(R.id.titleFixed);
+        date = view.findViewById(R.id.dateFixed);
 
+        title.setText(item.getName());
+        date.setText("Uploaded on: "+item.getDate());
         //download image from download path provided
         new ImageFragment.DownloadImageTask(image).execute("https://engage.cs.uct.ac.za"+itemPath);
 

@@ -19,7 +19,14 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"/>
+        />
+
+    <TextView
+        android:id="@+id/textProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Downloading New Items..."
+        android:textAlignment="center"/>
 
     <TextView
         android:id="@+id/textInfo"

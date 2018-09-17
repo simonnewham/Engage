@@ -25,6 +25,7 @@
         </activity>
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.ContentActivity"
+            android:configChanges="orientation|screenSize"
             />
         <activity android:name=".activities.SurveyActivity" />
         <activity android:name=".activities.AboutActivity" />

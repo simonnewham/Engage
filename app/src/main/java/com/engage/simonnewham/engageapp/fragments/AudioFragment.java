@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import android.widget.Toast;
 import com.engage.simonnewham.engageapp.R;
 import com.engage.simonnewham.engageapp.activities.ContentActivity;
 import com.engage.simonnewham.engageapp.activities.SignUpActivity;
+import com.engage.simonnewham.engageapp.models.NewsItem;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,8 +53,9 @@ public class AudioFragment extends Fragment {
     private SeekBar seekbar;
     private TextView progress;
     private TextView total;
+    private ProgressBar progressBar;
+    private TextView itemReady;
 
-    private String path;
     private MediaPlayer mediaPlayer;
 
     private double startTime = 0;
@@ -76,6 +79,7 @@ public class AudioFragment extends Fragment {
         // Inflate the layout for this fragment
         String itemPath = this.getArguments().getString("path");
         View view = inflater.inflate(R.layout.fragment_audio, container, false);
+        NewsItem item = (NewsItem) this.getArguments().getSerializable("Item");
 
         play = view.findViewById(R.id.buttonPlay);
         forward = view.findViewById(R.id.buttonForward);
@@ -83,13 +87,15 @@ public class AudioFragment extends Fragment {
         progress = view.findViewById(R.id.textProgress);
         seekbar = view.findViewById(R.id.seekBar);
         total = view.findViewById(R.id.textTotal);
+        progressBar = view.findViewById(R.id.progressBar);
+        itemReady = view.findViewById(R.id.textViewReady);
 
         //download media
         mediaPlayer = new MediaPlayer();
         downloadAudioTask = new AudioFragment.DownloadAudioTask();
         downloadAudioTask.execute("https://engage.cs.uct.ac.za"+itemPath);
 
-        seekbar.setClickable(false);
+        //seekbar.setClickable(false);
 
         //Method to handle play and pause functionality
         play.setOnClickListener(new View.OnClickListener(){
@@ -157,6 +163,26 @@ public class AudioFragment extends Fragment {
             }
         });
 
+        seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(ready) {
+                    if (fromUser)
+                        mediaPlayer.seekTo(progress);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
         return view;
     }
 
@@ -205,7 +231,9 @@ public class AudioFragment extends Fragment {
 
         protected void onPostExecute(String result) {
             downloadAudioTask = null;
-            progress.setText("Item Ready");
+            //progress.setText("Item Ready");
+            progressBar.setVisibility(View.GONE);
+            itemReady.setText("Item Ready");
             ready = true;
 
         }

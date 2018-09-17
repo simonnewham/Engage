@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private String email;
     private String user_group;
     private String load;
+    private TextView textProgress;
 
     private ContentDownload contentDownload;
     ArrayList<NewsItem> store;
@@ -92,8 +93,8 @@ public class MainActivity extends AppCompatActivity {
 
         main_panel = findViewById(R.id.main_panel);
         progressBar = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
         info = findViewById(R.id.textInfo);
+        textProgress = findViewById(R.id.textProgress);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         if(load == null){
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
         //Log.i(TAG, "Offline news "+newsList);
         displayNews(getNews(newsList));
         progressBar.setVisibility(View.GONE);
+        textProgress.setVisibility(View.GONE);
         info.setVisibility(View.VISIBLE);
         info.setTextSize(10);
         info.setText("Loaded offline, press the home icon to refresh");
@@ -237,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
             else{
                 ArrayList<NewsItem> toDisplay = getNews(result);
                 progressBar.setVisibility(View.GONE);
+                textProgress.setVisibility(View.GONE);
                 //write file to internal memory
                 writeToFile(result, getApplicationContext());
                 //display array
@@ -318,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
     //Display a error message to the user
     public void onError(){
         progressBar.setVisibility(View.GONE);
+        textProgress.setVisibility(View.GONE);
         info.setVisibility(View.VISIBLE);
         info.setTextSize(25);
         info.setText("Server error, please try again later");

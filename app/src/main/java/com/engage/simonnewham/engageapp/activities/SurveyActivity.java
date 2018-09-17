@@ -457,6 +457,7 @@ public class SurveyActivity extends AppCompatActivity {
                         survey = new Survey(newJObject.getString("_id"), newJObject.getString("name"),
                                 newJObject.getString("description"), questionList);
                         progressBar.setVisibility(View.GONE);
+                        begin.setClickable(true);
                         displaySurvey(survey);
                     }
 

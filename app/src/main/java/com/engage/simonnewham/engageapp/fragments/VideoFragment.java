@@ -15,15 +15,17 @@ import android.widget.VideoView;
 import com.engage.simonnewham.engageapp.R;
 import com.engage.simonnewham.engageapp.activities.ContentActivity;
 
+import bg.devlabs.fullscreenvideoview.FullscreenVideoView;
+
 /**
  * Class to download and display video items to users
  * @author simonnewham
  */
 public class VideoFragment extends Fragment {
 
-    VideoView video;
+    //VideoView video;
+    FullscreenVideoView video;
     private String path;
-    ProgressBar progressBar;
 
     public VideoFragment (){
 
@@ -35,19 +37,17 @@ public class VideoFragment extends Fragment {
         String itemPath = this.getArguments().getString("path");
         View view = inflater.inflate(R.layout.fragment_video, container, false);
 
-        video = view.findViewById(R.id.Video);
-        progressBar = view.findViewById(R.id.progressContent);
+        video = view.findViewById(R.id.fullscreenVideoView);
 
         //download video from provided item path
         String vidAddress = "https://engage.cs.uct.ac.za"+itemPath;
-        Uri vidUri = Uri.parse(vidAddress);
-        MediaController vidControl = new MediaController(getActivity());
-        vidControl.setAnchorView(video);
-        video.setMediaController(vidControl);
-        video.setVisibility(View.VISIBLE);
-        video.setVideoURI(vidUri);
-        progressBar.setVisibility(View.GONE);
-        video.start();
+        //Uri vidUri = Uri.parse(vidAddress);
+        //MediaController vidControl = new MediaController(getActivity());
+        //vidControl.setAnchorView(video);
+        //video.setMediaController(vidControl);
+        //video.setVisibility(View.VISIBLE);
+        video.videoUrl(vidAddress);
+        video.enableAutoStart();
 
         return view;
     }

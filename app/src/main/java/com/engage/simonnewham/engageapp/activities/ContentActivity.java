@@ -121,14 +121,15 @@ public class ContentActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         String path = item.getPath();
         bundle.putString("path", path );
+        String title = item.getName();
+        String date = item.getDate();
+        bundle.putString("title", title );
+        bundle.putString("date", date );
+        bundle.putSerializable("Item" ,item);
 
         if(type.equals("IMAGE")){
             //set date and title
             frameLayout.setVisibility(View.VISIBLE);
-            titleF.setVisibility(View.VISIBLE);
-            dateF.setVisibility(View.VISIBLE);
-            dateF.setText("Uploaded on: "+item.getDate());
-            titleF.setText(item.getName());
 
             ImageFragment image = new ImageFragment();
             image.setArguments(bundle);
@@ -153,10 +154,6 @@ public class ContentActivity extends AppCompatActivity {
         else if(type.equals("TEXT")){
             TextFragment text = new TextFragment();
             text.setArguments(bundle);
-            String title = item.getName();
-            String date = item.getDate();
-            bundle.putString("title", title );
-            bundle.putString("date", date );
             transaction.replace(R.id.container, text);
             transaction.commit();
         }
